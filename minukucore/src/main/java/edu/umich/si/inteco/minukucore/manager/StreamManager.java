@@ -13,6 +13,7 @@ import edu.umich.si.inteco.minukucore.stream.Stream;
 
 /**
  * Created by shriti on 7/9/16.
+ *
  */
 public interface StreamManager {
 

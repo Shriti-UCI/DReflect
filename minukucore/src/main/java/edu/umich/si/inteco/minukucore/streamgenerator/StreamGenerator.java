@@ -62,18 +62,49 @@ import edu.umich.si.inteco.minukucore.stream.Stream;
  */
 public interface StreamGenerator<T extends DataRecord> {
 
+    /**
+     * Register itself to the StreamManager
+     * Get the source/input streams
+     * @see edu.umich.si.inteco.minukucore.manager.StreamManager
+     */
     public void register();
 
+    /**
+     * Get transformed stream from a raw stream
+     * @return the semantic/transformed stream
+     */
     public Stream<T> generateNewStream();
 
+    /**
+     * Whenever a new DataRecord comes in, add the new entry to update the stream
+     * @return true if the stream is updated, false otherwise
+     * @throws edu.umich.si.inteco.minukucore.exception.StreamNotFoundException
+     */
     public boolean updateStream();
 
+    /**
+     * Fetch the sampling rate of the stream - could be same as the
+     * sampling rate of the underlying DataRecord
+     * @return the sampling rate of the data underlying the stream
+     */
     public long getUpdateFrequency();
 
+    /**
+     * Generate a state change event
+     */
     public void sendStateChangeEvent();
 
+    /**
+     *
+     */
     public void onStreamRegistration();
 
+    /**
+     * Fetch a list of streams that this stream generator
+     * uses as inputs to create a new stream
+     *
+     * @return the list of stream classes that this stream generator depends on
+     */
     public List<Stream> dependsOnStreams();
 }
 
