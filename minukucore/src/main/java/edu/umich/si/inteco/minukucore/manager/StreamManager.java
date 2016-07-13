@@ -2,6 +2,8 @@ package edu.umich.si.inteco.minukucore.manager;
 
 import java.util.List;
 
+import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
+import edu.umich.si.inteco.minukucore.event.Subscribe;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
@@ -62,7 +64,8 @@ public interface StreamManager {
      * This method then calls the state change handler of the SituationManager
      * {@link edu.umich.si.inteco.minukucore.manager.SituationManager}
      */
-    public void onStateChange();
+    @Subscribe
+    public void onStateChange(StateChangeEvent e);
 
 }
 
