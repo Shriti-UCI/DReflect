@@ -14,6 +14,7 @@ public interface SituationManager {
     /**
      * Called by {@link edu.umich.si.inteco.minukucore.manager.StreamManager}
      * Sends request to appropriate situations
+     * Note: does not subscribe to any event on the event bus
      * @param s {@link edu.umich.si.inteco.minukucore.model.StreamSnapshot}
      *          a snapshot of the stream with current and previous values
      *          at the time of state change.

@@ -62,13 +62,14 @@ public interface StreamManager {
 
     /**
      * Called when a state change event is triggered by the StreamGenerator
-     * Subscribes to the state change event
      * {@link edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator}
+     * Subscribes to the state change event
+     * {@link edu.umich.si.inteco.minukucore.event.StateChangeEvent}
      * This method then calls the state change handler of the SituationManager
      * {@link edu.umich.si.inteco.minukucore.manager.SituationManager}
      */
     @Subscribe
-    public void onStateChange(StateChangeEvent e);
+    public void handleStateChangeEvent(StateChangeEvent e);
 
 }
 
