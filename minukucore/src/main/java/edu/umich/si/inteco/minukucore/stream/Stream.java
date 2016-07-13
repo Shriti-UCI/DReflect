@@ -16,6 +16,13 @@ import edu.umich.si.inteco.minukucore.model.DataRecord;
 public interface Stream<T extends DataRecord> extends Queue {
 
     /**
+     * Defining stream types
+     */
+    public enum StreamType{
+        FROM_DEVICE, FROM_USER, FROM_QUESTION
+    }
+
+    /**
      * Fetch the current value of the stream
      *
      * @return the value of the newest DataRecord (T) in the stream
@@ -37,5 +44,12 @@ public interface Stream<T extends DataRecord> extends Queue {
      * @throws {@link edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound}
      */
     public<T extends DataRecord> List<Class<T>> dependsOnDataRecord() throws DataRecordTypeNotFound;
+
+    /**
+     * Get the type of stream - from_device, from_user, from_question
+     * @return the type of stream
+     *         {@link edu.umich.si.inteco.minukucore.stream.Stream.StreamType}
+     */
+    public StreamType getType();
 
 }

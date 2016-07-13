@@ -1,5 +1,6 @@
 package edu.umich.si.inteco.minukucore.manager;
 
+import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
 import edu.umich.si.inteco.minukucore.situation.Situation;
 
@@ -18,8 +19,11 @@ public interface SituationManager {
      * @param s {@link edu.umich.si.inteco.minukucore.model.StreamSnapshot}
      *          a snapshot of the stream with current and previous values
      *          at the time of state change.
+     * @param event state change event transferred by StreamManager
+     *              contains the type of data for which the state changed
+     *              the situations associated with this data type will be called
      */
-    public void onStateChange(StreamSnapshot s);
+    public void onStateChange(StreamSnapshot s, StateChangeEvent event);
 
     /**
      * Register a situation after checking for the existence of all the streams

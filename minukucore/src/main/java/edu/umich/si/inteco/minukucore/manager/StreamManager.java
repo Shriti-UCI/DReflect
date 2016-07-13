@@ -71,6 +71,16 @@ public interface StreamManager {
     @Subscribe
     public void handleStateChangeEvent(StateChangeEvent e);
 
+    /**
+     * get all the streams of a specific type
+     * @param streamType type of stream
+     *                   {@link edu.umich.si.inteco.minukucore.stream.Stream.StreamType}
+     * @param <T>        the application specific DataRecord
+     *                   {@link edu.umich.si.inteco.minukucore.model.DataRecord}
+     * @return           list of streams
+     */
+    public <T extends DataRecord> List<Stream<T>> getStreams(Stream.StreamType streamType);
+
 }
 
 /**
