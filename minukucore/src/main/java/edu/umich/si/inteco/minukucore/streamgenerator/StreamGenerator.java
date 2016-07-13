@@ -63,7 +63,7 @@ import edu.umich.si.inteco.minukucore.stream.Stream;
 public interface StreamGenerator<T extends DataRecord> {
 
     /**
-     * Register itself to the StreamManager
+     * Register itself to the StreamManager - calls the register method of StreamManager
      * Get the source/input streams
      * @see edu.umich.si.inteco.minukucore.manager.StreamManager
      */
@@ -105,13 +105,6 @@ public interface StreamGenerator<T extends DataRecord> {
      */
     public void onStreamRegistration();
 
-    /**
-     * Fetch a list of streams that this stream generator
-     * uses as inputs to create a new stream
-     *
-     * @return the list of stream classes that this stream generator depends on
-     */
-    public List<Stream> dependsOnStreams();
 }
 
 /**

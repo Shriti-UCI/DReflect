@@ -1,8 +1,10 @@
 package edu.umich.si.inteco.minukucore.stream;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Queue;
 
+import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 
 /**
@@ -26,5 +28,14 @@ public interface Stream<T extends DataRecord> extends Queue {
      * @return the value of the DataRecord right after the newest DataRecord
      */
     public T getPreviousValue();
+
+    /**
+     * Fetch a list of DataRecord types that this stream
+     * uses as inputs to create a new stream
+     *
+     * @return the list of DataRecord types
+     * @throws {@link edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound}
+     */
+    public<T extends DataRecord> List<Class<T>> dependsOnDataRecord() throws DataRecordTypeNotFound;
 
 }

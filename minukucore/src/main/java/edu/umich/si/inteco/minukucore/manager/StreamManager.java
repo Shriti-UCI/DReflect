@@ -8,6 +8,7 @@ import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.stream.Stream;
+import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
 
 /**
  * Created by shriti on 7/9/16.
@@ -29,13 +30,14 @@ public interface StreamManager {
      * Registering a stream that does not exist throws exception
      * Registering a stream that is already registered throws exception
      *
-     * @param s the Stream to be registered
+     * @param s the new stream to be registered
      * @param clazz the class for DataRecord that the Stream holds
      * @param <T> the application specific DataRecord {@link edu.umich.si.inteco.minukucore.model.DataRecord}
      * @throws StreamNotFoundException {@link edu.umich.si.inteco.minukucore.exception.StreamNotFoundException}
      * @throws StreamAlreadyExistsException {@link edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException}
      */
-    public <T extends DataRecord> void register(Stream s, Class<T> clazz) throws StreamNotFoundException, StreamAlreadyExistsException;
+    public <T extends DataRecord> void register(Stream s, Class<T> clazz)
+            throws StreamNotFoundException, StreamAlreadyExistsException;
 
     /**
      * Unregister stream s
@@ -60,6 +62,7 @@ public interface StreamManager {
 
     /**
      * Called when a state change event is triggered by the StreamGenerator
+     * Subscribes to the state change event
      * {@link edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator}
      * This method then calls the state change handler of the SituationManager
      * {@link edu.umich.si.inteco.minukucore.manager.SituationManager}

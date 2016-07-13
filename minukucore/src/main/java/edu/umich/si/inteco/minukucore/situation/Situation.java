@@ -3,6 +3,7 @@ package edu.umich.si.inteco.minukucore.situation;
 import java.util.List;
 
 import edu.umich.si.inteco.minukucore.event.ActionEvent;
+import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
 import edu.umich.si.inteco.minukucore.stream.Stream;
@@ -33,6 +34,7 @@ public interface Situation {
     /**
      * Fetch a list of DataRecords types that the situation depends on
      * @return the list of DataRecord classes
+     * @throws {@link edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound}
      */
-    public <T extends DataRecord> List<Class<T>> dependsOnDataRecord();
+    public <T extends DataRecord> List<Class<T>> dependsOnDataRecord() throws DataRecordTypeNotFound;
 }
