@@ -8,13 +8,6 @@ package edu.umich.si.inteco.minukucore.model;
 public interface DataRecord {
 
     /**
-     * Fetch the value of a DataRecord.
-     *
-     * @return the value of a dataRecord
-     */
-    public DataRecord getValue();
-
-    /**
      * Fetch the time at which the DataRecord was created.
      *
      * @return the time at which the DataRecord was created
