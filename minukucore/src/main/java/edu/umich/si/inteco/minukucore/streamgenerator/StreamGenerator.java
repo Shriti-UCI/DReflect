@@ -76,7 +76,8 @@ public interface StreamGenerator<T extends DataRecord> {
     public Stream<T> generateNewStream();
 
     /**
-     * Whenever a new DataRecord comes in, add the new entry to update the stream
+     * Whenever a new DataRecord comes in, add the new entry to update the stream.
+     * This will be called every 1 sec.
      * @return true if the stream is updated, false otherwise
      * @throws edu.umich.si.inteco.minukucore.exception.StreamNotFoundException
      */
@@ -84,18 +85,23 @@ public interface StreamGenerator<T extends DataRecord> {
 
     /**
      * Fetch the sampling rate of the stream - could be same as the
-     * sampling rate of the underlying DataRecord
+     * sampling rate of the underlying DataRecord - unit is seconds
      * @return the sampling rate of the data underlying the stream
      */
     public long getUpdateFrequency();
 
     /**
      * Generate a state change event
+     * The state change event will be added to the event bus
      */
     public void sendStateChangeEvent();
 
     /**
-     *
+     * Once the new stream is registered, this method tells the stream generator
+     * that the new stream has been registered successfully
+     * This is most likely to be used by
+     * {@link edu.umich.si.inteco.minukucore.manager.StreamManager},
+     * which would be registering all the streams, as and when they are created.
      */
     public void onStreamRegistration();
 
