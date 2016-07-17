@@ -13,7 +13,7 @@ import edu.umich.si.inteco.minukucore.model.DataRecord;
  * @see edu.umich.si.inteco.minukucore.model.DataRecord
  * @version 1.0
  */
-public interface Stream<T extends DataRecord> extends Queue {
+public interface Stream<T extends DataRecord> extends Queue<T> {
 
     /**
      * Defining stream types
