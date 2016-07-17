@@ -41,9 +41,8 @@ public interface Stream<T extends DataRecord> extends Queue<T> {
      * uses as inputs to create a new stream
      *
      * @return the list of DataRecord types
-     * @throws {@link edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound}
      */
-    public<T extends DataRecord> List<Class<T>> dependsOnDataRecord() throws DataRecordTypeNotFound;
+    public<T extends DataRecord> List<Class<T>> dependsOnDataRecord();
 
     /**
      * Get the type of stream - from_device, from_user, from_question

@@ -1,14 +1,9 @@
-package edu.umich.si.inteco.minuku.stream;
-
-import android.support.annotation.NonNull;
+package edu.umich.si.inteco.minukucore.stream;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.stream.Stream;
 
@@ -33,7 +28,7 @@ public class AbstractStream<T extends DataRecord> extends LinkedList<T> implemen
     }
 
     @Override
-    public <T extends DataRecord> List<Class<T>> dependsOnDataRecord() throws DataRecordTypeNotFound {
+    public <T extends DataRecord> List<Class<T>> dependsOnDataRecord() {
         return new ArrayList<>();
     }
 
