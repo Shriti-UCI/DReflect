@@ -1,14 +1,18 @@
 package edu.umich.si.inteco.minuku.manager;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
@@ -30,15 +34,52 @@ import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
  */
 public class AndroidStreamManager extends Service implements StreamManager {
 
+    private final String TAG = "AndroidStreamManager";
+
     protected Map<Class, Stream> mStreamMap;
     protected Map<Stream.StreamType, List<Stream<? extends DataRecord>>> mStreamTypeStreamMap;
     protected List<StreamGenerator> mRegisteredStreamGenerators;
 
+    private static int counter = 0;
+
+    private static AndroidStreamManager instance = null;
+
+    private AndroidStreamManager() {
+
+    }
+
+    public static AndroidStreamManager getInstance() {
+        if(instance == null) {
+            instance = new AndroidStreamManager();
+        }
+        return instance;
+    }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "Start command received.");
+        for(StreamGenerator streamGenerator: mRegisteredStreamGenerators) {
+            if(counter % streamGenerator.getUpdateFrequency() == 0) {
+                streamGenerator.updateStream();
+            }
+        }
+
+        AlarmManager alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
+        alarm.set(
+                alarm.RTC_WAKEUP,
+                System.currentTimeMillis() + Constants.PROMPT_SERVICE_REPEAT_MILLISECONDS,
+                PendingIntent.getService(this, 0, new Intent(this, AndroidStreamManager.class), 0)
+        );
+
         return START_STICKY_COMPATIBILITY;
     }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "Destroying service.");
+    }
+
 
     @Override
     public List<Stream> getAllStreams() {
@@ -78,7 +119,6 @@ public class AndroidStreamManager extends Service implements StreamManager {
 
     @Override
     public void handleStateChangeEvent(StateChangeEvent e) {
-
     }
 
     @Override

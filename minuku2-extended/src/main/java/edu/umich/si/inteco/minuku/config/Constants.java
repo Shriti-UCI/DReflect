@@ -39,7 +39,7 @@ public class Constants {
 
 
     // Prompt service related constants
-    public static final int PROMPT_SERVICE_REPEAT_MILLISECONDS = 1000 * 60 * 15;
+    public static final int PROMPT_SERVICE_REPEAT_MILLISECONDS = 1000 * 1; // 1 second
 
 
     // NNotification related constants
