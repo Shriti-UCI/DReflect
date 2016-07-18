@@ -2,6 +2,7 @@ package edu.umich.si.inteco.minukucore.dao;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.user.User;
@@ -44,19 +45,20 @@ public interface DAO<T extends DataRecord> {
     /**
      * Get all entities as a list.
      *
-     * @return A list of all entities of this type in the persistent storage.
+     * @return A {@link Future} that promise a list of all
+     * entities of this type, related to the user,  in the persistent storage.
      * @throws DAOException
      */
-    public List<T> getAll() throws DAOException;
+    public Future<List<T>> getAll() throws DAOException;
 
     /**
      * Get the last {@param N} entities as a list.
      *
      * @param N the number of records to pull from the persistent storage.
-     * @return The last N DataRecords for this DAO.
+     * @return A {@link Future} of the last N DataRecords for this DAO.
      * @throws DAOException
      */
-    public List<T> getLast(int N) throws DAOException;
+    public Future<List<T>> getLast(int N) throws DAOException;
 
     /**
      * Update an old entity with the new entity, without modifying it's location in the

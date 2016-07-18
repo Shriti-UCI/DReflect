@@ -25,4 +25,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile project(':minuku2-extended')
     compile project(':minukucore')
+
+    /* Google Guava */
+    compile 'com.google.guava:guava:19.0'
 }

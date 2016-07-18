@@ -43,4 +43,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:8.3.0'
     compile 'com.google.android.gms:play-services-location:8.3.0'
 
+    /* Google Guava */
+    compile 'com.google.guava:guava:19.0'
 }
