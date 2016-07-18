@@ -11,7 +11,7 @@ import java.util.UUID;
  *
  * Created by Neeraj Kumar on 7/12/2016.
  */
-public abstract class User {
+public class User {
     private String firstName;
     private String lastName;
     private List<UUID> deviceIDs;

@@ -10,7 +10,7 @@ import edu.umich.si.inteco.minukucore.model.DataRecord;
  */
 public abstract  class AbstractDAOManager implements DAOManager {
 
-    private Map<Class<? extends DataRecord>, DAO<? extends DataRecord>> map;
+    protected Map<Class<? extends DataRecord>, DAO<? extends DataRecord>> map;
 
     @Override
     public <T extends DAO<D>, D extends DataRecord> T getDaoFor(Class<D> dataRecordType) {
