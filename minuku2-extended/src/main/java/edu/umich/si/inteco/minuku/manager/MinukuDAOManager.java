@@ -1,7 +1,5 @@
 package edu.umich.si.inteco.minuku.manager;
 
-import android.provider.ContactsContract;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,18 +9,18 @@ import edu.umich.si.inteco.minukucore.model.DataRecord;
 /**
  * Created by neerajkumar on 7/18/16.
  */
-public class DAOManager extends edu.umich.si.inteco.minukucore.manager.AbstractDAOManager {
+public class MinukuDAOManager extends edu.umich.si.inteco.minukucore.manager.AbstractDAOManager {
 
-    private static DAOManager instance;
+    private static MinukuDAOManager instance;
     private Map<? extends DataRecord, DAO<? extends DataRecord>> registeredDAOMap;
 
-    private DAOManager() {
+    private MinukuDAOManager() {
         this.map = new HashMap<>();
     }
 
-    public static DAOManager getInstance() {
+    public static MinukuDAOManager getInstance() {
         if (instance == null) {
-            instance = new DAOManager();
+            instance = new MinukuDAOManager();
         }
         return instance;
     }

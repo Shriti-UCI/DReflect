@@ -1,11 +1,6 @@
 package edu.umich.si.inteco.minuku.manager;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -13,8 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import edu.umich.si.inteco.minuku.config.Constants;
-import edu.umich.si.inteco.minuku.streamgenerator.AndroidStreamGenerator;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
@@ -26,17 +19,17 @@ import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
 /**
  * Created by Neeraj Kumar on 7/17/16.
  *
- * The AndroidStreamManager class implements {@link StreamManager} and runs as a service within
+ * The MinukuStreamManager class implements {@link StreamManager} and runs as a service within
  * the application context. It maintains a list of all the Streams and StreamGenerators registered
  * within the application and is responsible for trigerring the
  * {@link StreamGenerator#updateStream() updateStream} method of the StreamManager class after
  * every {@link StreamGenerator#getUpdateFrequency() updateFrequency}.
  *
- * The AndroidStreamManager is a {@link Service#START_STICKY sticky} service.
+ * This depends on a service to call it's updateStreamGenerators method.
  */
-public class AndroidStreamManager implements StreamManager {
+public class MinukuStreamManager implements StreamManager {
 
-    private final String TAG = "AndroidStreamManager";
+    private final String TAG = "MinukuStreamManager";
 
     protected Map<Class, Stream> mStreamMap;
     protected Map<Stream.StreamType, List<Stream<? extends DataRecord>>> mStreamTypeStreamMap;
@@ -44,23 +37,23 @@ public class AndroidStreamManager implements StreamManager {
 
     private static int counter = 0;
 
-    private static AndroidStreamManager instance;
+    private static MinukuStreamManager instance;
 
-    private AndroidStreamManager() throws Exception {
+    private MinukuStreamManager() throws Exception {
         mStreamMap = new HashMap<>();
         mStreamTypeStreamMap = new HashMap<>();
         mRegisteredStreamGenerators = new LinkedList<>();
     }
 
-    public static AndroidStreamManager getInstance() {
-        if(AndroidStreamManager.instance == null) {
+    public static MinukuStreamManager getInstance() {
+        if(MinukuStreamManager.instance == null) {
             try {
-                AndroidStreamManager.instance = new AndroidStreamManager();
+                MinukuStreamManager.instance = new MinukuStreamManager();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return AndroidStreamManager.instance;
+        return MinukuStreamManager.instance;
     }
 
     public void updateStreamGenerators() {

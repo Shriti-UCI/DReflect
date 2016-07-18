@@ -15,16 +15,14 @@ import com.google.common.util.concurrent.AtomicDouble;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
-import edu.umich.si.inteco.minuku.manager.AndroidStreamManager;
-import edu.umich.si.inteco.minuku.manager.DAOManager;
+import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
+import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.stream.LocationStream;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
-import edu.umich.si.inteco.minukucore.manager.StreamManager;
 import edu.umich.si.inteco.minukucore.stream.Stream;
-import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
 
 /**
  * Created by neerajkumar on 7/18/16.
@@ -48,7 +46,7 @@ public class LocationStreamGenerator extends AndroidStreamGenerator<LocationData
     public LocationStreamGenerator(Context applicationContext) {
         super(applicationContext);
         this.mStream = new LocationStream(Constants.LOCATION_QUEUE_SIZE);
-        this.mDAO = DAOManager.getInstance().getDaoFor(LocationDataRecord.class);
+        this.mDAO = MinukuDAOManager.getInstance().getDaoFor(LocationDataRecord.class);
         this.latitude = new AtomicDouble();
         this.longitude = new AtomicDouble();
         this.register();
@@ -78,7 +76,7 @@ public class LocationStreamGenerator extends AndroidStreamGenerator<LocationData
     public void register() {
         Log.d(TAG, "Registering with StreamManager.");
         try {
-            AndroidStreamManager.getInstance().register(mStream, LocationDataRecord.class, this);
+            MinukuStreamManager.getInstance().register(mStream, LocationDataRecord.class, this);
         } catch (StreamNotFoundException streamNotFoundException) {
             Log.e(TAG, "One of the streams on which LocationDataRecord depends in not found.");
         } catch (StreamAlreadyExistsException streamAlreadyExistsException) {
@@ -169,7 +167,7 @@ public class LocationStreamGenerator extends AndroidStreamGenerator<LocationData
         if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
             try {
-                AndroidStreamManager.getInstance().unregister(mStream, this);
+                MinukuStreamManager.getInstance().unregister(mStream, this);
                 Log.e(TAG, "Unregistering location stream generator from stream manager");
             } catch (StreamNotFoundException e) {
                 e.printStackTrace();

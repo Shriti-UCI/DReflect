@@ -7,8 +7,7 @@ import android.os.Bundle;
 import java.util.UUID;
 
 import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
-import edu.umich.si.inteco.minuku.manager.AndroidStreamManager;
-import edu.umich.si.inteco.minuku.manager.DAOManager;
+import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
@@ -26,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         UUID dummyUUID = UUID.randomUUID();
 
         // DAO initialization stuff
-        DAOManager daoManager = DAOManager.getInstance();
+        MinukuDAOManager daoManager = MinukuDAOManager.getInstance();
         LocationDataRecordDAO locationDataRecordDAO = new LocationDataRecordDAO();
         locationDataRecordDAO.setDevice(dummyUser, dummyUUID);
         daoManager.registerDaoFor(LocationDataRecord.class, locationDataRecordDAO);

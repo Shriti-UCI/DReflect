@@ -7,23 +7,16 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.util.UUID;
-
 import edu.umich.si.inteco.minuku.config.Constants;
-import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
-import edu.umich.si.inteco.minuku.manager.AndroidStreamManager;
-import edu.umich.si.inteco.minuku.manager.DAOManager;
-import edu.umich.si.inteco.minuku.model.LocationDataRecord;
-import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
-import edu.umich.si.inteco.minukucore.user.User;
+import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 
 public class BackgroundService extends Service {
 
     private static final String TAG = "BackgroundService";
-    AndroidStreamManager streamManager;
+    MinukuStreamManager streamManager;
 
     public BackgroundService() {
-        streamManager = AndroidStreamManager.getInstance();
+        streamManager = MinukuStreamManager.getInstance();
     }
 
     @Override
