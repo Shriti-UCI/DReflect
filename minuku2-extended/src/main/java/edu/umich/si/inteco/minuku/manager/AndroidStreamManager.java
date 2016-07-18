@@ -64,7 +64,7 @@ public class AndroidStreamManager extends Service implements StreamManager {
                 streamGenerator.updateStream();
             }
         }
-
+        counter++;
         AlarmManager alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
         alarm.set(
                 alarm.RTC_WAKEUP,
@@ -87,7 +87,8 @@ public class AndroidStreamManager extends Service implements StreamManager {
     }
 
     @Override
-    public <T extends DataRecord> void register(Stream s, Class<T> clazz,
+    public <T extends DataRecord> void register(Stream s,
+                                                Class<T> clazz,
                                                 StreamGenerator aStreamGenerator)
             throws StreamNotFoundException, StreamAlreadyExistsException {
         if(mStreamMap.containsKey(clazz)) {
@@ -103,7 +104,8 @@ public class AndroidStreamManager extends Service implements StreamManager {
     }
 
     @Override
-    public boolean unregister(Stream s, StreamGenerator sg) throws StreamNotFoundException {
+    public boolean unregister(Stream s, StreamGenerator sg)
+            throws StreamNotFoundException {
         Class classType = s.getCurrentValue().getClass();
         if(!mStreamMap.containsKey(classType)) {
             throw new StreamNotFoundException();
@@ -113,7 +115,8 @@ public class AndroidStreamManager extends Service implements StreamManager {
     }
 
     @Override
-    public <T extends DataRecord> Stream<T> getStreamFor(Class<T> clazz) throws StreamNotFoundException {
+    public <T extends DataRecord> Stream<T> getStreamFor(Class<T> clazz)
+            throws StreamNotFoundException {
         return mStreamMap.get(clazz);
     }
 

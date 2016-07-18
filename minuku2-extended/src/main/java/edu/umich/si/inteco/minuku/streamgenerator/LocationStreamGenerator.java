@@ -14,6 +14,7 @@ import com.google.android.gms.location.LocationServices;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.AndroidStreamManager;
 import edu.umich.si.inteco.minuku.manager.DAOManager;
@@ -45,7 +46,7 @@ public class LocationStreamGenerator implements AndroidStreamGenerator<LocationD
     LocationDataRecordDAO mDAO;
 
     public LocationStreamGenerator() {
-        this.mStream = new LocationStream();
+        this.mStream = new LocationStream(Constants.LOCATION_QUEUE_SIZE);
         this.mDAO = DAOManager.getInstance().getDaoFor(LocationDataRecord.class);
     }
 
@@ -74,7 +75,7 @@ public class LocationStreamGenerator implements AndroidStreamGenerator<LocationD
         try {
             AndroidStreamManager.getInstance().register(mStream, LocationDataRecord.class, this);
         } catch (StreamNotFoundException streamNotFoundException) {
-
+            Log.d(TAG, "Another stream which provides LocationDataRecord is already registered.");
         } catch (StreamAlreadyExistsException streamAlreadyExistsException) {
             Log.d(TAG, "Another stream which provides LocationDataRecord is already registered.");
         }
@@ -102,7 +103,7 @@ public class LocationStreamGenerator implements AndroidStreamGenerator<LocationD
 
     @Override
     public long getUpdateFrequency() {
-        return 2; // seconds;
+        return 5; // 5 minutes
     }
 
     @Override
@@ -157,8 +158,8 @@ public class LocationStreamGenerator implements AndroidStreamGenerator<LocationD
         Log.d(TAG, "onConnected");
 
         mLocationRequest = LocationRequest.create();
-        mLocationRequest.setInterval(2000);
-        mLocationRequest.setFastestInterval(2000);
+        mLocationRequest.setInterval(5000);
+        mLocationRequest.setFastestInterval(5000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         LocationServices.FusedLocationApi

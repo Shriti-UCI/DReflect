@@ -9,4 +9,7 @@ import edu.umich.si.inteco.minukucore.stream.AbstractStream;
  */
 public class LocationStream extends AbstractStream<LocationDataRecord> {
 
+    public LocationStream(int maxSize) {
+        super(maxSize);
+    }
 }

@@ -39,11 +39,13 @@ public class Constants {
 
 
     // Prompt service related constants
-    public static final int PROMPT_SERVICE_REPEAT_MILLISECONDS = 1000 * 1; // 1 second
+    public static final int PROMPT_SERVICE_REPEAT_MILLISECONDS = 1000 * 60; // 1 minute
 
 
     // NNotification related constants
     public static final String REMINDER_NOTIFICATION_TITLE = "DStudio Reminder";
     public static final String REMINDER_NOTIFICATION_CONTENT = "Everyone forgets, we get that! That's why god made reminders";
     public static final String CAN_SHOW_NOTIFICATION = "ENABLE_NOTIFICATIONS";
+
+    public static final int LOCATION_QUEUE_SIZE = 100;
 }
