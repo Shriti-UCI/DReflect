@@ -1,5 +1,7 @@
 package edu.umich.si.inteco.minuku.model;
 
+import java.util.Date;
+
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 /**
  * Created by shriti on 7/15/16.
@@ -9,6 +11,12 @@ public class LocationDataRecord implements DataRecord {
     public float latitude;
     public float longitude;
     public long creationTime;
+
+    public LocationDataRecord(float latitude, float longitude) {
+        this.creationTime = new Date().getTime();
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 
     public float getLatitude() {
         return latitude;

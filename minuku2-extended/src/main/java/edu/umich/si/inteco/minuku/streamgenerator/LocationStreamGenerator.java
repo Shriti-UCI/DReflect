@@ -2,17 +2,16 @@ package edu.umich.si.inteco.minuku.streamgenerator;
 
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-
-import java.util.concurrent.atomic.AtomicLong;
+import com.google.common.util.concurrent.AtomicDouble;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
@@ -25,11 +24,12 @@ import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.manager.StreamManager;
 import edu.umich.si.inteco.minukucore.stream.Stream;
+import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
 
 /**
  * Created by neerajkumar on 7/18/16.
  */
-public class LocationStreamGenerator implements AndroidStreamGenerator<LocationDataRecord>,
+public class LocationStreamGenerator extends AndroidStreamGenerator<LocationDataRecord> implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
@@ -40,23 +40,27 @@ public class LocationStreamGenerator implements AndroidStreamGenerator<LocationD
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
 
-    private AtomicLong latitude;
-    private AtomicLong longitude;
+    private AtomicDouble latitude;
+    private AtomicDouble longitude;
 
     LocationDataRecordDAO mDAO;
 
-    public LocationStreamGenerator() {
+    public LocationStreamGenerator(Context applicationContext) {
+        super(applicationContext);
         this.mStream = new LocationStream(Constants.LOCATION_QUEUE_SIZE);
         this.mDAO = DAOManager.getInstance().getDaoFor(LocationDataRecord.class);
+        this.latitude = new AtomicDouble();
+        this.longitude = new AtomicDouble();
+        this.register();
     }
 
 
     @Override
-    public void onStreamRegistration(Context applicationContext) {
+    public void onStreamRegistration() {
         // do nothing.
-        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(applicationContext)
+        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(mApplicationContext)
                 == ConnectionResult.SUCCESS) {
-            mGoogleApiClient = new GoogleApiClient.Builder(applicationContext)
+            mGoogleApiClient = new GoogleApiClient.Builder(mApplicationContext)
                     .addApi(LocationServices.API)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
@@ -72,12 +76,13 @@ public class LocationStreamGenerator implements AndroidStreamGenerator<LocationD
 
     @Override
     public void register() {
+        Log.d(TAG, "Registering with StreamManager.");
         try {
             AndroidStreamManager.getInstance().register(mStream, LocationDataRecord.class, this);
         } catch (StreamNotFoundException streamNotFoundException) {
-            Log.d(TAG, "Another stream which provides LocationDataRecord is already registered.");
+            Log.e(TAG, "One of the streams on which LocationDataRecord depends in not found.");
         } catch (StreamAlreadyExistsException streamAlreadyExistsException) {
-            Log.d(TAG, "Another stream which provides LocationDataRecord is already registered.");
+            Log.e(TAG, "Another stream which provides LocationDataRecord is already registered.");
         }
     }
 
@@ -88,9 +93,10 @@ public class LocationStreamGenerator implements AndroidStreamGenerator<LocationD
 
     @Override
     public boolean updateStream() {
-        LocationDataRecord locationDataRecord = new LocationDataRecord();
-        locationDataRecord.setLatitude(latitude.get());
-        locationDataRecord.setLongitude(longitude.get());
+        Log.d(TAG, "Update stream called.");
+        LocationDataRecord locationDataRecord = new LocationDataRecord(
+                (float)latitude.get(),
+                (float)longitude.get());
         mStream.add(locationDataRecord);
         try {
             mDAO.add(locationDataRecord);
@@ -111,11 +117,6 @@ public class LocationStreamGenerator implements AndroidStreamGenerator<LocationD
 
     }
 
-    @Override
-    public void onStreamRegistration() {
-
-    }
-
 
     /**
      * Location Listerner events start here.
@@ -124,7 +125,7 @@ public class LocationStreamGenerator implements AndroidStreamGenerator<LocationD
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-            Log.e(TAG, "GPS: "
+            Log.d(TAG, "GPS: "
                     + location.getLatitude() + ", "
                     + location.getLongitude() + ", "
                     + "accuracy: " + location.getAccuracy());
@@ -132,26 +133,12 @@ public class LocationStreamGenerator implements AndroidStreamGenerator<LocationD
             // If the location is accurate to 30 meters, it's good enough for us.
             // Post an update event and exit.
             if (location.getAccuracy() < 30.0f) {
-                this.latitude.set((long) location.getLatitude());
-                this.longitude.set((long) location.getLongitude());
+                this.latitude.set(location.getLatitude());
+                this.longitude.set(location.getLongitude());
             }
         }
     }
 
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 
     @Override
     public void onConnected(Bundle bundle) {
@@ -164,7 +151,7 @@ public class LocationStreamGenerator implements AndroidStreamGenerator<LocationD
 
         LocationServices.FusedLocationApi
                 .requestLocationUpdates(mGoogleApiClient, mLocationRequest,
-                        (com.google.android.gms.location.LocationListener) this);
+                         this);
     }
 
     @Override

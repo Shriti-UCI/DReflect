@@ -3,6 +3,7 @@ package edu.umich.si.inteco.minuku.streamgenerator;
 import android.content.Context;
 
 import edu.umich.si.inteco.minukucore.model.DataRecord;
+import edu.umich.si.inteco.minukucore.stream.Stream;
 import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
 
 /**
@@ -13,16 +14,12 @@ import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
  * a {@link edu.umich.si.inteco.minukucore.stream.Stream} of type
  * {@link edu.umich.si.inteco.minukucore.stream.Stream.StreamType#FROM_DEVICE}
  */
-public interface AndroidStreamGenerator<T extends DataRecord> extends StreamGenerator<T> {
+public abstract class AndroidStreamGenerator<T extends DataRecord>
+        implements StreamGenerator<T> {
 
-    /**
-     * onStreamRegistration will be called when this StreamGenerator is registered successfully
-     * with the {@link edu.umich.si.inteco.minukucore.manager.StreamManager}. The {@link Context}
-     * is a required conduit to get access to raw data from the phone, e.g. Location, Accelerometer
-     * etc. This method passes the Context to the StreamGenerator for whatever purpose the
-     * StreamGenerator might require it for.
-     *
-     * @param applicationContext The application's context.
-     */
-    public void onStreamRegistration(Context applicationContext);
+    protected Context mApplicationContext;
+
+    public AndroidStreamGenerator(Context aApplicationContext) {
+        this.mApplicationContext = aApplicationContext;
+    }
 }

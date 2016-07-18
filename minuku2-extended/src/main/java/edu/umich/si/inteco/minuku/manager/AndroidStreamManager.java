@@ -8,11 +8,13 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku.streamgenerator.AndroidStreamGenerator;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
@@ -32,7 +34,7 @@ import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
  *
  * The AndroidStreamManager is a {@link Service#START_STICKY sticky} service.
  */
-public class AndroidStreamManager extends Service implements StreamManager {
+public class AndroidStreamManager implements StreamManager {
 
     private final String TAG = "AndroidStreamManager";
 
@@ -42,42 +44,33 @@ public class AndroidStreamManager extends Service implements StreamManager {
 
     private static int counter = 0;
 
-    private static AndroidStreamManager instance = null;
+    private static AndroidStreamManager instance;
 
-    private AndroidStreamManager() {
-
+    private AndroidStreamManager() throws Exception {
+        mStreamMap = new HashMap<>();
+        mStreamTypeStreamMap = new HashMap<>();
+        mRegisteredStreamGenerators = new LinkedList<>();
     }
 
     public static AndroidStreamManager getInstance() {
-        if(instance == null) {
-            instance = new AndroidStreamManager();
+        if(AndroidStreamManager.instance == null) {
+            try {
+                AndroidStreamManager.instance = new AndroidStreamManager();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return instance;
+        return AndroidStreamManager.instance;
     }
 
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "Start command received.");
+    public void updateStreamGenerators() {
         for(StreamGenerator streamGenerator: mRegisteredStreamGenerators) {
+            Log.d(TAG, "Stream generator : " + streamGenerator.getUpdateFrequency());
             if(counter % streamGenerator.getUpdateFrequency() == 0) {
                 streamGenerator.updateStream();
             }
         }
         counter++;
-        AlarmManager alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
-        alarm.set(
-                alarm.RTC_WAKEUP,
-                System.currentTimeMillis() + Constants.PROMPT_SERVICE_REPEAT_MILLISECONDS,
-                PendingIntent.getService(this, 0, new Intent(this, AndroidStreamManager.class), 0)
-        );
-
-        return START_STICKY_COMPATIBILITY;
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.d(TAG, "Destroying service.");
     }
 
 
@@ -101,6 +94,8 @@ public class AndroidStreamManager extends Service implements StreamManager {
         }
         mStreamMap.put(clazz, s);
         mRegisteredStreamGenerators.add(aStreamGenerator);
+        aStreamGenerator.onStreamRegistration();
+        Log.d(TAG, "Registered a new stream generator for " + clazz);
     }
 
     @Override
@@ -129,9 +124,4 @@ public class AndroidStreamManager extends Service implements StreamManager {
         return mStreamTypeStreamMap.get(streamType);
     }
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
 }

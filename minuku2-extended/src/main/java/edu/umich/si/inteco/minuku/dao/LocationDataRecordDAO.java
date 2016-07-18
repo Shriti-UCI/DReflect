@@ -29,7 +29,6 @@ import edu.umich.si.inteco.minukucore.user.User;
 public class LocationDataRecordDAO implements DAO<LocationDataRecord> {
 
     private String TAG = "LocationDataRecordDAO";
-    private String url = Constants.FIREBASE_URL_LOCATION;
     private User myUser;
 
 
@@ -40,6 +39,7 @@ public class LocationDataRecordDAO implements DAO<LocationDataRecord> {
 
     @Override
     public void add(LocationDataRecord entity) throws DAOException {
+        Log.d(TAG, "Adding location data record.");
         FirebaseClient.getInstance();
         Firebase locationListRef = new Firebase(Constants.FIREBASE_URL_LOCATION)
                 .child(myUser.getEmail())
