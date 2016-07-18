@@ -25,12 +25,20 @@ import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
  * within the application and is responsible for trigerring the
  * {@link StreamGenerator#updateStream() updateStream} method of the StreamManager class after
  * every {@link StreamGenerator#getUpdateFrequency() updateFrequency}.
+ *
+ * The AndroidStreamManager is a {@link Service#START_STICKY sticky} service.
  */
 public class AndroidStreamManager extends Service implements StreamManager {
 
     protected Map<Class, Stream> mStreamMap;
     protected Map<Stream.StreamType, List<Stream<? extends DataRecord>>> mStreamTypeStreamMap;
     protected List<StreamGenerator> mRegisteredStreamGenerators;
+
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY_COMPATIBILITY;
+    }
 
     @Override
     public List<Stream> getAllStreams() {
