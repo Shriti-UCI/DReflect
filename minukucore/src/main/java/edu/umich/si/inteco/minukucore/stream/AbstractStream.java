@@ -10,7 +10,7 @@ import edu.umich.si.inteco.minukucore.stream.Stream;
 /**
  * Created by Neeraj Kumar on 7/17/16.
  */
-public class AbstractStream<T extends DataRecord> extends LinkedList<T> implements Stream<T> {
+public abstract class AbstractStream<T extends DataRecord> extends LinkedList<T> implements Stream<T> {
 
     @Override
     public T getCurrentValue() {

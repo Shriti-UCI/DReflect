@@ -32,21 +32,24 @@ public interface StreamManager {
      *
      * @param s the new stream to be registered
      * @param clazz the class for DataRecord that the Stream holds
+     * @param aStreamGenerator the StreamGenerator which called the register method.
      * @param <T> the application specific DataRecord {@link edu.umich.si.inteco.minukucore.model.DataRecord}
      * @throws StreamNotFoundException {@link edu.umich.si.inteco.minukucore.exception.StreamNotFoundException}
      * @throws StreamAlreadyExistsException {@link edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException}
      */
-    public <T extends DataRecord> void register(Stream s, Class<T> clazz)
+    public <T extends DataRecord> void register(Stream s, Class<T> clazz,
+                                                StreamGenerator aStreamGenerator)
             throws StreamNotFoundException, StreamAlreadyExistsException;
 
     /**
      * Unregister stream s
      * Unregistering a stream that does not exist throws expection
      * @param s the Stream to be unregistered
+     * @param sg the StreamGenerator to be registered
      * @return true if the Stream is successfully unregistered
      * @throws StreamNotFoundException {@link edu.umich.si.inteco.minukucore.exception.StreamNotFoundException}
      */
-    public boolean unregister(Stream s) throws StreamNotFoundException;
+    public boolean unregister(Stream s, StreamGenerator sg) throws StreamNotFoundException;
 
     /**
      * Fetch the Stream for the DataRecord that the stream holds

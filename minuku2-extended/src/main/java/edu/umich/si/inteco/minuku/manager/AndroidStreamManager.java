@@ -15,14 +15,22 @@ import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.manager.StreamManager;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.stream.Stream;
+import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
 
 /**
  * Created by Neeraj Kumar on 7/17/16.
+ *
+ * The AndroidStreamManager class implements {@link StreamManager} and runs as a service within
+ * the application context. It maintains a list of all the Streams and StreamGenerators registered
+ * within the application and is responsible for trigerring the
+ * {@link StreamGenerator#updateStream() updateStream} method of the StreamManager class after
+ * every {@link StreamGenerator#getUpdateFrequency() updateFrequency}.
  */
 public class AndroidStreamManager extends Service implements StreamManager {
 
     protected Map<Class, Stream> mStreamMap;
     protected Map<Stream.StreamType, List<Stream<? extends DataRecord>>> mStreamTypeStreamMap;
+    protected List<StreamGenerator> mRegisteredStreamGenerators;
 
     @Override
     public List<Stream> getAllStreams() {
@@ -30,7 +38,8 @@ public class AndroidStreamManager extends Service implements StreamManager {
     }
 
     @Override
-    public <T extends DataRecord> void register(Stream s, Class<T> clazz)
+    public <T extends DataRecord> void register(Stream s, Class<T> clazz,
+                                                StreamGenerator aStreamGenerator)
             throws StreamNotFoundException, StreamAlreadyExistsException {
         if(mStreamMap.containsKey(clazz)) {
             throw new StreamAlreadyExistsException();
@@ -41,16 +50,17 @@ public class AndroidStreamManager extends Service implements StreamManager {
             }
         }
         mStreamMap.put(clazz, s);
+        mRegisteredStreamGenerators.add(aStreamGenerator);
     }
 
     @Override
-    public boolean unregister(Stream s) throws StreamNotFoundException {
+    public boolean unregister(Stream s, StreamGenerator sg) throws StreamNotFoundException {
         Class classType = s.getCurrentValue().getClass();
         if(!mStreamMap.containsKey(classType)) {
             throw new StreamNotFoundException();
         }
         mStreamMap.remove(s);
-        return true;
+        return mRegisteredStreamGenerators.remove(sg);
     }
 
     @Override
