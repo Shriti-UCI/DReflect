@@ -13,6 +13,8 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.common.util.concurrent.AtomicDouble;
 
+import org.greenrobot.eventbus.EventBus;
+
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
@@ -96,6 +98,8 @@ public class LocationStreamGenerator extends AndroidStreamGenerator<LocationData
                 (float)latitude.get(),
                 (float)longitude.get());
         mStream.add(locationDataRecord);
+        // also post an event.
+        EventBus.getDefault().post(locationDataRecord);
         try {
             mDAO.add(locationDataRecord);
         } catch (DAOException e) {

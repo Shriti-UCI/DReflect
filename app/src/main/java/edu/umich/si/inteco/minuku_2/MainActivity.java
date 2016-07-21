@@ -15,13 +15,16 @@ import java.util.UUID;
 import edu.umich.si.inteco.minuku.dao.ImageDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.MoodDataRecordDAO;
+import edu.umich.si.inteco.minuku.dao.SemanticLocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.model.ImageDataRecord;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
+import edu.umich.si.inteco.minuku.model.SemanticLocationDataRecord;
 import edu.umich.si.inteco.minuku.streamgenerator.ImageStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MoodStreamGenerator;
+import edu.umich.si.inteco.minuku.streamgenerator.SemanticLocationStreamGenerator;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
 import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
@@ -56,6 +59,11 @@ public class MainActivity extends AppCompatActivity {
         moodDataRecordDAO.setDevice(dummyUser, dummyUUID);
         daoManager.registerDaoFor(MoodDataRecord.class, moodDataRecordDAO);
 
+        // SemanticLocation
+        SemanticLocationDataRecordDAO semanticLocationDataRecordDAO = new SemanticLocationDataRecordDAO();
+        semanticLocationDataRecordDAO.setDevice(dummyUser, dummyUUID);
+        daoManager.registerDaoFor(SemanticLocationDataRecord.class, semanticLocationDataRecordDAO);
+
         // Create corresponding stream generators. Only to be created once in Main Activity
         //creating a new stream registers it with the stream manager
         LocationStreamGenerator locationStreamGenerator =
@@ -64,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
                 new ImageStreamGenerator(getApplicationContext());
         MoodStreamGenerator moodStreamGenerator =
                 new MoodStreamGenerator(getApplicationContext());
+        SemanticLocationStreamGenerator semanticLocationStreamGenerator =
+                new SemanticLocationStreamGenerator(getApplicationContext());
 
     }
 

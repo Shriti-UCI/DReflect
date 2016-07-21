@@ -17,7 +17,7 @@ public class ImageStream extends AbstractStreamFromUser<ImageDataRecord>{
     }
 
     @Override
-    public <T extends DataRecord> List<Class<T>> dependsOnDataRecord() {
+    public List<Class<? extends DataRecord>> dependsOnDataRecord() {
         return new ArrayList<>();
     }
 }
