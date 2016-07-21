@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    style="@style/PreferencesTheme"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+    <edu.umich.si.inteco.minuku_2.preferences.TimePreference
+        android:title="Wake up time"
+        android:summary="This is the time when the notifications will be enabled"
+        android:key="startTime"/>
+    <edu.umich.si.inteco.minuku_2.preferences.TimePreference
+        android:title="Bed  time"
+        android:summary="This is the time when the notifications will be disabled"
+        android:key="endTime"/>
+    <com.h6ah4i.android.compat.preference.MultiSelectListPreferenceCompat
+        android:title="GM  time"
+        android:summary="Select all the times that you need to take glucose readings"
+        android:key="gmTimes"
+        android:entries="@array/listArray"
+        android:entryValues="@array/listValues"/>
+    <com.h6ah4i.android.compat.preference.MultiSelectListPreferenceCompat
+        android:title="Insulin  time"
+        android:summary="Select all the times that you need to take insulin"
+        android:key="insulinTimes"
+        android:entries="@array/listArray"
+        android:entryValues="@array/listValues"/>
+</PreferenceScreen>

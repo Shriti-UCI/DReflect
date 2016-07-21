@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg2">
+    <TextView
+        style="@style/NormalXLargeText"
+        android:id="@+id/moodmap_descriptor"
+        android:layout_marginLeft="6dip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center"
+        android:text="Tap and drag to select your mood"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"/>
+
+    <edu.umich.si.inteco.minuku_2.view.customview.MoodEntryView android:id="@+id/graphCustomView"
+        android:layout_width="300dp"
+        android:layout_height="300dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!-- <TextView
+                style="@style/NormalText"
+                android:id="@+id/mood_annotation_descriptor"
+                android:layout_marginLeft="6dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="Tell us why are you feeling this way?"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"/>
+            <EditText
+                android:id="@+id/mood_annotation"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:singleLine="false"
+                android:layout_height="80dp"/> -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <ImageView
+                    android:id="@+id/rejectButton"
+                    android:src="@drawable/reject"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"/>
+
+                --<ImageView
+                    android:src="@drawable/mood"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"/>
+
+                <ImageView
+                    android:id="@+id/acceptButton"
+                    android:src="@drawable/accept"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

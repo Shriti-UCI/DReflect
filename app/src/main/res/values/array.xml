@@ -1,0 +1,42 @@
+<resources>
+    <string-array name="listArray">
+        <item>6:00am</item>
+        <item>7:00am</item>
+        <item>8:00am</item>
+        <item>9:00am</item>
+        <item>10:00am</item>
+        <item>11:00am</item>
+        <item>12:00pm</item>
+        <item>1:00apm</item>
+        <item>2:00pm</item>
+        <item>3:00pm</item>
+        <item>4:00pm</item>
+        <item>5:00pm</item>
+        <item>6:00pm</item>
+        <item>7:00pm</item>
+        <item>8:00pm</item>
+        <item>9:00pm</item>
+        <item>10:00pm</item>
+    </string-array>
+
+    <string-array name="listValues">
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+    </string-array>
+
+</resources>

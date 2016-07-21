@@ -2,5 +2,8 @@
     <string name="app_name">Minuku-2</string>
     <string name="ok">OK</string>
     <string name="permission_location_rationale">The app needs location for context</string>
+    <string name="squarecamera__app_name">Minuku</string>
+    <string name="action_logout">Logout</string>
+
 
 </resources>
