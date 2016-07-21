@@ -115,6 +115,10 @@ public class LocationStreamGenerator extends AndroidStreamGenerator<LocationData
 
     }
 
+    @Override
+    public void offer(LocationDataRecord dataRecord) {
+
+    }
 
     /**
      * Location Listerner events start here.

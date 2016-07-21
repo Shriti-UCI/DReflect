@@ -14,7 +14,7 @@ public class Constants {
     public static final String FIREBASE_URL_USERS = FIREBASE_URL + "/users";
     public static final String FIREBASE_URL_MOODS = FIREBASE_URL + "/moods";
     public static final String FIREBASE_URL_NOTES = FIREBASE_URL + "/notes";
-    public static final String FIREBASE_URL_PHOTOS = FIREBASE_URL + "/photos";
+    public static final String FIREBASE_URL_IMAGES = FIREBASE_URL + "/photos";
     public static final String FIREBASE_URL_LOCATION = FIREBASE_URL + "/location";
 
 
@@ -47,5 +47,10 @@ public class Constants {
     public static final String REMINDER_NOTIFICATION_CONTENT = "Everyone forgets, we get that! That's why god made reminders";
     public static final String CAN_SHOW_NOTIFICATION = "ENABLE_NOTIFICATIONS";
 
+    //default queue size
+    public static final int DEFAULT_QUEUE_SIZE = 100;
+
+    //specific queue sizes
     public static final int LOCATION_QUEUE_SIZE = 100;
+    public static final int IMAGE_QUEUE_SIZE = 100;
 }

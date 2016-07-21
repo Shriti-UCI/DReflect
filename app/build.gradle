@@ -28,4 +28,8 @@ dependencies {
 
     /* Google Guava */
     compile 'com.google.guava:guava:19.0'
+
+    /* Third party camera API */
+    compile 'com.github.boxme:squarecamera:1.1.0'
+
 }

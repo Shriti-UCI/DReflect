@@ -1,6 +1,5 @@
 package edu.umich.si.inteco.minuku.dao;
 
-import android.location.Location;
 import android.util.Log;
 
 import com.firebase.client.DataSnapshot;
@@ -18,20 +17,20 @@ import java.util.UUID;
 import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku.model.ImageDataRecord;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
-import edu.umich.si.inteco.minukucore.dao.*;
+import edu.umich.si.inteco.minukucore.dao.DAO;
+import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.user.User;
 
 /**
- * Created by shriti on 7/15/16.
- * Author: Neeraj Kumar
+ * Created by shriti on 7/19/16.
  */
-public class LocationDataRecordDAO implements DAO<LocationDataRecord> {
+public class ImageDataRecordDAO implements DAO<ImageDataRecord> {
 
-    private String TAG = "LocationDataRecordDAO";
+    private String TAG = "ImageDataRecordDAO";
     private User myUser;
     private UUID uuID;
-
 
     @Override
     public void setDevice(User user, UUID uuid) {
@@ -40,33 +39,33 @@ public class LocationDataRecordDAO implements DAO<LocationDataRecord> {
     }
 
     @Override
-    public void add(LocationDataRecord entity) throws DAOException {
-        Log.d(TAG, "Adding location data record.");
-        Firebase locationListRef = new Firebase(Constants.FIREBASE_URL_LOCATION)
+    public void add(ImageDataRecord entity) throws DAOException {
+        Log.d(TAG, "Adding image data record");
+        Firebase imageListRef = new Firebase(Constants.FIREBASE_URL_IMAGES)
                 .child(myUser.getEmail())
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
-        locationListRef.push().setValue((LocationDataRecord) entity);
+        imageListRef.push().setValue((ImageDataRecord) entity);
     }
 
     @Override
-    public void delete(LocationDataRecord entity) throws DAOException {
-        // no-op for now.
+    public void delete(ImageDataRecord entity) throws DAOException {
+        //do nothing for now
     }
 
     @Override
-    public Future<List<LocationDataRecord>> getAll() throws DAOException {
-        final SettableFuture<List<LocationDataRecord>> settableFuture =
+    public Future<List<ImageDataRecord>> getAll() throws DAOException {
+        final SettableFuture<List<ImageDataRecord>> settableFuture =
                 SettableFuture.create();
-        Firebase locationListRef = new Firebase(Constants.FIREBASE_URL_LOCATION)
+        Firebase imageListRef = new Firebase(Constants.FIREBASE_URL_IMAGES)
                 .child(myUser.getEmail())
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
 
-        locationListRef.addValueEventListener(new ValueEventListener() {
+        imageListRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, LocationDataRecord> locationListMap =
-                        (HashMap<String,LocationDataRecord>) dataSnapshot.getValue();
-                List<LocationDataRecord> values = (List) locationListMap.values();
+                Map<String, ImageDataRecord> imageListMap =
+                        (HashMap<String,ImageDataRecord>) dataSnapshot.getValue();
+                List<ImageDataRecord> values = (List) imageListMap.values();
                 settableFuture.set(values);
             }
 
@@ -79,14 +78,11 @@ public class LocationDataRecordDAO implements DAO<LocationDataRecord> {
     }
 
     @Override
-    public Future<List<LocationDataRecord>> getLast(int N) throws DAOException {
-        Log.e(TAG, "Method not implemented. Returning null");
+    public Future<List<ImageDataRecord>> getLast(int N) throws DAOException {
         return null;
     }
 
     @Override
-    public void update(LocationDataRecord oldEntity, LocationDataRecord newEntity)
-            throws DAOException {
-        Log.e(TAG, "Method not implemented. Returning null");
+    public void update(ImageDataRecord oldEntity, ImageDataRecord newEntity) throws DAOException {
     }
 }

@@ -105,6 +105,9 @@ public interface StreamGenerator<T extends DataRecord> {
      */
     public void onStreamRegistration();
 
+    //add a method for activity to pass data to stream generator
+    public void offer(T dataRecord);
+
 }
 
 /**

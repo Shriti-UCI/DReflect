@@ -1,6 +1,7 @@
 package edu.umich.si.inteco.minuku.manager;
 
 import android.app.Service;
+import android.media.Image;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import edu.umich.si.inteco.minuku.model.ImageDataRecord;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
@@ -33,7 +35,7 @@ public class MinukuStreamManager implements StreamManager {
 
     protected Map<Class, Stream> mStreamMap;
     protected Map<Stream.StreamType, List<Stream<? extends DataRecord>>> mStreamTypeStreamMap;
-    protected List<StreamGenerator> mRegisteredStreamGenerators;
+    protected Map<Class, StreamGenerator> mRegisteredStreamGenerators;
 
     private static int counter = 0;
 
@@ -42,7 +44,7 @@ public class MinukuStreamManager implements StreamManager {
     private MinukuStreamManager() throws Exception {
         mStreamMap = new HashMap<>();
         mStreamTypeStreamMap = new HashMap<>();
-        mRegisteredStreamGenerators = new LinkedList<>();
+        mRegisteredStreamGenerators = new HashMap<>();
     }
 
     public static MinukuStreamManager getInstance() {
@@ -57,7 +59,7 @@ public class MinukuStreamManager implements StreamManager {
     }
 
     public void updateStreamGenerators() {
-        for(StreamGenerator streamGenerator: mRegisteredStreamGenerators) {
+        for(StreamGenerator streamGenerator: mRegisteredStreamGenerators.values()) {
             Log.d(TAG, "Stream generator : " + streamGenerator.getUpdateFrequency());
             if(counter % streamGenerator.getUpdateFrequency() == 0) {
                 streamGenerator.updateStream();
@@ -86,26 +88,30 @@ public class MinukuStreamManager implements StreamManager {
             }
         }
         mStreamMap.put(clazz, s);
-        mRegisteredStreamGenerators.add(aStreamGenerator);
+        mRegisteredStreamGenerators.put(clazz, aStreamGenerator);
         aStreamGenerator.onStreamRegistration();
         Log.d(TAG, "Registered a new stream generator for " + clazz);
     }
 
     @Override
-    public boolean unregister(Stream s, StreamGenerator sg)
+    public void unregister(Stream s, StreamGenerator sg)
             throws StreamNotFoundException {
         Class classType = s.getCurrentValue().getClass();
         if(!mStreamMap.containsKey(classType)) {
             throw new StreamNotFoundException();
         }
         mStreamMap.remove(s);
-        return mRegisteredStreamGenerators.remove(sg);
+        mRegisteredStreamGenerators.remove(sg);
     }
 
     @Override
     public <T extends DataRecord> Stream<T> getStreamFor(Class<T> clazz)
             throws StreamNotFoundException {
-        return mStreamMap.get(clazz);
+        if(mStreamMap.containsKey(clazz)) {
+            return mStreamMap.get(clazz);
+        } else {
+            throw new StreamNotFoundException();
+        }
     }
 
     @Override
@@ -117,4 +123,13 @@ public class MinukuStreamManager implements StreamManager {
         return mStreamTypeStreamMap.get(streamType);
     }
 
+    @Override
+    public <T extends DataRecord> StreamGenerator<T> getStreamGeneratorFor(Class<T> clazz)
+            throws StreamNotFoundException {
+        if(mRegisteredStreamGenerators.containsKey(clazz)) {
+            return mRegisteredStreamGenerators.get(clazz);
+        } else {
+            throw new StreamNotFoundException();
+        }
+    }
 }

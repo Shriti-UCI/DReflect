@@ -82,14 +82,4 @@ public abstract class AbstractStream<T extends DataRecord>
         return this.get(this.size() - 1);
     }
 
-    @Override
-    public StreamType getType() {
-        return StreamType.FROM_DEVICE;
-    }
-
-    @Override
-    public <T extends DataRecord> List<Class<T>> dependsOnDataRecord() {
-        return new ArrayList<>();
-    }
-
 }
