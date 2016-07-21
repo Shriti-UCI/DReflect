@@ -1,7 +1,5 @@
 package edu.umich.si.inteco.minuku.manager;
 
-import android.app.Service;
-import android.media.Image;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -9,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import edu.umich.si.inteco.minuku.model.ImageDataRecord;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;

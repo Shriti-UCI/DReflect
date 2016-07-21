@@ -1,6 +1,5 @@
 package edu.umich.si.inteco.minuku.dao;
 
-import android.location.Location;
 import android.util.Log;
 
 import com.firebase.client.DataSnapshot;

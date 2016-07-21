@@ -6,7 +6,6 @@ import java.util.List;
 
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
-import edu.umich.si.inteco.minukucore.stream.AbstractStream;
 import edu.umich.si.inteco.minukucore.stream.AbstractStreamFromDevice;
 
 /**
