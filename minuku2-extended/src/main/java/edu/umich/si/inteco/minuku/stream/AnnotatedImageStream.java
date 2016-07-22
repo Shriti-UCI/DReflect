@@ -3,16 +3,16 @@ package edu.umich.si.inteco.minuku.stream;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.umich.si.inteco.minuku.model.ImageDataRecord;
+import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.stream.AbstractStreamFromUser;
 
 /**
- * Created by shriti on 7/19/16.
+ * Created by shriti on 7/22/16.
  */
-public class ImageStream extends AbstractStreamFromUser<ImageDataRecord>{
+public class AnnotatedImageStream extends AbstractStreamFromUser<AnnotatedImageDataRecord> {
 
-    public ImageStream(int maxSize) {
+    public AnnotatedImageStream(int maxSize) {
         super(maxSize);
     }
 
