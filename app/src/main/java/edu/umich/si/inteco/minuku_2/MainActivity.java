@@ -12,14 +12,14 @@ import android.widget.Toast;
 
 import java.util.UUID;
 
-import edu.umich.si.inteco.minuku.dao.ImageDataRecordDAO;
+import edu.umich.si.inteco.minuku.dao.AnnotatedImageDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.MoodDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
-import edu.umich.si.inteco.minuku.model.ImageDataRecord;
+import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
-import edu.umich.si.inteco.minuku.streamgenerator.ImageStreamGenerator;
+import edu.umich.si.inteco.minuku.streamgenerator.AnnotatedImageStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MoodStreamGenerator;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
         daoManager.registerDaoFor(LocationDataRecord.class, locationDataRecordDAO);
 
         //For image
-        ImageDataRecordDAO imageDataRecordDAO = new ImageDataRecordDAO();
-        imageDataRecordDAO.setDevice(dummyUser, dummyUUID);
-        daoManager.registerDaoFor(ImageDataRecord.class, imageDataRecordDAO);
+        AnnotatedImageDataRecordDAO annotatedImageDataRecordDAO = new AnnotatedImageDataRecordDAO();
+        annotatedImageDataRecordDAO.setDevice(dummyUser, dummyUUID);
+        daoManager.registerDaoFor(AnnotatedImageDataRecord.class, annotatedImageDataRecordDAO);
 
         //For mood
         MoodDataRecordDAO moodDataRecordDAO = new MoodDataRecordDAO();
@@ -60,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
         //creating a new stream registers it with the stream manager
         LocationStreamGenerator locationStreamGenerator =
                 new LocationStreamGenerator(getApplicationContext());
-        ImageStreamGenerator imageStreamGenerator =
-                new ImageStreamGenerator(getApplicationContext());
+        AnnotatedImageStreamGenerator annotatedImageStreamGenerator =
+                new AnnotatedImageStreamGenerator(getApplicationContext());
         MoodStreamGenerator moodStreamGenerator =
                 new MoodStreamGenerator(getApplicationContext());
 
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 // The position here corresponds to position of objects in the array passed above.
                 switch (position) {
                     case 0:
-                        Intent addPhotoIntent = new Intent(MainActivity.this, ImageDataRecordActivity.class);
+                        Intent addPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
                         startActivity(addPhotoIntent);
                         break;
                     case 1:

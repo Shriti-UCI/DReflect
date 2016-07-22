@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -25,18 +26,19 @@ import com.desmond.squarecamera.ImageUtility;
 import java.io.ByteArrayOutputStream;
 
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
-import edu.umich.si.inteco.minuku.model.ImageDataRecord;
+import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 
 /**
  * Created by shriti on 7/19/16.
  */
-public class ImageDataRecordActivity extends Activity {
+public class AnnotatedImageDataRecordActivity extends Activity {
 
-    private static final String TAG = "ImageDataRecordActivity";
+    private static final String TAG = "AnotatdImgDataRecActvty";
 
     protected ImageView imageView;
     protected View mLayout;
+    protected EditText mText;
     protected String base64ImageData;
 
     protected static final int REQUEST_CAMERA = 101;
@@ -47,6 +49,7 @@ public class ImageDataRecordActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_image_activity);
         imageView = (ImageView) findViewById(R.id.image);
+        mText = (EditText) findViewById(R.id.image_annotation);
 
         // Add click listeners for buttons
         ImageView acceptButton = (ImageView) findViewById(R.id.acceptButton);
@@ -76,18 +79,20 @@ public class ImageDataRecordActivity extends Activity {
 
     private void acceptResults() {
         //create a new image data record once submitted/accepted by user
-        ImageDataRecord imageDataRecord = new ImageDataRecord(base64ImageData);
+        String annotation = mText.getText().toString();
+        AnnotatedImageDataRecord annotatedImageDataRecord = new AnnotatedImageDataRecord(base64ImageData, annotation);
 
         //get the StreamGenerator for image and save data in database
         try {
             Log.d(TAG, "Saving results to the database");
-            MinukuStreamManager.getInstance().getStreamGeneratorFor(ImageDataRecord.class).offer(imageDataRecord);
+            MinukuStreamManager.getInstance().getStreamGeneratorFor(AnnotatedImageDataRecord.class).offer(annotatedImageDataRecord);
         } catch (StreamNotFoundException e) {
             e.printStackTrace();
             Log.e(TAG, "The photo stream does not exist on this device.");
         }
 
         showToast("Starting the image stream annotated photo.");
+
         finish();
     }
 
@@ -148,7 +153,7 @@ public class ImageDataRecordActivity extends Activity {
                         .setAction(R.string.ok, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                ActivityCompat.requestPermissions(ImageDataRecordActivity.this,
+                                ActivityCompat.requestPermissions(AnnotatedImageDataRecordActivity.this,
                                         new String[]{Manifest.permission.CAMERA},
                                         REQUEST_CAMERA);
                             }
