@@ -42,7 +42,7 @@ public interface Stream<T extends DataRecord> extends Queue<T> {
      *
      * @return the list of DataRecord types
      */
-    public List<Class<? extends DataRecord>> dependsOnDataRecord();
+    public List<Class<? extends DataRecord>> dependsOnDataRecordType();
 
     /**
      * Get the type of stream - from_device, from_user, from_question
