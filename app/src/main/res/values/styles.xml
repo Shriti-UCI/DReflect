@@ -31,5 +31,35 @@
         <item name="android:background">@drawable/bg2</item>
     </style>
 
+    <style name="HintText">
+        <item name="android:textColor">@color/common_plus_signin_btn_text_dark_pressed</item>
+        <item name="android:textSize">12dp</item>
+    </style>
+    <!--Styles for login screen text-->
+    <style name="LoginCreateTextButton">
+        <item name="android:textSize">@dimen/login_buttons_text_size</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="LoginCreateText">
+        <item name="android:textSize">@dimen/login_buttons_text_size</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_margin">2dp</item>
+    </style>
+    <style name="LoginDivider">
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:background">@color/divider</item>
+    </style>
+
 
 </resources>

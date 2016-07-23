@@ -3,6 +3,7 @@ package edu.umich.si.inteco.minuku_2;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +34,9 @@ import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
 import edu.umich.si.inteco.minukucore.user.User;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
+
+    private static final String LOG_TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,29 +45,32 @@ public class MainActivity extends AppCompatActivity {
         initializeActionList();
         startService(new Intent(getBaseContext(), BackgroundService.class));
 
-        User dummyUser = new User("dummy", "user", "dummyuser@gmail,com");
+        User myUser = mSharedPref.getUser();
+        if(myUser == null) {
+            Log.e(LOG_TAG, "User is set to null");
+        }
         UUID dummyUUID = UUID.randomUUID();
 
         // DAO initialization stuff
         MinukuDAOManager daoManager = MinukuDAOManager.getInstance();
         //For location
         LocationDataRecordDAO locationDataRecordDAO = new LocationDataRecordDAO();
-        locationDataRecordDAO.setDevice(dummyUser, dummyUUID);
+        locationDataRecordDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(LocationDataRecord.class, locationDataRecordDAO);
 
         //For image
         AnnotatedImageDataRecordDAO annotatedImageDataRecordDAO = new AnnotatedImageDataRecordDAO();
-        annotatedImageDataRecordDAO.setDevice(dummyUser, dummyUUID);
+        annotatedImageDataRecordDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(AnnotatedImageDataRecord.class, annotatedImageDataRecordDAO);
 
         //For mood
         MoodDataRecordDAO moodDataRecordDAO = new MoodDataRecordDAO();
-        moodDataRecordDAO.setDevice(dummyUser, dummyUUID);
+        moodDataRecordDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(MoodDataRecord.class, moodDataRecordDAO);
 
         // SemanticLocation
         SemanticLocationDataRecordDAO semanticLocationDataRecordDAO = new SemanticLocationDataRecordDAO();
-        semanticLocationDataRecordDAO.setDevice(dummyUser, dummyUUID);
+        semanticLocationDataRecordDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(SemanticLocationDataRecord.class, semanticLocationDataRecordDAO);
 
         // Create corresponding stream generators. Only to be created once in Main Activity
@@ -87,8 +93,7 @@ public class MainActivity extends AppCompatActivity {
         // the action object is the model behind the list that is shown on the main screen.
         final ActionObject[] array = {
                 new ActionObject("Take Glucose Reading Pictures", "A", R.drawable.camera),
-                new ActionObject("Record Your Mood", "A", R.drawable.mood),
-                new ActionObject("Huff", "A", R.drawable.reject)
+                new ActionObject("Record Your Mood", "A", R.drawable.mood)
         };
         // The adapter takes the action object array and converts it into a view that can be
         // rendered as a list, one item at a time.
@@ -102,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                 // The position here corresponds to position of objects in the array passed above.
                 switch (position) {
                     case 0:
-                        Intent addPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecord.class);
+                        Intent addPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
                         startActivity(addPhotoIntent);
                         break;
                     case 1:

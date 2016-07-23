@@ -20,7 +20,7 @@ import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 /**
  * Created by shriti on 7/21/16.
  */
-public class MoodDataRecordActivity extends Activity {
+public class MoodDataRecordActivity extends BaseActivity {
 
     private float DEVICE_DENSITY = 0;
     private int DEVICE_WIDTH = 0;
@@ -321,9 +321,5 @@ public class MoodDataRecordActivity extends Activity {
     public void rejectResults() {
         showToast("Going back to home screen");
         finish();
-    }
-
-    protected void showToast(String aText) {
-        Toast.makeText(this, aText, Toast.LENGTH_SHORT).show();
     }
 }

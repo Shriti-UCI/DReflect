@@ -32,12 +32,11 @@ import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 /**
  * Created by shriti on 7/19/16.
  */
-public class AnnotatedImageDataRecordActivity extends Activity {
+public class AnnotatedImageDataRecordActivity extends BaseActivity {
 
     private static final String TAG = "AnotatdImgDataRecActvty";
 
     protected ImageView imageView;
-    protected View mLayout;
     protected EditText mText;
     protected String base64ImageData;
 
@@ -169,10 +168,6 @@ public class AnnotatedImageDataRecordActivity extends Activity {
 
         Intent startCustomCameraIntent = new Intent(this, CameraActivity.class);
         startActivityForResult(startCustomCameraIntent, REQUEST_CAMERA);
-    }
-
-    protected void showToast(String aText) {
-        Toast.makeText(this, aText, Toast.LENGTH_SHORT).show();
     }
 
 }
