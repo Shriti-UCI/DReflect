@@ -17,6 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.model.SemanticLocationDataRecord;
 import edu.umich.si.inteco.minukucore.dao.DAO;

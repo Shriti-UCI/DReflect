@@ -17,6 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minukucore.dao.*;
 import edu.umich.si.inteco.minukucore.user.User;
@@ -34,7 +35,7 @@ public class LocationDataRecordDAO implements DAO<LocationDataRecord> {
 
     @Override
     public void setDevice(User user, UUID uuid) {
-        myUser = user;
+        myUser = UserPreferences.getInstance().getUser();
         uuID = uuid;
     }
 

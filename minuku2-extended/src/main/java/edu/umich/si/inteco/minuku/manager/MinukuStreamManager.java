@@ -79,7 +79,7 @@ public class MinukuStreamManager implements StreamManager {
         if(mStreamMap.containsKey(clazz)) {
             throw new StreamAlreadyExistsException();
         }
-        for(Object dependsOnClass:s.dependsOnDataRecord()) {
+        for(Object dependsOnClass:s.dependsOnDataRecordType()) {
             if(!mStreamMap.containsKey(dependsOnClass)) {
                 throw new StreamNotFoundException();
             }

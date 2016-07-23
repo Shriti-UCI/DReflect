@@ -18,7 +18,7 @@ public class LocationStream extends AbstractStreamFromDevice<LocationDataRecord>
     }
 
     @Override
-    public List<Class<? extends DataRecord>> dependsOnDataRecord() {
+    public List<Class<? extends DataRecord>> dependsOnDataRecordType() {
         return new ArrayList<>();
     }
 }

@@ -17,6 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.model.ImageDataRecord;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minukucore.dao.DAO;
@@ -34,7 +35,7 @@ public class MoodDataRecordDAO implements DAO<MoodDataRecord> {
 
     @Override
     public void setDevice(User user, UUID uuid) {
-        myUser = user;
+        myUser = UserPreferences.getInstance().getUser();
         uuID = uuid;
     }
 

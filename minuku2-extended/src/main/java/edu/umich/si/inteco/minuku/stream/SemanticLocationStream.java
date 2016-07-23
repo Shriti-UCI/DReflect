@@ -21,7 +21,7 @@ public class SemanticLocationStream extends AbstractStreamFromDevice<SemanticLoc
     }
 
     @Override
-    public List<Class<? extends DataRecord>> dependsOnDataRecord() {
+    public List<Class<? extends DataRecord>> dependsOnDataRecordType() {
         List<Class<? extends DataRecord>> dependsOn = new ArrayList<>();
         dependsOn.add(LocationDataRecord.class);
         return dependsOn;

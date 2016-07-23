@@ -17,6 +17,7 @@ import java.util.UUID;
 import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
 import edu.umich.si.inteco.minukucore.dao.DAO;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
@@ -33,7 +34,7 @@ public class AnnotatedImageDataRecordDAO implements DAO<AnnotatedImageDataRecord
 
     @Override
     public void setDevice(User user, UUID uuid) {
-        myUser = user;
+        myUser = UserPreferences.getInstance().getUser();
         uuID = uuid;
     }
 
