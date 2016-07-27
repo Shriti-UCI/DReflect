@@ -99,8 +99,3 @@ public interface StreamManager {
 
 }
 
-/**
- * getStreamFor(LocationDataStream.class);
- */
-
-

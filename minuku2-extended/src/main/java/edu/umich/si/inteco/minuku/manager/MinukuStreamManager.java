@@ -2,6 +2,10 @@ package edu.umich.si.inteco.minuku.manager;
 
 import android.util.Log;
 
+import com.google.android.gms.games.snapshot.Snapshot;
+
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +16,7 @@ import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.manager.StreamManager;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
+import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
 import edu.umich.si.inteco.minukucore.stream.Stream;
 import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
 
@@ -112,7 +117,9 @@ public class MinukuStreamManager implements StreamManager {
     }
 
     @Override
+    @Subscribe
     public void handleStateChangeEvent(StateChangeEvent e) {
+
     }
 
     @Override

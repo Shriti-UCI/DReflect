@@ -1,6 +1,7 @@
 package edu.umich.si.inteco.minukucore.manager;
 
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
+import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
 import edu.umich.si.inteco.minukucore.situation.Situation;
 
@@ -27,11 +28,17 @@ public interface SituationManager {
 
     /**
      * Register a situation after checking for the existence of all the streams
-     * that the situation depends on. Add situation to the situation manager's registry
+     * that the situation depends on. Add situation to the situation manager's registry.
+     * Whenever a {@link Situation} calls the register method, this Manager would call the
+     * {@link Situation#dependsOnDataRecordType()} method of the Situation trying to register
+     *      before it can successfully add that Situation to the registry.
      * @param s the situation requesting to be registered
      * @return true if registration is successful
+     * @throws DataRecordTypeNotFound exception when the any of the
+     *      {@link edu.umich.si.inteco.minukucore.model.DataRecord}s that the Situation depends on
+     *      are not registered with the StreamManager.
      */
-    public boolean register(Situation s);
+    public <T extends Situation> boolean register(T s) throws DataRecordTypeNotFound;
 
     /**
      * Unregister a situation. Remove situation from registry.

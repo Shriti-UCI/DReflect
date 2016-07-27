@@ -10,6 +10,8 @@ import edu.umich.si.inteco.minukucore.stream.Stream;
 
 /**
  * Created by shriti on 7/9/16.
+ *
+ * @author neerajkumar
  * A situation depends on certain type of data records
  * It generates an action events defined by the developer
  * The developer would code the rules for the situation in the
@@ -36,5 +38,6 @@ public interface Situation {
      * @return the list of DataRecord classes
      * @throws {@link edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound}
      */
-    public <T extends DataRecord> List<Class<T>> dependsOnDataRecord() throws DataRecordTypeNotFound;
+    public List<Class<? extends DataRecord>> dependsOnDataRecordType()
+            throws DataRecordTypeNotFound;
 }
