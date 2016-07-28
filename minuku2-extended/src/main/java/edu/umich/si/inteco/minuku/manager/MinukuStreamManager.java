@@ -2,18 +2,19 @@ package edu.umich.si.inteco.minuku.manager;
 
 import android.util.Log;
 
-import com.google.android.gms.games.snapshot.Snapshot;
-
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import edu.umich.si.inteco.minuku.model.MinukuStreamSnapshot;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
+import edu.umich.si.inteco.minukucore.manager.SituationManager;
 import edu.umich.si.inteco.minukucore.manager.StreamManager;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
@@ -119,7 +120,7 @@ public class MinukuStreamManager implements StreamManager {
     @Override
     @Subscribe
     public void handleStateChangeEvent(StateChangeEvent e) {
-
+        MinukuSituationManager.getInstance().onStateChange(getStreamSnapshot(), e);
     }
 
     @Override
@@ -135,5 +136,21 @@ public class MinukuStreamManager implements StreamManager {
         } else {
             throw new StreamNotFoundException();
         }
+    }
+
+    private StreamSnapshot getStreamSnapshot() {
+        Map<Class<? extends DataRecord>, List<? extends DataRecord>> streamSnapshotData =
+                new HashMap<>();
+        for(Map.Entry<Class, Stream> entry: mStreamMap.entrySet()) {
+            List list = createListOfType(entry.getKey());
+            list.add(entry.getValue().getCurrentValue());
+            list.add(entry.getValue().getPreviousValue());
+            streamSnapshotData.put(entry.getKey(), list);
+        }
+        return new MinukuStreamSnapshot(streamSnapshotData);
+    }
+
+    private static <T extends DataRecord>  List<T> createListOfType(Class<T> type) {
+        return new ArrayList<T>();
     }
 }
