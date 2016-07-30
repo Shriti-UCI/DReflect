@@ -8,12 +8,16 @@ import java.lang.reflect.AnnotatedElement;
  *
  * Created by neerajkumar on 7/13/16.
  */
-public abstract class LikertScaleQuestion extends Question {
+public abstract class LikertScale extends Question {
 
     private static int numSteps;
     private static String[] stepValues;
 
     private int answerValue;
+
+    public LikertScale() {
+
+    }
 
     /**
      *
@@ -21,7 +25,7 @@ public abstract class LikertScaleQuestion extends Question {
      * @param aNumSteps The number of steps on the likert scale.
      * @param aStepValues Label to be shown for each tick on the scale.
      */
-    public LikertScaleQuestion(String aQuestion, int aNumSteps, String[] aStepValues) {
+    public LikertScale(String aQuestion, int aNumSteps, String[] aStepValues) {
         super(aQuestion);
         stepValues = aStepValues;
         numSteps = aNumSteps;
@@ -35,12 +39,20 @@ public abstract class LikertScaleQuestion extends Question {
         return numSteps;
     }
 
+    public void setNumSteps(int steps) {
+        numSteps = steps;
+    }
+
     /**
      *
      * @return The array of labels for the scale.
      */
     public String[] getStepValues() {
         return stepValues;
+    }
+
+    public void setStepValues(String[] values) {
+        stepValues = values;
     }
 
     /**

@@ -5,9 +5,13 @@ package edu.umich.si.inteco.minukucore.model.question;
  *
  * Created by neerajkumar on 7/13/16.
  */
-public abstract class FreeResponse extends Question {
+public class FreeResponse extends Question {
 
-    private String freeResponseAnswer;
+    private String answer;
+
+    public FreeResponse () {
+
+    }
 
     /**
      *
@@ -22,7 +26,12 @@ public abstract class FreeResponse extends Question {
      * @return The answer provided by the user.
      */
     public String getAnswer() {
-        return freeResponseAnswer;
+
+        return answer;
     }
 
+    public void setAnswer(String answer) {
+
+        this.answer = answer;
+    }
 }

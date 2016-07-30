@@ -17,6 +17,8 @@ public class Constants {
     public static final String FIREBASE_URL_IMAGES = FIREBASE_URL + "/photos";
     public static final String FIREBASE_URL_LOCATION = FIREBASE_URL + "/location";
     public static final String FIREBASE_URL_SEMANTIC_LOCATION = FIREBASE_URL + "/semantic_location";
+    public static final String FIREBASE_URL_QUESTIONS = FIREBASE_URL + "/questions";
+
 
 
 

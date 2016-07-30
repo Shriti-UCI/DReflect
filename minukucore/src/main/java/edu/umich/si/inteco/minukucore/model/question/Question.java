@@ -17,9 +17,13 @@ import edu.umich.si.inteco.minukucore.model.DataRecord;
 public abstract class Question implements DataRecord {
     // protected UUID questionnaireID;
 
-    protected static String question;
+    private String question;
+    private int ID;
+    private long creationTime;
 
-    protected long creationTime;
+    public Question() {
+
+    }
 
     /**
      *
@@ -31,8 +35,29 @@ public abstract class Question implements DataRecord {
         this.creationTime = new Date().getTime();
     }
 
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public void setCreationTime(long creationTime) {
+        this.creationTime = creationTime;
+    }
+
     @Override
     public long getCreationTime() {
         return  this.creationTime;
+    }
+
+    public String getQuestion() { return this.question; }
+
+    public void setQuestion(String aQuestion) { this.question = aQuestion; }
+
+    @Override
+    public int hashCode() {
+        return this.ID;
     }
 }

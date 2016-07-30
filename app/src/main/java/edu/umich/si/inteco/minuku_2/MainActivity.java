@@ -1,7 +1,6 @@
 package edu.umich.si.inteco.minuku_2;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -14,24 +13,24 @@ import android.widget.Toast;
 import java.util.UUID;
 
 import edu.umich.si.inteco.minuku.dao.AnnotatedImageDataRecordDAO;
-import edu.umich.si.inteco.minuku.dao.ImageDataRecordDAO;
+import edu.umich.si.inteco.minuku.dao.FreeResponseDAO;
 import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.MoodDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.SemanticLocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
-import edu.umich.si.inteco.minuku.model.ImageDataRecord;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minuku.model.SemanticLocationDataRecord;
 import edu.umich.si.inteco.minuku.streamgenerator.AnnotatedImageStreamGenerator;
-import edu.umich.si.inteco.minuku.streamgenerator.ImageStreamGenerator;
+import edu.umich.si.inteco.minuku.streamgenerator.FreeResponseQuestionStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MoodStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.SemanticLocationStreamGenerator;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
 import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
+import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.user.User;
 
 public class MainActivity extends BaseActivity {
@@ -73,6 +72,11 @@ public class MainActivity extends BaseActivity {
         semanticLocationDataRecordDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(SemanticLocationDataRecord.class, semanticLocationDataRecordDAO);
 
+        //Free Response questions
+        FreeResponseDAO freeResponseQuestionDAO = new FreeResponseDAO();
+        freeResponseQuestionDAO.setDevice(myUser, dummyUUID);
+        daoManager.registerDaoFor(FreeResponse.class, freeResponseQuestionDAO);
+
         // Create corresponding stream generators. Only to be created once in Main Activity
         //creating a new stream registers it with the stream manager
         LocationStreamGenerator locationStreamGenerator =
@@ -83,6 +87,8 @@ public class MainActivity extends BaseActivity {
                 new MoodStreamGenerator(getApplicationContext());
         SemanticLocationStreamGenerator semanticLocationStreamGenerator =
                 new SemanticLocationStreamGenerator(getApplicationContext());
+        FreeResponseQuestionStreamGenerator freeResponseQuestionStreamGenerator =
+                new FreeResponseQuestionStreamGenerator(getApplicationContext());
 
     }
 
@@ -93,7 +99,8 @@ public class MainActivity extends BaseActivity {
         // the action object is the model behind the list that is shown on the main screen.
         final ActionObject[] array = {
                 new ActionObject("Take Glucose Reading Pictures", "A", R.drawable.camera),
-                new ActionObject("Record Your Mood", "A", R.drawable.mood)
+                new ActionObject("Record Your Mood", "A", R.drawable.mood),
+                new ActionObject("Answer some questions", "A", R.drawable.blue_circle)
         };
         // The adapter takes the action object array and converts it into a view that can be
         // rendered as a list, one item at a time.
@@ -113,6 +120,9 @@ public class MainActivity extends BaseActivity {
                     case 1:
                         Intent addMoodIntent = new Intent(MainActivity.this, MoodDataRecordActivity.class);
                         startActivity(addMoodIntent);
+                    case 2:
+                        Intent answerQuestionsIntent = new Intent(MainActivity.this, QuestionnaireActivity.class);
+                        startActivity(answerQuestionsIntent);
                     default:
                         showToast("Clicked unknown");
                         break;

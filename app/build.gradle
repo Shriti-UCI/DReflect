@@ -34,5 +34,6 @@ dependencies {
 
     compile 'com.h6ah4i.android.compat:mulsellistprefcompat:1.0.0'
 
+    compile 'com.github.dkharrat.nexusdialog:nexusdialog:0.4.0'
 
 }

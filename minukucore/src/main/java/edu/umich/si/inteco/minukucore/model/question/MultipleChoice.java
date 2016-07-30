@@ -7,12 +7,16 @@ package edu.umich.si.inteco.minukucore.model.question;
  *
  * Created by neerajkumar on 7/13/16.
  */
-public abstract class MultipleChoiceQuestion extends Question {
+public class MultipleChoice extends Question {
 
-    private static int numChoices;
-    private static String[] choiceValues;
+    private int numChoices;
+    private String[] choiceValues;
 
     private int answerValue;
+
+    public MultipleChoice () {
+
+    }
 
     /**
      *
@@ -20,7 +24,7 @@ public abstract class MultipleChoiceQuestion extends Question {
      * @param aNumChoices The number of choices this MCQ will have.
      * @param aChoiceValues The label(s) for each choice.
      */
-    public MultipleChoiceQuestion(String aQuestion, int aNumChoices, String[] aChoiceValues) {
+    public MultipleChoice(String aQuestion, int aNumChoices, String[] aChoiceValues) {
         super(aQuestion);
         numChoices = aNumChoices;
         choiceValues = aChoiceValues;
@@ -30,7 +34,7 @@ public abstract class MultipleChoiceQuestion extends Question {
      *
      * @return The number of choices.
      */
-    public static int getNumChoices() {
+    public int getNumChoices() {
         return numChoices;
     }
 
@@ -38,7 +42,7 @@ public abstract class MultipleChoiceQuestion extends Question {
      *
      * @return The labels for choices.
      */
-    public static String[] getChoiceValues() {
+    public String[] getChoiceValues() {
         return choiceValues;
     }
 

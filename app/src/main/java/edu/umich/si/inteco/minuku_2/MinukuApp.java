@@ -27,5 +27,7 @@ public class MinukuApp extends android.app.Application {
         super.onCreate();
         Firebase.setAndroidContext(this);
         UserPreferences.getInstance().Initialize(getApplicationContext());
+
+        //register questions registerStudyQuestions();
     }
 }
