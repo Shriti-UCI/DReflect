@@ -16,6 +16,7 @@ import org.greenrobot.eventbus.Subscribe;
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku_2.MainActivity;
+import edu.umich.si.inteco.minuku_2.MoodDataRecordActivity;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 
 public class BackgroundService extends Service {
@@ -57,8 +58,12 @@ public class BackgroundService extends Service {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(
                         Service.NOTIFICATION_SERVICE);
-        //PackageManager pm = getPackageManager();
         Intent launchIntent = new Intent(this, MainActivity.class);
+        //PackageManager pm = getPackageManager();
+        if(aShowNotificationEvent.title.equals(Constants.MOOD_REMINDER_TITLE)) {
+            launchIntent = new Intent(this, MoodDataRecordActivity.class);
+        }
+
         PendingIntent pIntent = PendingIntent.getActivity(this,
                 0, launchIntent, 0);
 

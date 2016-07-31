@@ -25,6 +25,7 @@ import edu.umich.si.inteco.minuku.model.ImageDataRecord;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minuku.stream.ImageStream;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
+import edu.umich.si.inteco.minukucore.event.IsDataExpectedEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
@@ -73,10 +74,8 @@ public class MoodStreamGenerator extends AndroidStreamGenerator<MoodDataRecord> 
                 "Update Stream called: The preference values are - \n" +
                         UserPreferences.getInstance().getPreference("startTime") + "\n" +
                         UserPreferences.getInstance().getPreference("endTime"));
-        if(shouldShowNotification()) {
-            Log.d(TAG, "Will show mood notification now. ");
-            createNotificationForMood();
-        }
+        MinukuStreamManager.getInstance().handleIsDataExpectedEvent(
+                new IsDataExpectedEvent(MoodDataRecord.class));
         return true;
     }
 
@@ -92,7 +91,7 @@ public class MoodStreamGenerator extends AndroidStreamGenerator<MoodDataRecord> 
 
     @Override
     public void onStreamRegistration() {
-
+        Log.d(TAG, "Stream " + TAG + " registered successfully");
     }
 
     @Override
@@ -105,70 +104,4 @@ public class MoodStreamGenerator extends AndroidStreamGenerator<MoodDataRecord> 
         }
     }
 
-    /**
-     * As per the UserPreferences for wake up and sleep time, select three times during the day
-     * at which the user will be shown a prompt to register their mood.
-     * @return Array of integers, where each entry in the array is the number of seconds from
-     * midnight at which the mood prompt should be generated.
-     */
-    private int[] getTimesForNotification() {
-        String startTime = UserPreferences.getInstance().getPreference("startTime");
-        String endTime = UserPreferences.getInstance().getPreference("endTime");
-        if(startTime == null || endTime == null) {
-            return new int[0];
-        }
-        int[] timesForNotification = new int[3];
-
-        int startTimeInSeconds = convertHHMMtoSeconds(startTime);
-        int endTimeInSeconds = convertHHMMtoSeconds(endTime);
-
-        int partitionWindow = (endTimeInSeconds - startTimeInSeconds) / 3;
-        timesForNotification[0] = startTimeInSeconds += partitionWindow;
-        timesForNotification[1] = startTimeInSeconds += partitionWindow;
-        timesForNotification[2] = startTimeInSeconds += partitionWindow;
-
-        return timesForNotification;
-    }
-
-    /**
-     * Given a String in the format HH:MM, returns the number of seconds from midnight.
-     * @param aTime
-     * @return
-     */
-    private int convertHHMMtoSeconds(String aTime) {
-        String[] aTimeParts = aTime.split(":");
-        return Integer.valueOf(aTimeParts[0]) * 3600 +
-                Integer.valueOf(aTimeParts[1]) * 60;
-    }
-
-    /**
-     * Gets all the times at which a notification needs to be shown, and check if the current time
-     * is within a window of 15 minutes from that time. Returns true if that is the case, false
-     * otherwise.
-     * @return true if current time is within a 15 minutes window of a time at which a notification
-     * needs to be shown. False otherwise.
-     */
-    private boolean shouldShowNotification() {
-        Calendar c = Calendar.getInstance();
-        long now = c.getTimeInMillis();
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
-        c.set(Calendar.MILLISECOND, 0);
-        long passed = now - c.getTimeInMillis();
-        long secondsPassed = passed / 1000;
-
-        for(int i:getTimesForNotification()) {
-            Log.d(TAG, "Seconds passed: " + secondsPassed + "; Time: " + i);
-            if(secondsPassed - i > 0 && secondsPassed - i < 300) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void createNotificationForMood() {
-        MinukuStreamManager.getInstance().handleStateChangeEvent(
-                new StateChangeEvent(MoodDataRecord.class));
-    }
 }
