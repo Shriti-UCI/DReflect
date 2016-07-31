@@ -110,7 +110,13 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
                         .offer((FreeResponse) question);
             }
             if(question instanceof MultipleChoice) {
-                ((MultipleChoice) question).setAnswerValue((int) answer);
+                Log.d(TAG, answer.toString());
+                Set<Integer> answerSet = (HashSet<Integer>) answer;
+                List<Integer> answers = new ArrayList<Integer>();
+                for(Object someAnswer: answerSet.toArray()) {
+                    answers.add(Integer.valueOf((String)someAnswer));
+                }
+                ((MultipleChoice) question).setAnswerValue(answers.toArray(new Integer[0]));
                 MinukuStreamManager.getInstance()
                         .getStreamGeneratorFor(MultipleChoice.class)
                         .offer((MultipleChoice) question);

@@ -12,7 +12,7 @@ public class MultipleChoice extends Question {
     private int numChoices;
     private String[] choiceValues;
 
-    private int answerValue;
+    private Integer[] answerValue;
 
     public MultipleChoice () {
 
@@ -50,7 +50,7 @@ public class MultipleChoice extends Question {
      *
      * @return The answer selected by the user.
      */
-    public int getAnswerValue() {
+    public Integer[] getAnswerValue() {
         return answerValue;
     }
 
@@ -58,7 +58,7 @@ public class MultipleChoice extends Question {
      * Sets the answer value.
      * @param aAnswerValue The answer selected by the user.
      */
-    public void setAnswerValue(int aAnswerValue) {
+    public void setAnswerValue(Integer[] aAnswerValue) {
         this.answerValue = aAnswerValue;
     }
 }

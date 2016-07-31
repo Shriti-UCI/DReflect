@@ -13,9 +13,10 @@ import android.widget.Toast;
 import java.util.UUID;
 
 import edu.umich.si.inteco.minuku.dao.AnnotatedImageDataRecordDAO;
-import edu.umich.si.inteco.minuku.dao.FreeResponseDAO;
+import edu.umich.si.inteco.minuku.dao.FreeResponseQuestionDAO;
 import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.MoodDataRecordDAO;
+import edu.umich.si.inteco.minuku.dao.MultipleChoiceQuestionDAO;
 import edu.umich.si.inteco.minuku.dao.SemanticLocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
@@ -27,6 +28,7 @@ import edu.umich.si.inteco.minuku.streamgenerator.AnnotatedImageStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.FreeResponseQuestionStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MoodStreamGenerator;
+import edu.umich.si.inteco.minuku.streamgenerator.MultipleChoiceQuestionStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.SemanticLocationStreamGenerator;
 import edu.umich.si.inteco.minuku_2.action.MoodDataExpectedAction;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
@@ -34,6 +36,7 @@ import edu.umich.si.inteco.minuku_2.situation.MoodDataExpectedSituation;
 import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
+import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
 import edu.umich.si.inteco.minukucore.user.User;
 
 public class MainActivity extends BaseActivity {
@@ -76,9 +79,14 @@ public class MainActivity extends BaseActivity {
         daoManager.registerDaoFor(SemanticLocationDataRecord.class, semanticLocationDataRecordDAO);
 
         //Free Response questions
-        FreeResponseDAO freeResponseQuestionDAO = new FreeResponseDAO();
+        FreeResponseQuestionDAO freeResponseQuestionDAO = new FreeResponseQuestionDAO();
         freeResponseQuestionDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(FreeResponse.class, freeResponseQuestionDAO);
+
+        //Questionnaire DAO
+        MultipleChoiceQuestionDAO multipleChoiceQuestionDAO = new MultipleChoiceQuestionDAO();
+        multipleChoiceQuestionDAO.setDevice(myUser, dummyUUID);
+        daoManager.registerDaoFor(MultipleChoice.class, multipleChoiceQuestionDAO);
 
         // Create corresponding stream generators. Only to be created once in Main Activity
         //creating a new stream registers it with the stream manager
@@ -92,6 +100,8 @@ public class MainActivity extends BaseActivity {
                 new SemanticLocationStreamGenerator(getApplicationContext());
         FreeResponseQuestionStreamGenerator freeResponseQuestionStreamGenerator =
                 new FreeResponseQuestionStreamGenerator(getApplicationContext());
+        MultipleChoiceQuestionStreamGenerator multipleChoiceQuestionStreamGenerator =
+                new MultipleChoiceQuestionStreamGenerator(getApplicationContext());
 
 
 

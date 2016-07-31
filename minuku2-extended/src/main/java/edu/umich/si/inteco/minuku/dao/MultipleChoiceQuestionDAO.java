@@ -1,28 +1,35 @@
 package edu.umich.si.inteco.minuku.dao;
 
 import android.util.Log;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.google.common.util.concurrent.SettableFuture;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.Future;
+
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minukucore.dao.DAO;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
+import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
 import edu.umich.si.inteco.minukucore.user.User;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.Future;
-
 /**
- * Created by shriti on 7/28/16.
+ * Created by shriti on 7/31/16.
  */
-public class FreeResponseDAO implements DAO<FreeResponse> {
+public class MultipleChoiceQuestionDAO implements DAO<MultipleChoice> {
 
-    private String TAG = "FreeResponseQuestionDAO";
+    private String TAG = "MultipleChoiceQuestionDAO";
     private User myUser;
     private UUID uuID;
 
@@ -33,33 +40,33 @@ public class FreeResponseDAO implements DAO<FreeResponse> {
     }
 
     @Override
-    public void add(FreeResponse entity) throws DAOException {
-        Log.d(TAG, "Adding reponse to missed data reports");
-        Firebase missedReportListRef = new Firebase(Constants.FIREBASE_URL_QUESTIONS)
+    public void add(MultipleChoice entity) throws DAOException {
+        Log.d(TAG, "Adding reponse");
+        Firebase multipleChoiceListRef = new Firebase(Constants.FIREBASE_URL_QUESTIONS)
                 .child(myUser.getEmail())
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
-        missedReportListRef.push().setValue((FreeResponse) entity);
+        multipleChoiceListRef.push().setValue((MultipleChoice) entity);
     }
 
     @Override
-    public void delete(FreeResponse entity) throws DAOException {
+    public void delete(MultipleChoice entity) throws DAOException {
 
     }
 
     @Override
-    public Future<List<FreeResponse>> getAll() throws DAOException {
-        final SettableFuture<List<FreeResponse>> settableFuture =
+    public Future<List<MultipleChoice>> getAll() throws DAOException {
+        final SettableFuture<List<MultipleChoice>> settableFuture =
                 SettableFuture.create();
-        Firebase missedReportListRef = new Firebase(Constants.FIREBASE_URL_QUESTIONS)
+        Firebase multipleChoiceListRef = new Firebase(Constants.FIREBASE_URL_QUESTIONS)
                 .child(myUser.getEmail())
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
 
-        missedReportListRef.addValueEventListener(new ValueEventListener() {
+        multipleChoiceListRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, FreeResponse> missedReportListMap =
-                        (HashMap<String,FreeResponse>) dataSnapshot.getValue();
-                List<FreeResponse> values = (List) missedReportListMap.values();
+                Map<String, MultipleChoice> multipleChoiceListMap =
+                        (HashMap<String,MultipleChoice>) dataSnapshot.getValue();
+                List<MultipleChoice> values = (List) multipleChoiceListMap.values();
                 settableFuture.set(values);
             }
 
@@ -73,12 +80,12 @@ public class FreeResponseDAO implements DAO<FreeResponse> {
     }
 
     @Override
-    public Future<List<FreeResponse>> getLast(int N) throws DAOException {
+    public Future<List<MultipleChoice>> getLast(int N) throws DAOException {
         return null;
     }
 
     @Override
-    public void update(FreeResponse oldEntity, FreeResponse newEntity) throws DAOException {
+    public void update(MultipleChoice oldEntity, MultipleChoice newEntity) throws DAOException {
 
     }
 

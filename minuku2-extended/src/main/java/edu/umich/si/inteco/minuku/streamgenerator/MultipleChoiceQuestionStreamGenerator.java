@@ -2,30 +2,34 @@ package edu.umich.si.inteco.minuku.streamgenerator;
 
 import android.content.Context;
 import android.util.Log;
+
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.FreeResponseQuestionDAO;
+import edu.umich.si.inteco.minuku.dao.MultipleChoiceQuestionDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.stream.FreeResponseQuestionStream;
+import edu.umich.si.inteco.minuku.stream.MultipleChoiceQuestionStream;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
+import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
 import edu.umich.si.inteco.minukucore.stream.Stream;
 
 /**
- * Created by shriti on 7/28/16.
+ * Created by shriti on 7/31/16.
  */
-public class FreeResponseQuestionStreamGenerator extends AndroidStreamGenerator<FreeResponse> {
+public class MultipleChoiceQuestionStreamGenerator extends AndroidStreamGenerator<MultipleChoice> {
 
     private Stream mStream;
-    private String TAG = "FreeResponseQuestionStreamGenerator";
-    private FreeResponseQuestionDAO mDAO;
+    private String TAG = "MultipleChoiceQuestionStreamGenerator";
+    private MultipleChoiceQuestionDAO mDAO;
 
-    public FreeResponseQuestionStreamGenerator(Context aApplicationContext) {
+    public MultipleChoiceQuestionStreamGenerator(Context aApplicationContext) {
         super(aApplicationContext);
-        this.mStream = new FreeResponseQuestionStream(Constants.DEFAULT_QUEUE_SIZE);
-        this.mDAO = MinukuDAOManager.getInstance().getDaoFor(FreeResponse.class);
+        this.mStream = new MultipleChoiceQuestionStream(Constants.DEFAULT_QUEUE_SIZE);
+        this.mDAO = MinukuDAOManager.getInstance().getDaoFor(MultipleChoice.class);
         this.register();
     }
 
@@ -33,7 +37,7 @@ public class FreeResponseQuestionStreamGenerator extends AndroidStreamGenerator<
     public void register() {
         Log.d(TAG, "Registering with Stream Manager");
         try {
-            MinukuStreamManager.getInstance().register(mStream, FreeResponse.class, this);
+            MinukuStreamManager.getInstance().register(mStream, MultipleChoice.class, this);
         } catch (StreamNotFoundException streamNotFoundException) {
             Log.e(TAG, "One of the streams on which FreeResponseQuestion/FreeResponseQuestionStream depends in not found.");
         } catch (StreamAlreadyExistsException streamAlreadyExsistsException) {
@@ -42,7 +46,7 @@ public class FreeResponseQuestionStreamGenerator extends AndroidStreamGenerator<
     }
 
     @Override
-    public Stream<FreeResponse> generateNewStream() {
+    public Stream<MultipleChoice> generateNewStream() {
         return mStream;
     }
 
@@ -67,10 +71,10 @@ public class FreeResponseQuestionStreamGenerator extends AndroidStreamGenerator<
     }
 
     @Override
-    public void offer(FreeResponse aMissdedReportQuestion) {
-        mStream.add(aMissdedReportQuestion);
+    public void offer(MultipleChoice aQuestion) {
+        mStream.add(aQuestion);
         try {
-            mDAO.add(aMissdedReportQuestion);
+            mDAO.add(aQuestion);
         } catch (DAOException e) {
             e.printStackTrace();
         }

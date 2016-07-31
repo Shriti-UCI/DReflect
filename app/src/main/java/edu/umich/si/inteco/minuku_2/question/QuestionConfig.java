@@ -29,16 +29,20 @@ public class QuestionConfig {
 
     public static final FreeResponse QUESTION_1 = new FreeResponse(QUESTION_1_STRING);
     public static final FreeResponse QUESTION_2 = new FreeResponse(QUESTION_2_STRING);
+    public static final MultipleChoice QUESTION_3 = new MultipleChoice(QUESTION_3_STRING,
+            3,
+            QUESTION_3_VALUES);
 
     public static LinkedList<Question> questionsList = new LinkedList();
 
     static {
         QUESTION_1.setID(1);
-        QUESTION_1.setID(2);
+        QUESTION_2.setID(2);
+        QUESTION_3.setID(3);
 
         questionsList.add(QUESTION_1);
         questionsList.add(QUESTION_2);
-        //questionsList.add(QUESTION_3);
+        questionsList.add(QUESTION_3);
     }
 
     // Create all Question instances here, make all Strings and instances created with those strings

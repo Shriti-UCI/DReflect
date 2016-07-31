@@ -114,6 +114,9 @@ public class MoodStreamGenerator extends AndroidStreamGenerator<MoodDataRecord> 
     private int[] getTimesForNotification() {
         String startTime = UserPreferences.getInstance().getPreference("startTime");
         String endTime = UserPreferences.getInstance().getPreference("endTime");
+        if(startTime == null || endTime == null) {
+            return new int[0];
+        }
         int[] timesForNotification = new int[3];
 
         int startTimeInSeconds = convertHHMMtoSeconds(startTime);
