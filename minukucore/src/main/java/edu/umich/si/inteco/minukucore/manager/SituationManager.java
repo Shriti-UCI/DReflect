@@ -43,7 +43,7 @@ public interface SituationManager {
      * {@link edu.umich.si.inteco.minukucore.model.DataRecord} entry is expected.
      * @param aIsDataExpectedEvent
      */
-    public void onIsDataExpectedEvent(IsDataExpectedEvent aIsDataExpectedEvent);
+    public void onIsDataExpected(StreamSnapshot s, IsDataExpectedEvent aIsDataExpectedEvent);
 
 
     /**

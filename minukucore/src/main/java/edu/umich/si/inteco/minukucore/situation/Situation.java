@@ -3,6 +3,7 @@ package edu.umich.si.inteco.minukucore.situation;
 import java.util.List;
 
 import edu.umich.si.inteco.minukucore.event.ActionEvent;
+import edu.umich.si.inteco.minukucore.event.MinukuEvent;
 import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
@@ -31,7 +32,8 @@ public interface Situation {
      *                 subscribed to this action event
      *
      */
-    public <T extends ActionEvent> T assertSituation(StreamSnapshot snapshot);
+    public <T extends ActionEvent> T assertSituation(StreamSnapshot snapshot,
+                                                     MinukuEvent minukuEvent);
 
     /**
      * Fetch a list of DataRecords types that the situation depends on

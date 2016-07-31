@@ -93,7 +93,7 @@ public interface StreamManager {
     public void handleNoDataChangeEvent(NoDataChangeEvent aNoDataChangeEvent);
 
     @Subscribe
-    public void handleIsDAtaExpectedEvent(IsDataExpectedEvent aIsDataExpectedEvent);
+    public void handleIsDataExpectedEvent(IsDataExpectedEvent aIsDataExpectedEvent);
 
     /**
      * get all the streams of a specific type
