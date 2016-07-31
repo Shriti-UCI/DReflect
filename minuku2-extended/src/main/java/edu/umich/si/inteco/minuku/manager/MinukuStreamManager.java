@@ -131,6 +131,11 @@ public class MinukuStreamManager implements StreamManager {
         MinukuSituationManager.getInstance().onNoDataChange(aNoDataChangeEvent);
     }
 
+    @Subscribe
+    public void handleIsDataExpectedEvent() {
+
+    }
+
     @Override
     public List<Stream<? extends DataRecord>> getStreams(Stream.StreamType streamType) {
         return mStreamTypeStreamMap.get(streamType);
