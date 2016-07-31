@@ -2,6 +2,7 @@ package edu.umich.si.inteco.minukucore.manager;
 
 import java.util.List;
 
+import edu.umich.si.inteco.minukucore.event.IsDataExpectedEvent;
 import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.event.Subscribe;
@@ -91,6 +92,9 @@ public interface StreamManager {
     @Subscribe
     public void handleNoDataChangeEvent(NoDataChangeEvent aNoDataChangeEvent);
 
+    @Subscribe
+    public void handleIsDAtaExpectedEvent(IsDataExpectedEvent aIsDataExpectedEvent);
+
     /**
      * get all the streams of a specific type
      * @param <T>        the application specific DataRecord
@@ -99,7 +103,8 @@ public interface StreamManager {
      *                   {@link Stream.StreamType}
      * @return           list of streams
      */
-    public <T extends DataRecord> List<Stream<? extends DataRecord>> getStreams(Stream.StreamType streamType);
+    public <T extends DataRecord> List<Stream<? extends DataRecord>> getStreams(
+            Stream.StreamType streamType);
 
 }
 

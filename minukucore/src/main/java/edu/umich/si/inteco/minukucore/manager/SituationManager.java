@@ -1,5 +1,6 @@
 package edu.umich.si.inteco.minukucore.manager;
 
+import edu.umich.si.inteco.minukucore.event.IsDataExpectedEvent;
 import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
@@ -35,6 +36,14 @@ public interface SituationManager {
      * @param aNoDataChangeEvent
      */
     public void onNoDataChange(NoDataChangeEvent aNoDataChangeEvent);
+
+    /**
+     * This method is called by {@link StreamManager}. Tells every Situations interested in the
+     * {@link IsDataExpectedEvent#eventType} that a
+     * {@link edu.umich.si.inteco.minukucore.model.DataRecord} entry is expected.
+     * @param aIsDataExpectedEvent
+     */
+    public void onIsDataExpectedEvent(IsDataExpectedEvent aIsDataExpectedEvent);
 
 
     /**
