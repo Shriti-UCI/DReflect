@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 import edu.umich.si.inteco.minuku.manager.QuestionManager;
-import edu.umich.si.inteco.minuku.model.MultipleChoiceQuestion;
 import edu.umich.si.inteco.minukucore.exception.QuestionNotFoundException;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
@@ -30,8 +29,6 @@ public class QuestionConfig {
 
     public static final FreeResponse QUESTION_1 = new FreeResponse(QUESTION_1_STRING);
     public static final FreeResponse QUESTION_2 = new FreeResponse(QUESTION_2_STRING);
-    public static final MultipleChoice QUESTION_3 = new MultipleChoiceQuestion(QUESTION_3_STRING,
-            3, QUESTION_3_VALUES);
 
     public static LinkedList<Question> questionsList = new LinkedList();
 

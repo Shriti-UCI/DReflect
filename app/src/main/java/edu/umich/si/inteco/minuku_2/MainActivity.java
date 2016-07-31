@@ -18,6 +18,7 @@ import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.MoodDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.SemanticLocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
+import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
 import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
@@ -27,7 +28,9 @@ import edu.umich.si.inteco.minuku.streamgenerator.FreeResponseQuestionStreamGene
 import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MoodStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.SemanticLocationStreamGenerator;
+import edu.umich.si.inteco.minuku_2.action.MoodDataExpectedAction;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
+import edu.umich.si.inteco.minuku_2.situation.MoodDataExpectedSituation;
 import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
@@ -89,6 +92,13 @@ public class MainActivity extends BaseActivity {
                 new SemanticLocationStreamGenerator(getApplicationContext());
         FreeResponseQuestionStreamGenerator freeResponseQuestionStreamGenerator =
                 new FreeResponseQuestionStreamGenerator(getApplicationContext());
+
+
+
+        // All situations must be registered AFTER the stream generators are registers.
+        MinukuSituationManager situationManager = MinukuSituationManager.getInstance();
+        MoodDataExpectedSituation moodDataExpectedSituation = new MoodDataExpectedSituation();
+        MoodDataExpectedAction moodDataExpectedAction = new MoodDataExpectedAction();
 
     }
 
