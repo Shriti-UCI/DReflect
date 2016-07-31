@@ -10,6 +10,8 @@ import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minuku_2.event.MoodDataExpectedActionEvent;
 import edu.umich.si.inteco.minukucore.event.ActionEvent;
+import edu.umich.si.inteco.minukucore.event.IsDataExpectedEvent;
+import edu.umich.si.inteco.minukucore.event.MinukuEvent;
 import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
@@ -32,9 +34,13 @@ public class MoodDataExpectedSituation implements Situation {
     }
 
     @Override
-    public <T extends ActionEvent> T assertSituation(StreamSnapshot snapshot) {
+    public <T extends ActionEvent> T assertSituation(StreamSnapshot snapshot,
+                                                     MinukuEvent aMinukuEvent) {
         List<DataRecord> dataRecords = new ArrayList<>();
-        return (T) new MoodDataExpectedActionEvent("TIME_FOR_MOOD_RECORDING", dataRecords);
+        if(aMinukuEvent instanceof IsDataExpectedEvent) {
+            return (T) new MoodDataExpectedActionEvent("TIME_FOR_MOOD_RECORDING", dataRecords);
+        }
+        return null;
     }
 
     @Override

@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.umich.si.inteco.minukucore.event.ActionEvent;
+import edu.umich.si.inteco.minukucore.event.IsDataExpectedEvent;
 import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
@@ -40,13 +42,25 @@ public class MinukuSituationManager implements SituationManager {
     @Override
     public void onStateChange(StreamSnapshot snapshot, StateChangeEvent event) {
         for(Situation situation: registeredSituationMap.get(event.getType())) {
-            EventBus.getDefault().post(situation.assertSituation(snapshot));
+            EventBus.getDefault().post(situation.assertSituation(snapshot, event));
         }
     }
 
     @Override
     public void onNoDataChange(NoDataChangeEvent aNoDataChangeEvent) {
     }
+
+    @Override
+    public void onIsDataExpected(StreamSnapshot snapshot,
+                                 IsDataExpectedEvent aIsDataExpectedEvent) {
+        for(Situation situation: registeredSituationMap.get(aIsDataExpectedEvent.getType())) {
+            ActionEvent actionEvent = situation.assertSituation(snapshot, aIsDataExpectedEvent);
+            if(actionEvent != null) {
+                EventBus.getDefault().post(actionEvent);
+            }
+        }
+    }
+
 
     @Override
     public <T extends Situation> boolean register(T s) throws DataRecordTypeNotFound {
