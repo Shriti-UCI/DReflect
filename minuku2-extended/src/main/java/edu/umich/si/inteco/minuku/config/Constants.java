@@ -46,10 +46,12 @@ public class Constants {
     public static final int PROMPT_SERVICE_REPEAT_MILLISECONDS = 1000 * 60; // 1 minute
 
 
-    // NNotification related constants
+    // Notification related constants
     public static final String REMINDER_NOTIFICATION_TITLE = "DStudio Reminder";
     public static final String REMINDER_NOTIFICATION_CONTENT = "Everyone forgets, we get that! That's why god made reminders";
     public static final String CAN_SHOW_NOTIFICATION = "ENABLE_NOTIFICATIONS";
+
+    public static final String MOOD_REMINDER_TITLE = "How are you feeling right now?";
 
     //default queue size
     public static final int DEFAULT_QUEUE_SIZE = 100;
@@ -57,4 +59,5 @@ public class Constants {
     //specific queue sizes
     public static final int LOCATION_QUEUE_SIZE = 100;
     public static final int IMAGE_QUEUE_SIZE = 100;
+    public static final int MOOD_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 15;
 }

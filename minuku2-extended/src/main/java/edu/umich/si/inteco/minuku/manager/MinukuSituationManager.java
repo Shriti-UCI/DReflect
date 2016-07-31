@@ -2,11 +2,14 @@ package edu.umich.si.inteco.minuku.manager;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
@@ -24,7 +27,7 @@ public class MinukuSituationManager implements SituationManager {
     private static MinukuSituationManager instance;
 
     private MinukuSituationManager() {
-        this.registeredSituationMap = new HashMap<>();
+        registeredSituationMap = new HashMap<>();
     }
 
     public static MinukuSituationManager getInstance() {
@@ -42,10 +45,17 @@ public class MinukuSituationManager implements SituationManager {
     }
 
     @Override
+    public void onNoDataChange(NoDataChangeEvent aNoDataChangeEvent) {
+    }
+
+    @Override
     public <T extends Situation> boolean register(T s) throws DataRecordTypeNotFound {
         for(Class<? extends DataRecord> type: s.dependsOnDataRecordType()) {
             try {
                 MinukuStreamManager.getInstance().getStreamFor(type);
+                if(registeredSituationMap.get(type) == null) {
+                    registeredSituationMap.put(type, new HashSet<Situation>());
+                }
                 return registeredSituationMap.get(type).add(s);
             } catch (StreamNotFoundException e) {
                 e.printStackTrace();

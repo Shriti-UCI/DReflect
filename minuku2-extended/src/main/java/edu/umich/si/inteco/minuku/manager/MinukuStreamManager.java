@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.umich.si.inteco.minuku.model.MinukuStreamSnapshot;
+import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
@@ -119,8 +120,15 @@ public class MinukuStreamManager implements StreamManager {
 
     @Override
     @Subscribe
-    public void handleStateChangeEvent(StateChangeEvent e) {
-        MinukuSituationManager.getInstance().onStateChange(getStreamSnapshot(), e);
+    public void handleStateChangeEvent(StateChangeEvent aStateChangeEvent) {
+        MinukuSituationManager.getInstance().onStateChange(getStreamSnapshot(),
+                aStateChangeEvent);
+    }
+
+    @Override
+    @Subscribe
+    public void handleNoDataChangeEvent(NoDataChangeEvent aNoDataChangeEvent) {
+        MinukuSituationManager.getInstance().onNoDataChange(aNoDataChangeEvent);
     }
 
     @Override
