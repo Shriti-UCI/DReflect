@@ -2,6 +2,7 @@ package edu.umich.si.inteco.minukucore.manager;
 
 import java.util.List;
 
+import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.event.Subscribe;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
@@ -85,7 +86,10 @@ public interface StreamManager {
      * {@link edu.umich.si.inteco.minukucore.manager.SituationManager}
      */
     @Subscribe
-    public void handleStateChangeEvent(StateChangeEvent e);
+    public void handleStateChangeEvent(StateChangeEvent aStateChangeEvent);
+
+    @Subscribe
+    public void handleNoDataChangeEvent(NoDataChangeEvent aNoDataChangeEvent);
 
     /**
      * get all the streams of a specific type

@@ -74,12 +74,12 @@ public abstract class AbstractStream<T extends DataRecord>
 
     @Override
     public T getCurrentValue() {
-        return this.getLast();
+        return (this.size() >= 2 ? this.getLast() : null);
     }
 
     @Override
     public T getPreviousValue() {
-        return this.get(this.size() - 1);
+        return this.size() > 0 ? this.get(this.size() - 1): null;
     }
 
 }

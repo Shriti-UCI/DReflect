@@ -1,5 +1,6 @@
 package edu.umich.si.inteco.minukucore.manager;
 
+import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
@@ -14,7 +15,7 @@ import edu.umich.si.inteco.minukucore.situation.Situation;
 public interface SituationManager {
 
     /**
-     * Called by {@link edu.umich.si.inteco.minukucore.manager.StreamManager}
+     * Called by {@link edu.umich.si.inteco.minukucore.manager.StreamManager}.
      * Sends request to appropriate situations
      * Note: does not subscribe to any event on the event bus
      * @param s {@link edu.umich.si.inteco.minukucore.model.StreamSnapshot}
@@ -25,6 +26,16 @@ public interface SituationManager {
      *              the situations associated with this data type will be called
      */
     public void onStateChange(StreamSnapshot s, StateChangeEvent event);
+
+
+    /**
+     * Called by {@link edu.umich.si.inteco.minukucore.manager.StreamManager}.
+     * Tells every situation interested in the {@link NoDataChangeEvent#eventType}
+     * that an expected data entry did NOT occur.
+     * @param aNoDataChangeEvent
+     */
+    public void onNoDataChange(NoDataChangeEvent aNoDataChangeEvent);
+
 
     /**
      * Register a situation after checking for the existence of all the streams
