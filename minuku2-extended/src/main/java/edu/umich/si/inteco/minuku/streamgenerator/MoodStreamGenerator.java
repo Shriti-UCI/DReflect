@@ -99,6 +99,8 @@ public class MoodStreamGenerator extends AndroidStreamGenerator<MoodDataRecord> 
         mStream.add(aMoodDataRecord);
         try {
             mMoodDataDAO.add(aMoodDataRecord);
+            StateChangeEvent moodStateChangeEvent = new StateChangeEvent(MoodDataRecord.class);
+            MinukuStreamManager.getInstance().handleStateChangeEvent(moodStateChangeEvent);
         } catch (DAOException e) {
             e.printStackTrace();
         }

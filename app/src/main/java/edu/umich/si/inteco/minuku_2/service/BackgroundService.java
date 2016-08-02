@@ -67,6 +67,12 @@ public class BackgroundService extends Service {
         if(aShowNotificationEvent.title.equals(Constants.MISSED_DATA_GLUCOSE_READING_PROMPT_TITLE)) {
             launchIntent = new Intent(this, QuestionnaireActivity.class);
         }
+        if(aShowNotificationEvent.title.equals(Constants.MISSED_DATA_INSULIN_ADMIN_PROMPT_TITLE)) {
+            launchIntent = new Intent(this, QuestionnaireActivity.class);
+        }
+        if(aShowNotificationEvent.title.equals(Constants.MOOD_ANNOTATION_TITLE)) {
+            launchIntent = new Intent(this, QuestionnaireActivity.class);
+        }
 
         PendingIntent pIntent = PendingIntent.getActivity(this,
                 0, launchIntent, 0);

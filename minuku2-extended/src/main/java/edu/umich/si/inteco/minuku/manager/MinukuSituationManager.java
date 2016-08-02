@@ -43,9 +43,13 @@ public class MinukuSituationManager implements SituationManager {
     }
 
     @Override
-    public void onStateChange(StreamSnapshot snapshot, StateChangeEvent event) {
-        for(Situation situation: registeredSituationMap.get(event.getType())) {
-            EventBus.getDefault().post(situation.assertSituation(snapshot, event));
+    public void onStateChange(StreamSnapshot snapshot, StateChangeEvent aStateChangeEvent) {
+        Log.d(TAG, "Calling state change event on situation manager");
+        for(Situation situation: registeredSituationMap.get(aStateChangeEvent.getType())) {
+            ActionEvent actionEvent = situation.assertSituation(snapshot, aStateChangeEvent);
+            if(actionEvent!=null) {
+                EventBus.getDefault().post(actionEvent);
+            }
         }
     }
 

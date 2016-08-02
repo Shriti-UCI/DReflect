@@ -31,15 +31,20 @@ import edu.umich.si.inteco.minuku.streamgenerator.MoodStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MultipleChoiceQuestionStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.SemanticLocationStreamGenerator;
 import edu.umich.si.inteco.minuku_2.action.MissedGlucoseReadingAction;
+import edu.umich.si.inteco.minuku_2.action.MissedInsulinAdminAction;
+import edu.umich.si.inteco.minuku_2.action.MoodAnnotationExpectedAction;
 import edu.umich.si.inteco.minuku_2.action.MoodDataExpectedAction;
 import edu.umich.si.inteco.minuku_2.dao.FoodImageDAO;
 import edu.umich.si.inteco.minuku_2.dao.GlucoseReadingImageDAO;
 import edu.umich.si.inteco.minuku_2.dao.InsulinAdminImageDAO;
+import edu.umich.si.inteco.minuku_2.event.MissedInsulinAdminEvent;
 import edu.umich.si.inteco.minuku_2.model.FoodImage;
 import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
 import edu.umich.si.inteco.minuku_2.situation.MissedGlucoseReadingSituation;
+import edu.umich.si.inteco.minuku_2.situation.MissedInsulinAdminSituation;
+import edu.umich.si.inteco.minuku_2.situation.MoodAnnotationExpectedSituation;
 import edu.umich.si.inteco.minuku_2.situation.MoodDataExpectedSituation;
 import edu.umich.si.inteco.minuku_2.stream.FoodImageStream;
 import edu.umich.si.inteco.minuku_2.streamgenerator.FoodImageStreamGenerator;
@@ -146,6 +151,12 @@ public class MainActivity extends BaseActivity {
         MissedGlucoseReadingSituation missedGlucoseReadingSituation = new MissedGlucoseReadingSituation();
         MissedGlucoseReadingAction missedGlucoseReadingAction = new MissedGlucoseReadingAction();
 
+        MissedInsulinAdminSituation missedInsulinAdminSituation = new MissedInsulinAdminSituation();
+        MissedInsulinAdminAction missedInsulinAdminAction = new MissedInsulinAdminAction();
+
+        MoodAnnotationExpectedSituation moodAnnotationExpectedSituation = new MoodAnnotationExpectedSituation();
+        MoodAnnotationExpectedAction moodAnnotationExpectedAction = new MoodAnnotationExpectedAction();
+
     }
 
     //populate the list of elements in home screen
@@ -156,7 +167,7 @@ public class MainActivity extends BaseActivity {
         final ActionObject[] array = {
                 new ActionObject("Take Glucose Reading Pictures", "A", R.drawable.camera),
                 new ActionObject("Record Your Mood", "A", R.drawable.mood),
-                new ActionObject("Answer some questions", "A", R.drawable.blue_circle)
+                //new ActionObject("Answer some questions", "A", R.drawable.blue_circle)
         };
         // The adapter takes the action object array and converts it into a view that can be
         // rendered as a list, one item at a time.
@@ -176,9 +187,9 @@ public class MainActivity extends BaseActivity {
                     case 1:
                         Intent addMoodIntent = new Intent(MainActivity.this, MoodDataRecordActivity.class);
                         startActivity(addMoodIntent);
-                    case 2:
-                        Intent answerQuestionsIntent = new Intent(MainActivity.this, QuestionnaireActivity.class);
-                        startActivity(answerQuestionsIntent);
+                    //case 2:
+                        //Intent answerQuestionsIntent = new Intent(MainActivity.this, QuestionnaireActivity.class);
+                        //startActivity(answerQuestionsIntent);
                     default:
                         showToast("Clicked unknown");
                         break;

@@ -53,6 +53,8 @@ public class Constants {
 
     public static final String MOOD_REMINDER_TITLE = "How are you feeling right now?";
     public static final String MISSED_DATA_GLUCOSE_READING_PROMPT_TITLE = "We want to hear from you!";
+    public static final String MISSED_DATA_INSULIN_ADMIN_PROMPT_TITLE = "What are you upto?";
+    public static final String MOOD_ANNOTATION_TITLE = "What happened to your mood?";
 
 
     //default queue size
