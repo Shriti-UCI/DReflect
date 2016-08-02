@@ -1,5 +1,7 @@
 package edu.umich.si.inteco.minuku.manager;
 
+import android.util.Log;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ import edu.umich.si.inteco.minukucore.situation.Situation;
  */
 public class MinukuSituationManager implements SituationManager {
 
+    private static final String TAG = "MinikuSituationManager";
     private Map<Class<? extends DataRecord>, Set<Situation>> registeredSituationMap;
     private static MinukuSituationManager instance;
 
@@ -47,7 +50,14 @@ public class MinukuSituationManager implements SituationManager {
     }
 
     @Override
-    public void onNoDataChange(NoDataChangeEvent aNoDataChangeEvent) {
+    public void onNoDataChange(StreamSnapshot snapshot, NoDataChangeEvent aNoDataChangeEvent) {
+        Log.d(TAG, "Calling no data change event on situtation manager");
+        for(Situation situation: registeredSituationMap.get(aNoDataChangeEvent.getType())) {
+            ActionEvent actionEvent = situation.assertSituation(snapshot, aNoDataChangeEvent);
+            if(actionEvent != null) {
+                EventBus.getDefault().post(actionEvent);
+            }
+        }
     }
 
     @Override

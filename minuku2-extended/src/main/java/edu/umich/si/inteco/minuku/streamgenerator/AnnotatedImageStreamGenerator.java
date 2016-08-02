@@ -19,19 +19,34 @@ import edu.umich.si.inteco.minukucore.stream.Stream;
 
 /**
  * Created by shriti on 7/22/16.
+ *
+ * AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> implements
+ DAO<T>
  */
-public class AnnotatedImageStreamGenerator extends AndroidStreamGenerator<AnnotatedImageDataRecord> {
+public class AnnotatedImageStreamGenerator<T extends AnnotatedImageDataRecord>
+        extends AndroidStreamGenerator<T> {
 
-    private AnnotatedImageStream mStream;
+    private AnnotatedImageStream<T> mStream;
     private String TAG = "AnnotatedImageStreamGenerator";
     private AnnotatedImageDataRecord imageDataRecord;
+    private Class<T> mDataRecordType;
 
     AnnotatedImageDataRecordDAO mDAO;
 
-    public AnnotatedImageStreamGenerator(Context applicationContext) {
+    /**
+     * The AnnotatedImageStreamGenerator class is extended by multiple classes and the type of
+     * generic changes for each subclass. The stream generator needs to get the DAO the type of
+     * dataRecord which it is created over. As the type is passed in as a generic, the class of the
+     * type cannot be determined at runtime. Hence the constructor for AnnotatedImageStreamGenerator
+     * needs to take a type of class at runtime.
+     * @param applicationContext The context of the application
+     * @param dataRecordType The type of data record
+     */
+    public AnnotatedImageStreamGenerator(Context applicationContext, Class<T> dataRecordType) {
         super(applicationContext);
         this.mStream = new AnnotatedImageStream(Constants.DEFAULT_QUEUE_SIZE);
-        this.mDAO = MinukuDAOManager.getInstance().getDaoFor(AnnotatedImageDataRecord.class);
+        this.mDAO = MinukuDAOManager.getInstance().getDaoFor(dataRecordType);
+        this.mDataRecordType = dataRecordType;
         this.register();
     }
 
@@ -39,7 +54,7 @@ public class AnnotatedImageStreamGenerator extends AndroidStreamGenerator<Annota
     public void register() {
         Log.d(TAG, "Registering with Stream Manager");
         try {
-            MinukuStreamManager.getInstance().register(mStream, AnnotatedImageDataRecord.class, this);
+            MinukuStreamManager.getInstance().register(mStream, mDataRecordType, this);
         } catch (StreamNotFoundException streamNotFoundException) {
             Log.e(TAG, "One of the streams on which ImageDataRecord/ImageStream depends in not found.");
         } catch (StreamAlreadyExistsException streamAlreadyExsistsException) {
@@ -48,7 +63,7 @@ public class AnnotatedImageStreamGenerator extends AndroidStreamGenerator<Annota
     }
 
     @Override
-    public Stream<AnnotatedImageDataRecord> generateNewStream() {
+    public Stream<T> generateNewStream() {
         return mStream;
     }
 
@@ -74,7 +89,7 @@ public class AnnotatedImageStreamGenerator extends AndroidStreamGenerator<Annota
     }
 
     @Override
-    public void offer(AnnotatedImageDataRecord annotatedImageDataRecord) {
+    public void offer(T annotatedImageDataRecord) {
         try {
             //add to stream
             mStream.add(annotatedImageDataRecord);

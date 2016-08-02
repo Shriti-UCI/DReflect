@@ -26,7 +26,8 @@ import edu.umich.si.inteco.minukucore.user.User;
 /**
  * Created by shriti on 7/22/16.
  */
-public class AnnotatedImageDataRecordDAO implements DAO<AnnotatedImageDataRecord>{
+public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> implements
+        DAO<T> {
 
     private String TAG = "AnnotatedImageDataRecordDAO";
     private User myUser;
@@ -53,8 +54,8 @@ public class AnnotatedImageDataRecordDAO implements DAO<AnnotatedImageDataRecord
     }
 
     @Override
-    public Future<List<AnnotatedImageDataRecord>> getAll() throws DAOException {
-        final SettableFuture<List<AnnotatedImageDataRecord>> settableFuture =
+    public Future<List<T>> getAll() throws DAOException {
+        final SettableFuture<List<T>> settableFuture =
                 SettableFuture.create();
         Firebase imageListRef = new Firebase(Constants.FIREBASE_URL_IMAGES)
                 .child(myUser.getEmail())
@@ -63,9 +64,9 @@ public class AnnotatedImageDataRecordDAO implements DAO<AnnotatedImageDataRecord
         imageListRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, AnnotatedImageDataRecord> imageListMap =
-                        (HashMap<String,AnnotatedImageDataRecord>) dataSnapshot.getValue();
-                List<AnnotatedImageDataRecord> values = (List) imageListMap.values();
+                Map<String, T> imageListMap =
+                        (HashMap<String,T>) dataSnapshot.getValue();
+                List<T> values = (List) imageListMap.values();
                 settableFuture.set(values);
             }
 
@@ -78,7 +79,7 @@ public class AnnotatedImageDataRecordDAO implements DAO<AnnotatedImageDataRecord
     }
 
     @Override
-    public Future<List<AnnotatedImageDataRecord>> getLast(int N) throws DAOException {
+    public Future<List<T>> getLast(int N) throws DAOException {
         return null;
     }
 

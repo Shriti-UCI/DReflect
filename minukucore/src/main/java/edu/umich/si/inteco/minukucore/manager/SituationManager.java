@@ -35,7 +35,7 @@ public interface SituationManager {
      * that an expected data entry did NOT occur.
      * @param aNoDataChangeEvent
      */
-    public void onNoDataChange(NoDataChangeEvent aNoDataChangeEvent);
+    public void onNoDataChange(StreamSnapshot snapshot, NoDataChangeEvent aNoDataChangeEvent);
 
     /**
      * This method is called by {@link StreamManager}. Tells every Situations interested in the

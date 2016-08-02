@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.umich.si.inteco.minukucore.user.User;
@@ -39,7 +40,6 @@ public class UserPreferences {
 
     public void Initialize(Context ctxt){
         mContext = ctxt;
-        //
         mMyPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
@@ -51,6 +51,10 @@ public class UserPreferences {
 
     public String getPreference(String key) {
         return mMyPreferences.getString(key, null);
+    }
+
+    public Set<String> getPreferenceSet(String key) {
+        return mMyPreferences.getStringSet(key, null);
     }
 
     public void clear() {

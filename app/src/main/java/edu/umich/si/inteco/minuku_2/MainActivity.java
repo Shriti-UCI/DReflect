@@ -30,9 +30,21 @@ import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MoodStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MultipleChoiceQuestionStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.SemanticLocationStreamGenerator;
+import edu.umich.si.inteco.minuku_2.action.MissedGlucoseReadingAction;
 import edu.umich.si.inteco.minuku_2.action.MoodDataExpectedAction;
+import edu.umich.si.inteco.minuku_2.dao.FoodImageDAO;
+import edu.umich.si.inteco.minuku_2.dao.GlucoseReadingImageDAO;
+import edu.umich.si.inteco.minuku_2.dao.InsulinAdminImageDAO;
+import edu.umich.si.inteco.minuku_2.model.FoodImage;
+import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
+import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
+import edu.umich.si.inteco.minuku_2.situation.MissedGlucoseReadingSituation;
 import edu.umich.si.inteco.minuku_2.situation.MoodDataExpectedSituation;
+import edu.umich.si.inteco.minuku_2.stream.FoodImageStream;
+import edu.umich.si.inteco.minuku_2.streamgenerator.FoodImageStreamGenerator;
+import edu.umich.si.inteco.minuku_2.streamgenerator.GlucoseReadingImageStreamGenerator;
+import edu.umich.si.inteco.minuku_2.streamgenerator.InsulinAdminImageStreamGenerator;
 import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
@@ -88,12 +100,26 @@ public class MainActivity extends BaseActivity {
         multipleChoiceQuestionDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(MultipleChoice.class, multipleChoiceQuestionDAO);
 
+        //App speicif Image DAOs
+        GlucoseReadingImageDAO glucoseReadingImageDAO = new GlucoseReadingImageDAO();
+        glucoseReadingImageDAO.setDevice(myUser, dummyUUID);
+        daoManager.registerDaoFor(GlucoseReadingImage.class, glucoseReadingImageDAO);
+
+        InsulinAdminImageDAO insulinAdminImageDAO = new InsulinAdminImageDAO();
+        insulinAdminImageDAO.setDevice(myUser, dummyUUID);
+        daoManager.registerDaoFor(InsulinAdminImage.class, insulinAdminImageDAO);
+
+        FoodImageDAO foodImageDAO = new FoodImageDAO();
+        foodImageDAO.setDevice(myUser, dummyUUID);
+        daoManager.registerDaoFor(FoodImage.class, foodImageDAO);
+
         // Create corresponding stream generators. Only to be created once in Main Activity
         //creating a new stream registers it with the stream manager
         LocationStreamGenerator locationStreamGenerator =
                 new LocationStreamGenerator(getApplicationContext());
         AnnotatedImageStreamGenerator annotatedImageStreamGenerator =
-                new AnnotatedImageStreamGenerator(getApplicationContext());
+                new AnnotatedImageStreamGenerator(getApplicationContext(),
+                        AnnotatedImageDataRecord.class);
         MoodStreamGenerator moodStreamGenerator =
                 new MoodStreamGenerator(getApplicationContext());
         SemanticLocationStreamGenerator semanticLocationStreamGenerator =
@@ -103,12 +129,22 @@ public class MainActivity extends BaseActivity {
         MultipleChoiceQuestionStreamGenerator multipleChoiceQuestionStreamGenerator =
                 new MultipleChoiceQuestionStreamGenerator(getApplicationContext());
 
+        GlucoseReadingImageStreamGenerator glucoseReadingImageStreamGenerator =
+                new GlucoseReadingImageStreamGenerator(getApplicationContext());
+        InsulinAdminImageStreamGenerator insulinAdminImageStreamGenerator =
+                new InsulinAdminImageStreamGenerator(getApplicationContext());
+        FoodImageStreamGenerator foodImageStreamGenerator =
+                new FoodImageStreamGenerator(getApplicationContext());
+
 
 
         // All situations must be registered AFTER the stream generators are registers.
         MinukuSituationManager situationManager = MinukuSituationManager.getInstance();
         MoodDataExpectedSituation moodDataExpectedSituation = new MoodDataExpectedSituation();
         MoodDataExpectedAction moodDataExpectedAction = new MoodDataExpectedAction();
+
+        MissedGlucoseReadingSituation missedGlucoseReadingSituation = new MissedGlucoseReadingSituation();
+        MissedGlucoseReadingAction missedGlucoseReadingAction = new MissedGlucoseReadingAction();
 
     }
 

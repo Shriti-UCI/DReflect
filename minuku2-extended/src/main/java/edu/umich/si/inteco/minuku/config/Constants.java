@@ -52,6 +52,8 @@ public class Constants {
     public static final String CAN_SHOW_NOTIFICATION = "ENABLE_NOTIFICATIONS";
 
     public static final String MOOD_REMINDER_TITLE = "How are you feeling right now?";
+    public static final String MISSED_DATA_GLUCOSE_READING_PROMPT_TITLE = "We want to hear from you!";
+
 
     //default queue size
     public static final int DEFAULT_QUEUE_SIZE = 100;
@@ -60,4 +62,6 @@ public class Constants {
     public static final int LOCATION_QUEUE_SIZE = 100;
     public static final int IMAGE_QUEUE_SIZE = 100;
     public static final int MOOD_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 15;
+    public static final int IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 30;
+
 }

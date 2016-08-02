@@ -10,7 +10,8 @@ import edu.umich.si.inteco.minukucore.stream.AbstractStreamFromUser;
 /**
  * Created by shriti on 7/22/16.
  */
-public class AnnotatedImageStream extends AbstractStreamFromUser<AnnotatedImageDataRecord> {
+public class AnnotatedImageStream<T extends AnnotatedImageDataRecord>
+        extends AbstractStreamFromUser<T> {
 
     public AnnotatedImageStream(int maxSize) {
         super(maxSize);

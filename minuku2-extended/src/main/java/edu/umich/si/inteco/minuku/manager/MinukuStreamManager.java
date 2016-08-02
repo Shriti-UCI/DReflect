@@ -129,7 +129,8 @@ public class MinukuStreamManager implements StreamManager {
     @Override
     @Subscribe
     public void handleNoDataChangeEvent(NoDataChangeEvent aNoDataChangeEvent) {
-        MinukuSituationManager.getInstance().onNoDataChange(aNoDataChangeEvent);
+        MinukuSituationManager.getInstance().onNoDataChange(getStreamSnapshot(),
+                aNoDataChangeEvent);
     }
 
     @Override

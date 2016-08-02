@@ -17,6 +17,7 @@ import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku_2.MainActivity;
 import edu.umich.si.inteco.minuku_2.MoodDataRecordActivity;
+import edu.umich.si.inteco.minuku_2.QuestionnaireActivity;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 
 public class BackgroundService extends Service {
@@ -62,6 +63,9 @@ public class BackgroundService extends Service {
         //PackageManager pm = getPackageManager();
         if(aShowNotificationEvent.title.equals(Constants.MOOD_REMINDER_TITLE)) {
             launchIntent = new Intent(this, MoodDataRecordActivity.class);
+        }
+        if(aShowNotificationEvent.title.equals(Constants.MISSED_DATA_GLUCOSE_READING_PROMPT_TITLE)) {
+            launchIntent = new Intent(this, QuestionnaireActivity.class);
         }
 
         PendingIntent pIntent = PendingIntent.getActivity(this,

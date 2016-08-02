@@ -17,6 +17,8 @@
         <item>8:00pm</item>
         <item>9:00pm</item>
         <item>10:00pm</item>
+        <item>11:00pm</item>
+        <item>12:00am</item>
     </string-array>
 
     <string-array name="listValues">
@@ -37,6 +39,8 @@
         <item>20</item>
         <item>21</item>
         <item>22</item>
+        <item>23</item>
+        <item>24</item>
     </string-array>
 
 </resources>
