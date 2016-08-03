@@ -15,11 +15,11 @@ public class MoodDataRecord implements DataRecord {
     /**
      * X axis to draw
      */
-    public float X = -50f;
+    public float x = -50f;
     /**
      * Y axis to draw
      */
-    public float Y = -50f;
+    public float y = -50f;
     /**
      * Checking flag while drag the mood
      */
@@ -42,21 +42,19 @@ public class MoodDataRecord implements DataRecord {
     public long creationTime;
 
     public float getX() {
-
-        return X;
+        return x;
     }
 
     public float getY() {
-
-        return Y;
+        return y;
     }
 
-    public boolean isSelected() {
+    public boolean getIsSelected() {
 
         return isSelected;
     }
 
-    public boolean isCreated() {
+    public boolean getIsCreated() {
 
         return isCreated;
     }
@@ -76,13 +74,18 @@ public class MoodDataRecord implements DataRecord {
         return creationTime;
     }
 
+    public void setCreationTime(long creationTime) {
+        this.creationTime =creationTime;
+    }
+
     public MoodDataRecord(){
 
     }
+
     public MoodDataRecord(float x, float y, boolean isSelected, boolean isCreated, float moodLevel,
                           float energyLevel) {
-        X = x;
-        Y = y;
+        this.x = x;
+        this.y = y;
         this.isSelected = isSelected;
         this.isCreated = isCreated;
         this.moodLevel = moodLevel;

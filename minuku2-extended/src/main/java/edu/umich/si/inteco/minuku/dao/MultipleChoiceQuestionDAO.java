@@ -9,6 +9,8 @@ import com.firebase.client.ValueEventListener;
 import com.google.common.util.concurrent.SettableFuture;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,20 +32,23 @@ import edu.umich.si.inteco.minukucore.user.User;
 public class MultipleChoiceQuestionDAO implements DAO<MultipleChoice> {
 
     private String TAG = "MultipleChoiceQuestionDAO";
-    private User myUser;
+    private String myUserEmail;
     private UUID uuID;
+
+    public MultipleChoiceQuestionDAO() {
+        myUserEmail = UserPreferences.getInstance().getPreference(Constants.KEY_ENCODED_EMAIL);
+
+    }
 
     @Override
     public void setDevice(User user, UUID uuid) {
-        this.myUser = UserPreferences.getInstance().getUser();
-        this.uuID = uuid;
     }
 
     @Override
     public void add(MultipleChoice entity) throws DAOException {
         Log.d(TAG, "Adding reponse");
         Firebase multipleChoiceListRef = new Firebase(Constants.FIREBASE_URL_QUESTIONS)
-                .child(myUser.getEmail())
+                .child(myUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
         multipleChoiceListRef.push().setValue((MultipleChoice) entity);
     }
@@ -58,7 +63,7 @@ public class MultipleChoiceQuestionDAO implements DAO<MultipleChoice> {
         final SettableFuture<List<MultipleChoice>> settableFuture =
                 SettableFuture.create();
         Firebase multipleChoiceListRef = new Firebase(Constants.FIREBASE_URL_QUESTIONS)
-                .child(myUser.getEmail())
+                .child(myUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
 
         multipleChoiceListRef.addValueEventListener(new ValueEventListener() {
@@ -81,6 +86,19 @@ public class MultipleChoiceQuestionDAO implements DAO<MultipleChoice> {
 
     @Override
     public Future<List<MultipleChoice>> getLast(int N) throws DAOException {
+        /*final SettableFuture<List<MultipleChoice>> settableFuture = SettableFuture.create();
+        final Date today = new Date();
+
+        final List<MultipleChoice> lastNRecords = Collections.synchronizedList(
+                new ArrayList<MultipleChoice>());
+
+        getLastNValues(N,
+                myUserEmail,
+                today,
+                lastNRecords,
+                settableFuture);
+
+        return settableFuture;*/
         return null;
     }
 
@@ -88,5 +106,60 @@ public class MultipleChoiceQuestionDAO implements DAO<MultipleChoice> {
     public void update(MultipleChoice oldEntity, MultipleChoice newEntity) throws DAOException {
 
     }
+
+    private final void getLastNValues(final int N,
+                                      final String userEmail,
+                                      final Date someDate,
+                                      final List<MultipleChoice> synchronizedListOfRecords,
+                                      final SettableFuture settableFuture) {
+        Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL_QUESTIONS)
+                .child(userEmail)
+                .child(new SimpleDateFormat("MMddyyyy").format(someDate).toString());
+
+        Log.d(TAG, "Checking the value of N "+ N);
+
+        if(N <= 0) {
+            settableFuture.set(synchronizedListOfRecords);
+            return;
+        }
+
+        firebaseRef.limitToLast(N).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int newN = N;
+
+                // dataSnapshot.exists returns false when the
+                // <root>/<datarecord>/<userEmail>/<date> location does not exist.
+                // What it means is that no entries were added for this date, i.e.
+                // all the historic information has been exhausted.
+                if(!dataSnapshot.exists()) {
+                    settableFuture.set(synchronizedListOfRecords);
+                    return;
+                }
+
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    synchronizedListOfRecords.add(snapshot.getValue(MultipleChoice.class));
+                    newN--;
+                }
+                Date newDate = new Date(someDate.getTime() - 26 * 60 * 60 * 1000); /* -1 Day */
+                getLastNValues(newN,
+                        userEmail,
+                        newDate,
+                        synchronizedListOfRecords,
+                        settableFuture);
+            }
+
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+                // This would mean that the firebase ref does not exist thereby meaning that
+                // the number of entries for all dates are over before we could get the last N
+                // results
+                settableFuture.set(synchronizedListOfRecords);
+            }
+        });
+    }
+
 
 }

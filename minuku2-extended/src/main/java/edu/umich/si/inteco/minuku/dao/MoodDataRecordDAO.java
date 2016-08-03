@@ -26,6 +26,7 @@ import edu.umich.si.inteco.minuku.model.ImageDataRecord;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minukucore.dao.DAO;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
+import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.stream.Stream;
 import edu.umich.si.inteco.minukucore.user.User;
 
@@ -35,20 +36,23 @@ import edu.umich.si.inteco.minukucore.user.User;
 public class MoodDataRecordDAO implements DAO<MoodDataRecord> {
 
     String TAG = "MoodDataRecordDAO";
-    private User myUser;
+    private String myUserEmail;
     private UUID uuID;
+
+    public MoodDataRecordDAO() {
+        myUserEmail = UserPreferences.getInstance().getPreference(Constants.KEY_ENCODED_EMAIL);
+    }
 
     @Override
     public void setDevice(User user, UUID uuid) {
-        myUser = UserPreferences.getInstance().getUser();
-        uuID = uuid;
+
     }
 
     @Override
     public void add(MoodDataRecord entity) throws DAOException {
         Log.d(TAG, "Adding mood data record");
         Firebase imageListRef = new Firebase(Constants.FIREBASE_URL_MOODS)
-                .child(myUser.getEmail())
+                .child(myUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
         imageListRef.push().setValue((MoodDataRecord) entity);
     }
@@ -63,7 +67,7 @@ public class MoodDataRecordDAO implements DAO<MoodDataRecord> {
         final SettableFuture<List<MoodDataRecord>> settableFuture =
                 SettableFuture.create();
         Firebase moodListRef = new Firebase(Constants.FIREBASE_URL_MOODS)
-                .child(myUser.getEmail())
+                .child(myUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
 
         moodListRef.addValueEventListener(new ValueEventListener() {
@@ -87,10 +91,13 @@ public class MoodDataRecordDAO implements DAO<MoodDataRecord> {
         final SettableFuture<List<MoodDataRecord>> settableFuture = SettableFuture.create();
         final Date today = new Date();
 
-        final List<MoodDataRecord> lastNRecords = Collections.synchronizedList(
-                new ArrayList<MoodDataRecord>());
+        final List<MoodDataRecord> lastNRecords = new ArrayList<MoodDataRecord>();
 
-        MoodDataRecordDAO.getLastNValues(N, myUser.getEmail(), today, lastNRecords, settableFuture);
+        getLastNValues(N,
+                myUserEmail,
+                today,
+                lastNRecords,
+                settableFuture);
 
         return settableFuture;
     }
@@ -100,7 +107,7 @@ public class MoodDataRecordDAO implements DAO<MoodDataRecord> {
 
     }
 
-    private static final void getLastNValues(final int N,
+    private final void getLastNValues(final int N,
                                              final String userEmail,
                                              final Date someDate,
                                              final List<MoodDataRecord> synchronizedListOfRecords,
@@ -109,29 +116,37 @@ public class MoodDataRecordDAO implements DAO<MoodDataRecord> {
                 .child(userEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(someDate).toString());
 
+        Log.d(TAG, "Checking the value of N "+ N);
+
+        if(N <= 0) {
+            settableFuture.set(synchronizedListOfRecords);
+            return;
+        }
+
         firebaseRef.limitToLast(N).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get all the values in firebase list as map
-                Map<String, MoodDataRecord> moodListMap =
-                        (HashMap<String,MoodDataRecord>) dataSnapshot.getValue();
+                int newN = N;
 
-                // Add values in the map as a list to the list of results.
-                synchronizedListOfRecords.addAll((List)moodListMap.values());
-
-                // if after adding records for "Today" (moving day for each loop),
-                // the number of records in list exceed N, set the future.
-                if(synchronizedListOfRecords.size() > N) {
-                    settableFuture.set(Lists.reverse(synchronizedListOfRecords));
-                } else {
-                    int newN = N - moodListMap.values().size();
-                    Date newDate = new Date(someDate.getTime() - 26 * 60 * 60 * 1000); /* -1 Day */
-                    MoodDataRecordDAO.getLastNValues(newN,
-                            userEmail,
-                            newDate,
-                            synchronizedListOfRecords,
-                            settableFuture);
+                // dataSnapshot.exists returns false when the
+                // <root>/<datarecord>/<userEmail>/<date> location does not exist.
+                // What it means is that no entries were added for this date, i.e.
+                // all the historic information has been exhausted.
+                if(!dataSnapshot.exists()) {
+                    settableFuture.set(synchronizedListOfRecords);
+                    return;
                 }
+
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    synchronizedListOfRecords.add(snapshot.getValue(MoodDataRecord.class));
+                    newN--;
+                }
+                Date newDate = new Date(someDate.getTime() - 26 * 60 * 60 * 1000); /* -1 Day */
+                getLastNValues(newN,
+                        userEmail,
+                        newDate,
+                        synchronizedListOfRecords,
+                        settableFuture);
             }
 
             @Override

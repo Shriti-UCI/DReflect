@@ -41,6 +41,7 @@ import edu.umich.si.inteco.minuku_2.event.MissedInsulinAdminEvent;
 import edu.umich.si.inteco.minuku_2.model.FoodImage;
 import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
+import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
 import edu.umich.si.inteco.minuku_2.situation.MissedGlucoseReadingSituation;
 import edu.umich.si.inteco.minuku_2.situation.MissedInsulinAdminSituation;
@@ -67,55 +68,43 @@ public class MainActivity extends BaseActivity {
         initializeActionList();
         startService(new Intent(getBaseContext(), BackgroundService.class));
 
-        User myUser = mSharedPref.getUser();
-        if(myUser == null) {
-            Log.e(LOG_TAG, "User is set to null");
-        }
         UUID dummyUUID = UUID.randomUUID();
 
         // DAO initialization stuff
         MinukuDAOManager daoManager = MinukuDAOManager.getInstance();
         //For location
         LocationDataRecordDAO locationDataRecordDAO = new LocationDataRecordDAO();
-        locationDataRecordDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(LocationDataRecord.class, locationDataRecordDAO);
 
         //For image
-        AnnotatedImageDataRecordDAO annotatedImageDataRecordDAO = new AnnotatedImageDataRecordDAO();
-        annotatedImageDataRecordDAO.setDevice(myUser, dummyUUID);
+        AnnotatedImageDataRecordDAO annotatedImageDataRecordDAO = new AnnotatedImageDataRecordDAO(
+                AnnotatedImageDataRecord.class);
         daoManager.registerDaoFor(AnnotatedImageDataRecord.class, annotatedImageDataRecordDAO);
 
         //For mood
         MoodDataRecordDAO moodDataRecordDAO = new MoodDataRecordDAO();
-        moodDataRecordDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(MoodDataRecord.class, moodDataRecordDAO);
 
         // SemanticLocation
         SemanticLocationDataRecordDAO semanticLocationDataRecordDAO = new SemanticLocationDataRecordDAO();
-        semanticLocationDataRecordDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(SemanticLocationDataRecord.class, semanticLocationDataRecordDAO);
 
         //Free Response questions
         FreeResponseQuestionDAO freeResponseQuestionDAO = new FreeResponseQuestionDAO();
-        freeResponseQuestionDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(FreeResponse.class, freeResponseQuestionDAO);
 
         //Questionnaire DAO
         MultipleChoiceQuestionDAO multipleChoiceQuestionDAO = new MultipleChoiceQuestionDAO();
-        multipleChoiceQuestionDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(MultipleChoice.class, multipleChoiceQuestionDAO);
 
         //App speicif Image DAOs
         GlucoseReadingImageDAO glucoseReadingImageDAO = new GlucoseReadingImageDAO();
-        glucoseReadingImageDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(GlucoseReadingImage.class, glucoseReadingImageDAO);
 
         InsulinAdminImageDAO insulinAdminImageDAO = new InsulinAdminImageDAO();
-        insulinAdminImageDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(InsulinAdminImage.class, insulinAdminImageDAO);
 
         FoodImageDAO foodImageDAO = new FoodImageDAO();
-        foodImageDAO.setDevice(myUser, dummyUUID);
         daoManager.registerDaoFor(FoodImage.class, foodImageDAO);
 
         // Create corresponding stream generators. Only to be created once in Main Activity
@@ -156,6 +145,9 @@ public class MainActivity extends BaseActivity {
 
         MoodAnnotationExpectedSituation moodAnnotationExpectedSituation = new MoodAnnotationExpectedSituation();
         MoodAnnotationExpectedAction moodAnnotationExpectedAction = new MoodAnnotationExpectedAction();
+
+        //create questionnaires
+        QuestionConfig.getInstance().setUpQuestions(getApplicationContext());
 
     }
 

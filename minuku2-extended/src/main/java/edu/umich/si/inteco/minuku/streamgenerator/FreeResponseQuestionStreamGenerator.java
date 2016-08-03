@@ -1,11 +1,18 @@
 package edu.umich.si.inteco.minuku.streamgenerator;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.FreeResponseQuestionDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
+import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.stream.FreeResponseQuestionStream;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
@@ -63,6 +70,29 @@ public class FreeResponseQuestionStreamGenerator extends AndroidStreamGenerator<
 
     @Override
     public void onStreamRegistration() {
+        Log.d(TAG, "Stream " + TAG + " registered successfully");
+        /*AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                    Log.d(TAG, "Stream " + TAG + "initialized from previous state");
+                    Future<List<FreeResponse>> listFuture =
+                            mDAO.getLast(Constants.DEFAULT_QUEUE_SIZE);
+                    while(!listFuture.isDone()) {
+                        Thread.sleep(1000);
+                    }
+                    Log.d(TAG, "Received data from Future for " + TAG);
+                    mStream.addAll(listFuture.get());
+                } catch (DAOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        });*/
 
     }
 

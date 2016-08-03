@@ -8,12 +8,16 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.provider.CalendarContract;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.R;
 import edu.umich.si.inteco.minuku.config.Constants;
@@ -22,6 +26,7 @@ import edu.umich.si.inteco.minuku.dao.MoodDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.ImageDataRecord;
+import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minuku.stream.ImageStream;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
@@ -31,6 +36,7 @@ import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.manager.StreamManager;
+import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.stream.Stream;
 
 /**
@@ -40,12 +46,12 @@ public class MoodStreamGenerator extends AndroidStreamGenerator<MoodDataRecord> 
 
     private Stream mStream;
     private String TAG = "MoodStreamGenerator";
-    private MoodDataRecordDAO mMoodDataDAO;
+    private MoodDataRecordDAO mDAO;
 
     public MoodStreamGenerator(Context applicationContext) {
         super(applicationContext);
         this.mStream = new ImageStream(Constants.DEFAULT_QUEUE_SIZE);
-        this.mMoodDataDAO = MinukuDAOManager.getInstance().getDaoFor(MoodDataRecord.class);
+        this.mDAO = MinukuDAOManager.getInstance().getDaoFor(MoodDataRecord.class);
         this.register();
     }
 
@@ -91,14 +97,37 @@ public class MoodStreamGenerator extends AndroidStreamGenerator<MoodDataRecord> 
 
     @Override
     public void onStreamRegistration() {
+
         Log.d(TAG, "Stream " + TAG + " registered successfully");
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                    Log.d(TAG, "Stream " + TAG + "initialized from previous state");
+                    Future<List<MoodDataRecord>> listFuture =
+                            mDAO.getLast(Constants.DEFAULT_QUEUE_SIZE);
+                    while(!listFuture.isDone()) {
+                        Thread.sleep(1000);
+                    }
+                    Log.d(TAG, "Received data from Future for " + TAG);
+                    mStream.addAll(listFuture.get());
+                } catch (DAOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
     public void offer(MoodDataRecord aMoodDataRecord) {
         mStream.add(aMoodDataRecord);
         try {
-            mMoodDataDAO.add(aMoodDataRecord);
+            mDAO.add(aMoodDataRecord);
             StateChangeEvent moodStateChangeEvent = new StateChangeEvent(MoodDataRecord.class);
             MinukuStreamManager.getInstance().handleStateChangeEvent(moodStateChangeEvent);
         } catch (DAOException e) {

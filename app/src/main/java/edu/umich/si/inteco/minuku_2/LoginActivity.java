@@ -33,6 +33,7 @@ import com.google.android.gms.common.api.Scope;
 import java.io.IOException;
 
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minukucore.user.User;
 
 /**
@@ -288,6 +289,7 @@ public class LoginActivity extends BaseActivity {
          * to be able to use it as a Firebase db key
          */
         mEmail = Utils.encodeEmail(unprocessedEmail);
+        UserPreferences.getInstance().writePreference(Constants.KEY_ENCODED_EMAIL, mEmail);
 
         final Firebase userLocationRef = new Firebase(Constants.FIREBASE_URL_USERS).child(mEmail);
         userLocationRef.addListenerForSingleValueEvent(new ValueEventListener() {

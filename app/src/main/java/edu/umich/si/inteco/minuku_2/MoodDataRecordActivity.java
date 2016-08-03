@@ -89,10 +89,10 @@ public class MoodDataRecordActivity extends BaseActivity {
             if (event.getAction() == MotionEvent.ACTION_DOWN)
             {
                 // is first mood selected
-                if (event.getX() - 25 * scale < moodFirst.X
-                        && event.getX() + 25 * scale > moodFirst.X
-                        && event.getY() - 25 * scale < moodFirst.Y
-                        && event.getY() + 25 * scale > moodFirst.Y)
+                if (event.getX() - 25 * scale < moodFirst.x
+                        && event.getX() + 25 * scale > moodFirst.x
+                        && event.getY() - 25 * scale < moodFirst.y
+                        && event.getY() + 25 * scale > moodFirst.y)
                 {
                     Log.v("First Mood", "Selected");
                     moodFirst.isSelected = true;
@@ -100,10 +100,10 @@ public class MoodDataRecordActivity extends BaseActivity {
                 }
 
                 // is second mood selected
-                else if (event.getX() - (25 * scale) < moodSecond.X
-                        && event.getX() + (25 * scale) > moodSecond.X
-                        && event.getY() - (25 * scale) < moodSecond.Y
-                        && event.getY() + (25 * scale) > moodSecond.Y)
+                else if (event.getX() - (25 * scale) < moodSecond.x
+                        && event.getX() + (25 * scale) > moodSecond.x
+                        && event.getY() - (25 * scale) < moodSecond.y
+                        && event.getY() + (25 * scale) > moodSecond.y)
                 {
                     Log.v("Second Mood", "Selected");
                     moodFirst.isSelected = false;
@@ -120,8 +120,8 @@ public class MoodDataRecordActivity extends BaseActivity {
                 /** Choice first or second mood creating */
                 if (!moodFirst.isCreated && moodSecond.isSelected == false)
                 {
-                    moodFirst.X = event.getX();
-                    moodFirst.Y = event.getY();
+                    moodFirst.x = event.getX();
+                    moodFirst.y = event.getY();
                     moodFirst.isCreated = true;
                     moodFirst.isSelected = true;
                     setFirstMood(moodFirst);
@@ -210,16 +210,16 @@ public class MoodDataRecordActivity extends BaseActivity {
                 tap_Y = Float.parseFloat(tapy);
                 if (moodFirst.isSelected)
                 {
-                    moodFirst.X = event.getX();
-                    moodFirst.Y = event.getY();
+                    moodFirst.x = event.getX();
+                    moodFirst.y = event.getY();
                     moodFirst.moodLevel = tap_X;
                     moodFirst.energyLevel = tap_Y;
 
                 }
                 if (moodSecond.isSelected)
                 {
-                    moodSecond.X = event.getX();
-                    moodSecond.Y = event.getY();
+                    moodSecond.x = event.getX();
+                    moodSecond.y = event.getY();
                     moodSecond.moodLevel = tap_X;
                     moodSecond.energyLevel = tap_Y;
                 }
@@ -229,8 +229,8 @@ public class MoodDataRecordActivity extends BaseActivity {
                 {
                     if (moodFirst.isSelected)
                     {
-                        moodFirst.X = -50 * scale;
-                        moodFirst.Y = -50 * scale;
+                        moodFirst.x = -50 * scale;
+                        moodFirst.y = -50 * scale;
                         setFirstMood(moodFirst);
                     }
 
@@ -249,8 +249,8 @@ public class MoodDataRecordActivity extends BaseActivity {
                 if (moodFirst.isSelected)
                 {
                     Log.v("first Mood ", "Moving");
-                    moodFirst.X = event.getX() - 10 * scale;
-                    moodFirst.Y = event.getY() - 10 * scale;
+                    moodFirst.x = event.getX() - 10 * scale;
+                    moodFirst.y = event.getY() - 10 * scale;
                     setFirstMood(moodFirst);
                 }
                 else
@@ -264,8 +264,8 @@ public class MoodDataRecordActivity extends BaseActivity {
                 {
                     if (moodFirst.isSelected)
                     {
-                        moodFirst.X = -20 * scale;
-                        moodFirst.Y = -20 * scale;
+                        moodFirst.x = -20 * scale;
+                        moodFirst.y = -20 * scale;
                         moodFirst.isCreated = false;
                         setFirstMood(moodFirst);
                     }
@@ -285,7 +285,7 @@ public class MoodDataRecordActivity extends BaseActivity {
      * @param mood
      */
     void setFirstMood(MoodDataRecord mood) {
-        moodEntryView.setFirstMood(mood.X, mood.Y);
+        moodEntryView.setFirstMood(mood.x, mood.y);
     }
 
 

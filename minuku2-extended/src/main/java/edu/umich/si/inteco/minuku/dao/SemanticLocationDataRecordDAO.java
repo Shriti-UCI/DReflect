@@ -9,6 +9,8 @@ import com.firebase.client.ValueEventListener;
 import com.google.common.util.concurrent.SettableFuture;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,6 +24,8 @@ import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.model.SemanticLocationDataRecord;
 import edu.umich.si.inteco.minukucore.dao.DAO;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
+import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
+import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
 import edu.umich.si.inteco.minukucore.user.User;
 
 /**
@@ -30,21 +34,22 @@ import edu.umich.si.inteco.minukucore.user.User;
 public class SemanticLocationDataRecordDAO implements DAO<SemanticLocationDataRecord> {
 
     private String TAG = "SemanticLocationDataRecordDAO";
-    private User myUser;
+    private String myUserEmail;
     private UUID uuID;
 
+    public SemanticLocationDataRecordDAO() {
+        myUserEmail = UserPreferences.getInstance().getPreference(Constants.KEY_ENCODED_EMAIL);
+    }
 
     @Override
     public void setDevice(User user, UUID uuid) {
-        myUser = user;
-        uuID = uuid;
     }
 
     @Override
     public void add(SemanticLocationDataRecord entity) throws DAOException {
         Log.d(TAG, "Adding location data record.");
         Firebase locationListRef = new Firebase(Constants.FIREBASE_URL_SEMANTIC_LOCATION)
-                .child(myUser.getEmail())
+                .child(myUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
         locationListRef.push().setValue((SemanticLocationDataRecord) entity);
     }
@@ -59,7 +64,7 @@ public class SemanticLocationDataRecordDAO implements DAO<SemanticLocationDataRe
         final SettableFuture<List<SemanticLocationDataRecord>> settableFuture =
                 SettableFuture.create();
         Firebase locationListRef = new Firebase(Constants.FIREBASE_URL_SEMANTIC_LOCATION)
-                .child(myUser.getEmail())
+                .child(myUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
 
         locationListRef.addValueEventListener(new ValueEventListener() {
@@ -81,8 +86,19 @@ public class SemanticLocationDataRecordDAO implements DAO<SemanticLocationDataRe
 
     @Override
     public Future<List<SemanticLocationDataRecord>> getLast(int N) throws DAOException {
-        Log.e(TAG, "Method not implemented. Returning null");
-        return null;
+        final SettableFuture<List<SemanticLocationDataRecord>> settableFuture = SettableFuture.create();
+        final Date today = new Date();
+
+        final List<SemanticLocationDataRecord> lastNRecords = Collections.synchronizedList(
+                new ArrayList<SemanticLocationDataRecord>());
+
+        getLastNValues(N,
+                myUserEmail,
+                today,
+                lastNRecords,
+                settableFuture);
+
+        return settableFuture;
     }
 
     @Override
@@ -90,4 +106,60 @@ public class SemanticLocationDataRecordDAO implements DAO<SemanticLocationDataRe
             throws DAOException {
         Log.e(TAG, "Method not implemented. Returning null");
     }
+
+    private final void getLastNValues(final int N,
+                                      final String userEmail,
+                                      final Date someDate,
+                                      final List<SemanticLocationDataRecord> synchronizedListOfRecords,
+                                      final SettableFuture settableFuture) {
+        Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL_QUESTIONS)
+                .child(userEmail)
+                .child(new SimpleDateFormat("MMddyyyy").format(someDate).toString());
+
+        Log.d(TAG, "Checking the value of N "+ N);
+
+        if(N <= 0) {
+            settableFuture.set(synchronizedListOfRecords);
+            return;
+        }
+
+        firebaseRef.limitToLast(N).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int newN = N;
+
+
+                // dataSnapshot.exists returns false when the
+                // <root>/<datarecord>/<userEmail>/<date> location does not exist.
+                // What it means is that no entries were added for this date, i.e.
+                // all the historic information has been exhausted.
+                if(!dataSnapshot.exists()) {
+                    settableFuture.set(synchronizedListOfRecords);
+                    return;
+                }
+
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    synchronizedListOfRecords.add(snapshot.getValue(SemanticLocationDataRecord.class));
+                    newN--;
+                }
+                Date newDate = new Date(someDate.getTime() - 26 * 60 * 60 * 1000); /* -1 Day */
+                getLastNValues(newN,
+                        userEmail,
+                        newDate,
+                        synchronizedListOfRecords,
+                        settableFuture);
+            }
+
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+                // This would mean that the firebase ref does not exist thereby meaning that
+                // the number of entries for all dates are over before we could get the last N
+                // results
+                settableFuture.set(synchronizedListOfRecords);
+            }
+        });
+    }
+
 }

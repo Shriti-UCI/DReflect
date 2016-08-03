@@ -8,4 +8,7 @@ import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
  */
 public class GlucoseReadingImageDAO extends AnnotatedImageDataRecordDAO<GlucoseReadingImage> {
 
+    public GlucoseReadingImageDAO() {
+        super(GlucoseReadingImage.class);
+    }
 }

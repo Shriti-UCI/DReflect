@@ -36,7 +36,7 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
     private ImageView acceptButton;
     private ImageView rejectButton;
     
-    private Map<T, FormElementController> map;
+    private Map<T, FormElementController> questionControllerMap;
     private String TAG = "QuestionnaireActivity";
 
     //FreeResponse q1= new FreeResponse("First Name");
@@ -50,7 +50,7 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
         setContentView(R.layout.custom_form);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        setupForm();
+        setupForm(savedInstanceState);
 
         acceptButton = (ImageView) findViewById(R.id.acceptButton);
         rejectButton = (ImageView) findViewById(R.id.rejectButton);
@@ -74,15 +74,17 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
 
     }
 
-    protected void setupForm() {
+    protected void setupForm(Bundle savedInstanceState) {
         formController = new FormController(this);
 
         Log.d(TAG, "creating form");
-
+        //get questionnaire ID from bundle
+        //QuestionManager.getInstance().getQuestionnaireForID(ID)
+        //
         FormSectionController section = new FormSectionController(this, "Personal Info");
         QuestionConfig.getInstance().setUpQuestions(getApplicationContext());
-        map = QuestionManager.getInstance().getQuestionFormControllerMap();
-        for (Map.Entry<T, FormElementController> entry:map.entrySet()) {
+        questionControllerMap = QuestionManager.getInstance().getQuestionFormControllerMap();
+        for (Map.Entry<T, FormElementController> entry:questionControllerMap.entrySet()) {
             section.addElement(entry.getValue());
         }
         //section.addElement(new EditTextController(this, "firstName", "First name"));
@@ -100,7 +102,7 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
         //Object firstName = formController.getModel().getValue();
         //Object lastName = formController.getModel().getValue("lastName");
 
-        for (Map.Entry<T, FormElementController> entry:map.entrySet()) {
+        for (Map.Entry<T, FormElementController> entry:questionControllerMap.entrySet()) {
             T question = entry.getKey();
             Object answer = formController.getModel().getValue(String.valueOf(question.getID()));
             if(question instanceof FreeResponse) {

@@ -12,6 +12,10 @@ public class ImageDataRecord implements DataRecord {
     public String base64Data;
     public long creationTime;
 
+    public ImageDataRecord() {
+
+    }
+
     public ImageDataRecord(String base64Data) {
         this.base64Data = base64Data;
         this.creationTime = new Date().getTime();;

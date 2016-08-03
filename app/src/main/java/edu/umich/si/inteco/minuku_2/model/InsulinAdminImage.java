@@ -7,6 +7,10 @@ import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
  */
 public class InsulinAdminImage extends AnnotatedImageDataRecord {
 
+    public InsulinAdminImage() {
+
+    }
+
     public InsulinAdminImage(String base64Data, String annotation) {
         super(base64Data, annotation);
     }

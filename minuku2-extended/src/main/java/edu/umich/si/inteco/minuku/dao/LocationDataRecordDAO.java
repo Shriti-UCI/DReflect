@@ -34,21 +34,23 @@ import edu.umich.si.inteco.minukucore.user.User;
 public class LocationDataRecordDAO implements DAO<LocationDataRecord> {
 
     private String TAG = "LocationDataRecordDAO";
-    private User myUser;
+    private String myUserEmail;
     private UUID uuID;
 
+    public LocationDataRecordDAO() {
+        myUserEmail = UserPreferences.getInstance().getPreference(Constants.KEY_ENCODED_EMAIL);
+    }
 
     @Override
     public void setDevice(User user, UUID uuid) {
-        myUser = UserPreferences.getInstance().getUser();
-        uuID = uuid;
+
     }
 
     @Override
     public void add(LocationDataRecord entity) throws DAOException {
         Log.d(TAG, "Adding location data record.");
         Firebase locationListRef = new Firebase(Constants.FIREBASE_URL_LOCATION)
-                .child(myUser.getEmail())
+                .child(myUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
         locationListRef.push().setValue((LocationDataRecord) entity);
     }
@@ -63,7 +65,7 @@ public class LocationDataRecordDAO implements DAO<LocationDataRecord> {
         final SettableFuture<List<LocationDataRecord>> settableFuture =
                 SettableFuture.create();
         Firebase locationListRef = new Firebase(Constants.FIREBASE_URL_LOCATION)
-                .child(myUser.getEmail())
+                .child(myUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
 
         locationListRef.addValueEventListener(new ValueEventListener() {
@@ -92,7 +94,7 @@ public class LocationDataRecordDAO implements DAO<LocationDataRecord> {
                 new ArrayList<LocationDataRecord>());
 
         getLastNValues(N,
-                myUser.getEmail(),
+                myUserEmail,
                 today,
                 lastNRecords,
                 settableFuture);
@@ -126,6 +128,16 @@ public class LocationDataRecordDAO implements DAO<LocationDataRecord> {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 int newN = N;
+
+                // dataSnapshot.exists returns false when the
+                // <root>/<datarecord>/<userEmail>/<date> location does not exist.
+                // What it means is that no entries were added for this date, i.e.
+                // all the historic information has been exhausted.
+                if(!dataSnapshot.exists()) {
+                    settableFuture.set(synchronizedListOfRecords);
+                    return;
+                }
+
                 for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     synchronizedListOfRecords.add(snapshot.getValue(LocationDataRecord.class));
                     newN--;

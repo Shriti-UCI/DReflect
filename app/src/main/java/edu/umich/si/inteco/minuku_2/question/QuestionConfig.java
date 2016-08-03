@@ -7,12 +7,14 @@ import com.github.dkharrat.nexusdialog.controllers.*;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 import edu.umich.si.inteco.minuku.manager.QuestionManager;
 import edu.umich.si.inteco.minukucore.exception.QuestionNotFoundException;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
 import edu.umich.si.inteco.minukucore.model.question.Question;
+import edu.umich.si.inteco.minukucore.model.question.Questionnaire;
 
 /**
  * Created by shriti on 7/29/16.
@@ -26,23 +28,47 @@ public class QuestionConfig {
     public static final String QUESTION_2_STRING = "Question2";
     public static final String QUESTION_3_STRING = "Question3";
     public static final String[] QUESTION_3_VALUES = {"1", "2", "3"};
+    public static final String QUESTION_4_STRING = "Question4";
+    public static final String[] QUESTION_4_VALUES = {"1", "2", "3"};
+
+
+
 
     public static final FreeResponse QUESTION_1 = new FreeResponse(QUESTION_1_STRING);
     public static final FreeResponse QUESTION_2 = new FreeResponse(QUESTION_2_STRING);
     public static final MultipleChoice QUESTION_3 = new MultipleChoice(QUESTION_3_STRING,
             3,
             QUESTION_3_VALUES);
+    public static final MultipleChoice QUESTION_4 = new MultipleChoice(QUESTION_4_STRING,
+            3,
+            QUESTION_4_VALUES);
 
     public static LinkedList<Question> questionsList = new LinkedList();
+    private static List<Question> list1 = new LinkedList<>();
+    private static List<Question> list2 = new LinkedList<>();
+
+    public static Questionnaire questionnaire_1;
+    public static Questionnaire questionnaire_2;
+
 
     static {
         QUESTION_1.setID(1);
         QUESTION_2.setID(2);
         QUESTION_3.setID(3);
+        QUESTION_4.setID(4);
 
         questionsList.add(QUESTION_1);
         questionsList.add(QUESTION_2);
         questionsList.add(QUESTION_3);
+        questionsList.add(QUESTION_4);
+
+        list1.add(QUESTION_1);
+        list1.add(QUESTION_3);
+        questionnaire_1 = new Questionnaire(1, list1);
+        list2.add(QUESTION_2);
+        list2.add(QUESTION_4);
+        questionnaire_2 = new Questionnaire(2, list2);
+
     }
 
     // Create all Question instances here, make all Strings and instances created with those strings
@@ -70,7 +96,7 @@ public class QuestionConfig {
     public static void setUpQuestions(Context context){
         for (Question question:QuestionConfig.questionsList) {
             try {
-                QuestionManager.getInstance().register(
+                QuestionManager.getInstance().registerQuestion(
                         question,
                         getControllerFor(question,context));
 

@@ -7,6 +7,10 @@ import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
  */
 public class GlucoseReadingImage extends AnnotatedImageDataRecord{
 
+    public GlucoseReadingImage() {
+
+    }
+
     public GlucoseReadingImage(String base64Data, String annotation) {
         super(base64Data, annotation);
     }

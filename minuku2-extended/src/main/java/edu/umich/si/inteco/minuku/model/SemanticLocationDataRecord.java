@@ -9,8 +9,12 @@ import edu.umich.si.inteco.minukucore.model.DataRecord;
  */
 public class SemanticLocationDataRecord implements DataRecord {
 
-    private String mSemanticLocation;
-    private long mCreationTime;
+    public String mSemanticLocation;
+    public long mCreationTime;
+
+    public SemanticLocationDataRecord() {
+
+    }
 
     public SemanticLocationDataRecord(String aSemanticLocation) {
         this.mCreationTime = new Date().getTime();

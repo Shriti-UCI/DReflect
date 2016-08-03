@@ -2,6 +2,7 @@ package edu.umich.si.inteco.minuku.streamgenerator;
 
 import android.content.Context;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -11,8 +12,11 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku.dao.SemanticLocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.model.SemanticLocationDataRecord;
@@ -21,6 +25,7 @@ import edu.umich.si.inteco.minuku.stream.SemanticLocationStream;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.manager.DAOManager;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
+import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.stream.AbstractStreamFromDevice;
 import edu.umich.si.inteco.minukucore.stream.Stream;
 
@@ -32,6 +37,7 @@ public class SemanticLocationStreamGenerator
 
     private SemanticLocationStream mStream;
     private String TAG = "SemanticLocationStreamGenerator";
+    private SemanticLocationDataRecordDAO mDAO;
 
 
 
@@ -39,6 +45,7 @@ public class SemanticLocationStreamGenerator
     public SemanticLocationStreamGenerator(Context applicationContext) {
         super(applicationContext);
         mStream = new SemanticLocationStream(Constants.LOCATION_QUEUE_SIZE);
+        mDAO = MinukuDAOManager.getInstance().getDaoFor(SemanticLocationDataRecord.class);
 
         // A potential subscriber must register to the event bus before calling subscribe
         // on it.
@@ -72,7 +79,29 @@ public class SemanticLocationStreamGenerator
 
     @Override
     public void onStreamRegistration() {
-
+        Log.d(TAG, "Stream " + TAG + " registered successfully");
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                    Log.d(TAG, "Stream " + TAG + "initialized from previous state");
+                    Future<List<SemanticLocationDataRecord>> listFuture =
+                            mDAO.getLast(Constants.DEFAULT_QUEUE_SIZE);
+                    while(!listFuture.isDone()) {
+                        Thread.sleep(1000);
+                    }
+                    Log.d(TAG, "Received data from Future for " + TAG);
+                    mStream.addAll(listFuture.get());
+                } catch (DAOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     @Override
@@ -85,9 +114,7 @@ public class SemanticLocationStreamGenerator
     @Subscribe
     public void onLocationDataChangeEvent(LocationDataRecord d) {
         try {
-            MinukuDAOManager.getInstance()
-                    .getDaoFor(SemanticLocationDataRecord.class)
-                    .add(convertToSemanticLocation(d));
+            mDAO.add(convertToSemanticLocation(d));
         } catch (DAOException e) {
             e.printStackTrace();
             Log.e(TAG, "There was an error adding the semantic location data record." +

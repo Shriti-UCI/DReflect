@@ -1,7 +1,12 @@
 package edu.umich.si.inteco.minuku.streamgenerator;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.FreeResponseQuestionDAO;
@@ -67,7 +72,29 @@ public class MultipleChoiceQuestionStreamGenerator extends AndroidStreamGenerato
 
     @Override
     public void onStreamRegistration() {
-
+        /*Log.d(TAG, "Stream " + TAG + " registered successfully");
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try
+                {
+                    Log.d(TAG, "Stream " + TAG + "initialized from previous state");
+                    Future<List<MultipleChoice>> listFuture =
+                            mDAO.getLast(Constants.DEFAULT_QUEUE_SIZE);
+                    while(!listFuture.isDone()) {
+                        Thread.sleep(1000);
+                    }
+                    Log.d(TAG, "Received data from Future for " + TAG);
+                    mStream.addAll(listFuture.get());
+                } catch (DAOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        });*/
     }
 
     @Override

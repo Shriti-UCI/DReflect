@@ -8,4 +8,7 @@ import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
  */
 public class InsulinAdminImageDAO extends AnnotatedImageDataRecordDAO<InsulinAdminImage> {
 
+    public InsulinAdminImageDAO() {
+        super(InsulinAdminImage.class);
+    }
 }

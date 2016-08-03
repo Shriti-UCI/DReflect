@@ -24,7 +24,7 @@ import edu.umich.si.inteco.minukucore.user.User;
 public class UserPreferences {
 
     private static AtomicInteger numActivities = new AtomicInteger(0);
-    private String LOG_TAG = getClass().getSimpleName();
+    private String LOG_TAG = "UserPreferences";
     private static UserPreferences mInstance;
     private Context mContext;
     //
