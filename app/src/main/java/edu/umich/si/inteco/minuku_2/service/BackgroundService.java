@@ -55,38 +55,6 @@ public class BackgroundService extends Service {
 
     @Subscribe
     public void handleNotificationEvent(ShowNotificationEvent aShowNotificationEvent) {
-        Log.d(TAG, "Handling notification event.");
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(
-                        Service.NOTIFICATION_SERVICE);
-        Intent launchIntent = new Intent(this, MainActivity.class);
-        //PackageManager pm = getPackageManager();
-        if(aShowNotificationEvent.title.equals(Constants.MOOD_REMINDER_TITLE)) {
-            launchIntent = new Intent(this, MoodDataRecordActivity.class);
-        }
-        if(aShowNotificationEvent.title.equals(Constants.MISSED_DATA_GLUCOSE_READING_PROMPT_TITLE)) {
-            launchIntent = new Intent(this, QuestionnaireActivity.class);
-        }
-        if(aShowNotificationEvent.title.equals(Constants.MISSED_DATA_INSULIN_ADMIN_PROMPT_TITLE)) {
-            launchIntent = new Intent(this, QuestionnaireActivity.class);
-        }
-        if(aShowNotificationEvent.title.equals(Constants.MOOD_ANNOTATION_TITLE)) {
-            launchIntent = new Intent(this, QuestionnaireActivity.class);
-        }
 
-        PendingIntent pIntent = PendingIntent.getActivity(this,
-                0, launchIntent, 0);
-
-        Notification n  = new Notification.Builder(this)
-                .setContentTitle(aShowNotificationEvent.title)
-                .setContentIntent(pIntent)
-                .setContentText("Yoohoo")
-                .setSmallIcon(edu.umich.si.inteco.minuku.R.drawable.common_google_signin_btn_icon_dark)
-                .setAutoCancel(true)
-                .build();
-
-        n.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
-
-        notificationManager.notify(0, n);
     }
 }

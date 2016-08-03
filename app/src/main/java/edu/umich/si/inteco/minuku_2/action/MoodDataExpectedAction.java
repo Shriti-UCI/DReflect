@@ -5,9 +5,14 @@ import android.util.Log;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.HashMap;
+
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku_2.MoodDataRecordActivity;
+import edu.umich.si.inteco.minuku_2.R;
 import edu.umich.si.inteco.minuku_2.event.MoodDataExpectedActionEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
+import edu.umich.si.inteco.minukucore.event.ShowNotificationEventBuilder;
 
 /**
  * Created by neerajkumar on 7/30/16.
@@ -23,6 +28,14 @@ public class MoodDataExpectedAction {
     public void handleMoodDataExpectedEvent(MoodDataExpectedActionEvent expectedActionEvent) {
         Log.d(TAG, "Handling mood data expected event");
         EventBus.getDefault().post(
-                new ShowNotificationEvent(Constants.MOOD_REMINDER_TITLE));
+                new ShowNotificationEventBuilder()
+                        .setExpirationAction(ShowNotificationEvent.ExpirationAction.DISMISS)
+                        .setExpirationTimeSeconds(Constants.MOOD_NOTIFICATION_EXPIRATION_TIME)
+                        .setViewToShow(MoodDataRecordActivity.class)
+                        .setIconID(R.drawable.analysis)
+                        .setTitle(Constants.MOOD_REMINDER_TITLE)
+                        .setMessage("")
+                        .setParams(new HashMap<String, String>())
+                        .createShowNotificationEvent());
     }
 }
