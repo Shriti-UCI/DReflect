@@ -12,6 +12,10 @@ public class LocationDataRecord implements DataRecord {
     public float longitude;
     public long creationTime;
 
+    public LocationDataRecord() {
+
+    }
+
     public LocationDataRecord(float latitude, float longitude) {
         this.creationTime = new Date().getTime();
         this.latitude = latitude;

@@ -6,9 +6,12 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.SettableFuture;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,8 +21,10 @@ import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
+import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minukucore.dao.*;
+import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.user.User;
 
 /**
@@ -80,8 +85,19 @@ public class LocationDataRecordDAO implements DAO<LocationDataRecord> {
 
     @Override
     public Future<List<LocationDataRecord>> getLast(int N) throws DAOException {
-        Log.e(TAG, "Method not implemented. Returning null");
-        return null;
+        final SettableFuture<List<LocationDataRecord>> settableFuture = SettableFuture.create();
+        final Date today = new Date();
+
+        final List<LocationDataRecord> lastNRecords = Collections.synchronizedList(
+                new ArrayList<LocationDataRecord>());
+
+        getLastNValues(N,
+                myUser.getEmail(),
+                today,
+                lastNRecords,
+                settableFuture);
+
+        return settableFuture;
     }
 
     @Override
@@ -89,4 +105,50 @@ public class LocationDataRecordDAO implements DAO<LocationDataRecord> {
             throws DAOException {
         Log.e(TAG, "Method not implemented. Returning null");
     }
+
+    private final void getLastNValues(final int N,
+                                      final String userEmail,
+                                      final Date someDate,
+                                      final List<LocationDataRecord> synchronizedListOfRecords,
+                                      final SettableFuture settableFuture) {
+        Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL_LOCATION)
+                .child(userEmail)
+                .child(new SimpleDateFormat("MMddyyyy").format(someDate).toString());
+
+        if(N <= 0) {
+            settableFuture.set(synchronizedListOfRecords);
+            return;
+        }
+
+
+        firebaseRef.limitToLast(N).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                int newN = N;
+                for(DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    synchronizedListOfRecords.add(snapshot.getValue(LocationDataRecord.class));
+                    newN--;
+                }
+                Date newDate = new Date(someDate.getTime() - 26 * 60 * 60 * 1000); /* -1 Day */
+                getLastNValues(newN,
+                        userEmail,
+                        newDate,
+                        synchronizedListOfRecords,
+                        settableFuture);
+            }
+
+
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+                // This would mean that the firebase ref does not exist thereby meaning that
+                // the number of entries for all dates are over before we could get the last N
+                // results
+                settableFuture.set(synchronizedListOfRecords);
+            }
+        });
+    }
+
 }
