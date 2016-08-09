@@ -1,5 +1,7 @@
 package edu.umich.si.inteco.minukucore.event;
 
+import android.util.Log;
+
 import java.util.Map;
 
 public class ShowNotificationEventBuilder {
@@ -10,6 +12,8 @@ public class ShowNotificationEventBuilder {
     private Class viewToShow;
     private ShowNotificationEvent.ExpirationAction expirationAction;
     private Map<String, String> params;
+
+    private String TAG = "ShowNotificationEventBuilder";
 
     public ShowNotificationEventBuilder setTitle(String title) {
         this.title = title;
@@ -42,6 +46,7 @@ public class ShowNotificationEventBuilder {
     }
 
     public ShowNotificationEvent createShowNotificationEvent() {
+        Log.d(TAG, "Returing show notification event for " + title);
         return new ShowNotificationEvent(title,
                 message,
                 iconID,

@@ -19,6 +19,7 @@ import edu.umich.si.inteco.minuku.dao.MoodDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.MultipleChoiceQuestionDAO;
 import edu.umich.si.inteco.minuku.dao.SemanticLocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
+import edu.umich.si.inteco.minuku.manager.MinukuNotificationManager;
 import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
 import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
@@ -67,6 +68,7 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         initializeActionList();
         startService(new Intent(getBaseContext(), BackgroundService.class));
+        startService(new Intent(getBaseContext(), MinukuNotificationManager.class));
 
         UUID dummyUUID = UUID.randomUUID();
 

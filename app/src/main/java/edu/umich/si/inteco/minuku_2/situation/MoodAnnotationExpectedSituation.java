@@ -9,6 +9,7 @@ import java.util.List;
 
 import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
+import edu.umich.si.inteco.minuku_2.event.MoodAnnotationExpectedActionEvent;
 import edu.umich.si.inteco.minuku_2.event.MoodDataExpectedActionEvent;
 import edu.umich.si.inteco.minukucore.event.ActionEvent;
 import edu.umich.si.inteco.minukucore.event.IsDataExpectedEvent;
@@ -49,7 +50,8 @@ public class MoodAnnotationExpectedSituation implements Situation {
                     "notification.");
             if(shouldAskForAnnotation(snapshot)) {
                 Log.d(TAG, "Should show notification returned true. Sending ActionEvent.");
-                return (T) new MoodDataExpectedActionEvent("EXPLAIN_MOOD_CHANGES", dataRecords);
+                return (T) new MoodAnnotationExpectedActionEvent("EXPLAIN_MOOD_CHANGES",
+                        dataRecords);
             }
 
         }

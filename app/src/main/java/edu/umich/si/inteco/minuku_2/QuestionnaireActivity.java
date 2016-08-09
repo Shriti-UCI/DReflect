@@ -14,6 +14,7 @@ import com.github.dkharrat.nexusdialog.FormController;
 import com.github.dkharrat.nexusdialog.FormElementController;
 import com.github.dkharrat.nexusdialog.controllers.EditTextController;
 import com.github.dkharrat.nexusdialog.controllers.FormSectionController;
+import com.github.dkharrat.nexusdialog.controllers.LabeledFieldController;
 import com.github.dkharrat.nexusdialog.controllers.SelectionController;
 
 import java.util.*;

@@ -24,57 +24,87 @@ public class QuestionConfig {
     private static QuestionConfig instance;
 
     //constants for IDs and Strings and options - mcq, likert
-    public static final String QUESTION_1_STRING = "Question1";
-    public static final String QUESTION_2_STRING = "Question2";
-    public static final String QUESTION_3_STRING = "Question3";
-    public static final String[] QUESTION_3_VALUES = {"1", "2", "3"};
-    public static final String QUESTION_4_STRING = "Question4";
-    public static final String[] QUESTION_4_VALUES = {"1", "2", "3"};
 
+    //missed report questions v1
+    // notification title - we want to hear from you!
+    public static final String MISSED_REPORT_QU_1_STRING =
+            "How busy are you currently?";
+    public static final Question MISSED_REPORT_QU_1 =
+            new FreeResponse(MISSED_REPORT_QU_1_STRING);
 
+    public static final String MISSED_REPORT_QU_2_STRING =
+            "What have you been doing in the last 2 hours?";
+    public static final Question MISSED_REPORT_QU_2 =
+            new FreeResponse(MISSED_REPORT_QU_2_STRING);
 
+    //missed report questions v2
+    //notification title - we want to hear from you!
+    public static final String MISSED_REPORT_QU_3_STRING = "Did you miss to report something?";
+    public static final String[] MISSED_REPORT_QU_3_VALUES = {"Yes", "No"};
+    public static final Question MISSED_REPORT_QU_3 = new MultipleChoice(MISSED_REPORT_QU_3_STRING,
+            2,
+            MISSED_REPORT_QU_3_VALUES);
 
-    public static final FreeResponse QUESTION_1 = new FreeResponse(QUESTION_1_STRING);
-    public static final FreeResponse QUESTION_2 = new FreeResponse(QUESTION_2_STRING);
-    public static final MultipleChoice QUESTION_3 = new MultipleChoice(QUESTION_3_STRING,
-            3,
-            QUESTION_3_VALUES);
-    public static final MultipleChoice QUESTION_4 = new MultipleChoice(QUESTION_4_STRING,
-            3,
-            QUESTION_4_VALUES);
+    public static final String MISSED_REPORT_QU_4_STRING = "If yes, please tell us what did you miss?";
+    public static final Question MISSED_REPORT_QU_4 = new FreeResponse(MISSED_REPORT_QU_4_STRING);
+
+    //mood change questions
+    //notification title - tell us what happened?
+    public static final String MOOD_CHANGE_NEG_QU_STRING =
+            "You went from being in a good mood to bad mood." +
+            "Did something happen that changed your mood?";
+    public static final Question MOOD_CHANGE_NEG_QU=
+            new FreeResponse(MOOD_CHANGE_NEG_QU_STRING);
+
+    public static final String MOOD_CHANGE_POS_QU_STRING =
+            "You went from being in a bad mood to good mood." +
+            "Did something happen that changed your mood?";
+    public static final Question MOOD_CHANGE_POS_QU=
+            new FreeResponse(MOOD_CHANGE_POS_QU_STRING);
 
     public static LinkedList<Question> questionsList = new LinkedList();
     private static List<Question> list1 = new LinkedList<>();
     private static List<Question> list2 = new LinkedList<>();
+    private static List<Question> list3 = new LinkedList<>();
+    private static List<Question> list4 = new LinkedList<>();
 
-    public static Questionnaire questionnaire_1;
-    public static Questionnaire questionnaire_2;
+    public static Questionnaire missedReportQuestionnaire_1;
+    public static Questionnaire missedReportQuestionnaire_2;
+    public static Questionnaire moodChangeNegQuestionnaire;
+    public static Questionnaire moodChangePosQuestionnaire;
+
 
 
     static {
-        QUESTION_1.setID(1);
-        QUESTION_2.setID(2);
-        QUESTION_3.setID(3);
-        QUESTION_4.setID(4);
+        MISSED_REPORT_QU_1.setID(1);
+        MISSED_REPORT_QU_2.setID(2);
+        MISSED_REPORT_QU_3.setID(3);
+        MISSED_REPORT_QU_4.setID(4);
+        MOOD_CHANGE_NEG_QU.setID(5);
+        MOOD_CHANGE_POS_QU.setID(6);
 
-        questionsList.add(QUESTION_1);
-        questionsList.add(QUESTION_2);
-        questionsList.add(QUESTION_3);
-        questionsList.add(QUESTION_4);
+        questionsList.add(MISSED_REPORT_QU_1);
+        questionsList.add(MISSED_REPORT_QU_2);
+        questionsList.add(MISSED_REPORT_QU_3);
+        questionsList.add(MISSED_REPORT_QU_4);
+        questionsList.add(MOOD_CHANGE_NEG_QU);
+        questionsList.add(MOOD_CHANGE_POS_QU);
 
-        list1.add(QUESTION_1);
-        list1.add(QUESTION_3);
-        questionnaire_1 = new Questionnaire(1, list1);
-        list2.add(QUESTION_2);
-        list2.add(QUESTION_4);
-        questionnaire_2 = new Questionnaire(2, list2);
+        list1.add(MISSED_REPORT_QU_1);
+        list1.add(MISSED_REPORT_QU_2);
+        missedReportQuestionnaire_1 = new Questionnaire(1, list1);
+
+        list2.add(MISSED_REPORT_QU_3);
+        list2.add(MISSED_REPORT_QU_4);
+        missedReportQuestionnaire_2 = new Questionnaire(2, list2);
+
+        list3.add(MOOD_CHANGE_NEG_QU);
+        moodChangeNegQuestionnaire = new Questionnaire(3, list3);
+
+        list4.add(MOOD_CHANGE_POS_QU);
+        moodChangePosQuestionnaire = new Questionnaire(4, list4);
 
     }
-
-    // Create all Question instances here, make all Strings and instances created with those strings
-    // static and final.
-    // create a list of MCQ
-    // create a list of FreeResponse
 
     // make this a singleton
     private QuestionConfig() {

@@ -27,7 +27,7 @@ public class BackgroundService extends Service {
 
     public BackgroundService() {
         streamManager = MinukuStreamManager.getInstance();
-        EventBus.getDefault().register(this);
+        //EventBus.getDefault().register(this);
     }
 
     @Override
@@ -51,10 +51,5 @@ public class BackgroundService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    @Subscribe
-    public void handleNotificationEvent(ShowNotificationEvent aShowNotificationEvent) {
-
     }
 }

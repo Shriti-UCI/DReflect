@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
@@ -32,14 +33,21 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     private android.app.NotificationManager mNotificationManager;
 
     public MinukuNotificationManager() {
+        Log.d(TAG, "Started minuku notification manager");
         registeredNotifications = new HashMap<>();
         notificationCounterMap = new HashMap<>();
-        mNotificationManager = (android.app.NotificationManager) getSystemService(
-                Service.NOTIFICATION_SERVICE);
+        EventBus.getDefault().register(this);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(TAG, "OnStartCommand");
+
+        if(mNotificationManager == null) {
+            mNotificationManager = (android.app.NotificationManager) getSystemService(
+                    Service.NOTIFICATION_SERVICE);
+        }
+
         AlarmManager alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
         alarm.set(
                 alarm.RTC_WAKEUP,
@@ -54,22 +62,30 @@ public class MinukuNotificationManager extends Service implements NotificationMa
 
     private void checkRegisteredNotifications() {
 
+        Log.d(TAG, "Checking for registered notificaitons.");
+
         for(Map.Entry<Integer, ShowNotificationEvent> entry: registeredNotifications.entrySet()) {
             ShowNotificationEvent notification = entry.getValue();
             Integer notificationID = entry.getKey();
             Integer counter = notificationCounterMap.get(notificationID);
             if(counter == notification.getExpirationTimeSeconds()) {
+                Log.d(TAG, "Counter for " + notification.getTitle() + " is matching.");
 
                 switch (notification.getExpirationAction()) {
                     case DISMISS:
+                        Log.d(TAG, "Dismissing " + notification.getTitle());
+
                         mNotificationManager.cancel(entry.getKey());
                         break;
                     case ALERT_AGAIN:
+                        Log.d(TAG, "Alerting again " + notification.getTitle());
+
                         mNotificationManager.cancel(entry.getKey());
                         mNotificationManager.notify(notificationID,
                                 buildNotificationForNotificationEvent(notification));
                         break;
                     case KEEP_SHOWING_WITHOUT_ALERT:
+                        Log.d(TAG, "Ignoring " + notification.getTitle());
                         break;
                     default:
                         break;
@@ -100,6 +116,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     }
 
     private static final String TAG = "MinNotificationManager";
+
     @Subscribe
     @Override
     public void handleShowNotificationEvent(ShowNotificationEvent aShowNotificationEvent) {
