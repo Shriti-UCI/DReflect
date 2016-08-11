@@ -27,7 +27,11 @@ import java.io.ByteArrayOutputStream;
 
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
+import edu.umich.si.inteco.minuku_2.model.FoodImage;
+import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
+import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
+import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
 
 /**
  * Created by shriti on 7/19/16.
@@ -39,6 +43,8 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
     protected ImageView imageView;
     protected EditText mText;
     protected String base64ImageData;
+    private String photoTypeValue;
+    protected String photoTypeKey = "photoType";
 
     protected static final int REQUEST_CAMERA = 101;
     protected static final int REQUEST_GALLERY = 102;
@@ -49,6 +55,8 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
         setContentView(R.layout.add_image_activity);
         imageView = (ImageView) findViewById(R.id.image);
         mText = (EditText) findViewById(R.id.image_annotation);
+
+        photoTypeValue = getIntent().getExtras().getString(photoTypeKey);
 
         // Add click listeners for buttons
         ImageView acceptButton = (ImageView) findViewById(R.id.acceptButton);
@@ -79,16 +87,60 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
     private void acceptResults() {
         //create a new image data record once submitted/accepted by user
         String annotation = mText.getText().toString();
-        AnnotatedImageDataRecord annotatedImageDataRecord = new AnnotatedImageDataRecord(base64ImageData, annotation);
 
-        //get the StreamGenerator for image and save data in database
-        try {
-            Log.d(TAG, "Saving results to the database");
-            MinukuStreamManager.getInstance().getStreamGeneratorFor(AnnotatedImageDataRecord.class).offer(annotatedImageDataRecord);
-        } catch (StreamNotFoundException e) {
-            e.printStackTrace();
-            Log.e(TAG, "The photo stream does not exist on this device.");
-        }
+            switch (photoTypeValue) {
+                case "GLUCOSE_READING":
+                    GlucoseReadingImage glucoseReadingImage = new GlucoseReadingImage(base64ImageData,
+                            annotation);
+                    try {
+                        StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
+                                getStreamGeneratorFor(GlucoseReadingImage.class);
+                        Log.d(TAG, "Saving results to the database");
+                        streamGenerator.offer(glucoseReadingImage);
+                    } catch (StreamNotFoundException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "The photo stream does not exist on this device.");
+                    }
+                    break;
+                case "INSULIN_SHOT":
+                    InsulinAdminImage insulinAdminImage = new InsulinAdminImage(base64ImageData,
+                            annotation);
+                    try {
+                        StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
+                                getStreamGeneratorFor(InsulinAdminImage.class);
+                        Log.d(TAG, "Saving results to the database");
+                        streamGenerator.offer(insulinAdminImage);
+                    } catch (StreamNotFoundException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "The photo stream does not exist on this device.");
+                    }
+                    break;
+                case "FOOD":
+                    FoodImage foodImage = new FoodImage(base64ImageData, annotation);
+                    try {
+                        StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
+                                getStreamGeneratorFor(FoodImage.class);
+                        Log.d(TAG, "Saving results to the database");
+                        streamGenerator.offer(foodImage);
+                    } catch (StreamNotFoundException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "The photo stream does not exist on this device.");
+                    }
+                    break;
+                default:
+                    AnnotatedImageDataRecord annotatedImageDataRecord = new AnnotatedImageDataRecord(
+                            base64ImageData,
+                            annotation);
+                    try {
+                        StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
+                                getStreamGeneratorFor(AnnotatedImageDataRecord.class);
+                        Log.d(TAG, "Saving results to the database");
+                        streamGenerator.offer(annotatedImageDataRecord);
+                    } catch (StreamNotFoundException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "The photo stream does not exist on this device.");
+                    }
+            }
 
         showToast("Starting the image stream annotated photo.");
 

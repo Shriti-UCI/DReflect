@@ -35,9 +35,9 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
         DAO<T> {
 
     private String TAG = "AnnotatedImageDataRecordDAO";
-    private String myUserEmail;
-    private UUID uuID;
-    private Class<T> mDataRecordType;
+    protected String myUserEmail;
+    protected UUID uuID;
+    protected Class<T> mDataRecordType;
 
     public AnnotatedImageDataRecordDAO(Class aDataRecordType) {
         myUserEmail = UserPreferences.getInstance().getPreference(Constants.KEY_ENCODED_EMAIL);
@@ -96,11 +96,14 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
         final List<T> lastNRecords = Collections.synchronizedList(
                 new ArrayList<T>());
 
+        String databaseURL = Constants.FIREBASE_URL_IMAGES;
+
         getLastNValues(N,
                 myUserEmail,
                 today,
                 lastNRecords,
-                settableFuture);
+                settableFuture,
+                databaseURL);
 
         return settableFuture;
     }
@@ -109,12 +112,13 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
     public void update(AnnotatedImageDataRecord oldEntity, AnnotatedImageDataRecord newEntity) throws DAOException {
     }
 
-    private final void getLastNValues(final int N,
+    public final void getLastNValues(final int N,
                                              final String userEmail,
                                              final Date someDate,
                                              final List<T> synchronizedListOfRecords,
-                                             final SettableFuture settableFuture) {
-        Firebase firebaseRef = new Firebase(Constants.FIREBASE_URL_IMAGES)
+                                             final SettableFuture settableFuture,
+                                             final String databaseURL) {
+        Firebase firebaseRef = new Firebase(databaseURL)
                 .child(userEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(someDate).toString());
 
@@ -148,7 +152,8 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
                         userEmail,
                         newDate,
                         synchronizedListOfRecords,
-                        settableFuture);
+                        settableFuture,
+                        databaseURL);
             }
 
 

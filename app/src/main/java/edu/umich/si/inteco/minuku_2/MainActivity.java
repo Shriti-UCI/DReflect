@@ -159,8 +159,10 @@ public class MainActivity extends BaseActivity {
 
         // the action object is the model behind the list that is shown on the main screen.
         final ActionObject[] array = {
-                new ActionObject("Take Glucose Reading Pictures", "A", R.drawable.camera),
-                new ActionObject("Record Your Mood", "A", R.drawable.mood),
+                new ActionObject("Take Glucose Reading Picture", "A", R.drawable.glucose_reading),
+                new ActionObject("Take Insulin Shot Picture", "A", R.drawable.insulin_shot),
+                new ActionObject("Take Food Pitcure", "A", R.drawable.food),
+                new ActionObject("Record Your Mood", "A", R.drawable.mood)
                 //new ActionObject("Answer some questions", "A", R.drawable.blue_circle)
         };
         // The adapter takes the action object array and converts it into a view that can be
@@ -172,13 +174,28 @@ public class MainActivity extends BaseActivity {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle extras = new Bundle();
                 // The position here corresponds to position of objects in the array passed above.
                 switch (position) {
                     case 0:
-                        Intent addPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        startActivity(addPhotoIntent);
+                        Intent addGlucoseReadingPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
+                        extras.putString("photoType", "GLUCOSE_READING");
+                        addGlucoseReadingPhotoIntent.putExtras(extras);
+                        startActivity(addGlucoseReadingPhotoIntent);
                         break;
                     case 1:
+                        Intent addInsulinShotPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
+                        extras.putString("photoType", "INSULIN_SHOT");
+                        addInsulinShotPhotoIntent.putExtras(extras);
+                        startActivity(addInsulinShotPhotoIntent);
+                        break;
+                    case 2:
+                        Intent addFoodPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
+                        extras.putString("photoType", "FOOD");
+                        addFoodPhotoIntent.putExtras(extras);
+                        startActivity(addFoodPhotoIntent);
+                        break;
+                    case 3:
                         Intent addMoodIntent = new Intent(MainActivity.this, MoodDataRecordActivity.class);
                         startActivity(addMoodIntent);
                     //case 2:
