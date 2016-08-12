@@ -12,9 +12,7 @@ import java.util.Set;
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
-import edu.umich.si.inteco.minuku_2.event.MissedGlucoseReadingEvent;
 import edu.umich.si.inteco.minuku_2.event.MissedInsulinAdminEvent;
-import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
 import edu.umich.si.inteco.minukucore.event.ActionEvent;
 import edu.umich.si.inteco.minukucore.event.MinukuEvent;
@@ -57,7 +55,7 @@ public class MissedInsulinAdminSituation implements Situation {
     @Override
     public List<Class<? extends DataRecord>> dependsOnDataRecordType() throws DataRecordTypeNotFound {
         List<Class<? extends  DataRecord>> dependsOn = new ArrayList<>();
-        dependsOn.add(GlucoseReadingImage.class);
+        dependsOn.add(InsulinAdminImage.class);
         return dependsOn;
     }
 

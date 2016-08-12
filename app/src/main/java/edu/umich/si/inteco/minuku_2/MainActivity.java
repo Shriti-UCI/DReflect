@@ -31,6 +31,7 @@ import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MoodStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MultipleChoiceQuestionStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.SemanticLocationStreamGenerator;
+import edu.umich.si.inteco.minuku_2.action.MissedFoodAction;
 import edu.umich.si.inteco.minuku_2.action.MissedGlucoseReadingAction;
 import edu.umich.si.inteco.minuku_2.action.MissedInsulinAdminAction;
 import edu.umich.si.inteco.minuku_2.action.MoodAnnotationExpectedAction;
@@ -44,6 +45,7 @@ import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
 import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
+import edu.umich.si.inteco.minuku_2.situation.MissedFoodImageSituation;
 import edu.umich.si.inteco.minuku_2.situation.MissedGlucoseReadingSituation;
 import edu.umich.si.inteco.minuku_2.situation.MissedInsulinAdminSituation;
 import edu.umich.si.inteco.minuku_2.situation.MoodAnnotationExpectedSituation;
@@ -136,6 +138,7 @@ public class MainActivity extends BaseActivity {
 
         // All situations must be registered AFTER the stream generators are registers.
         MinukuSituationManager situationManager = MinukuSituationManager.getInstance();
+
         MoodDataExpectedSituation moodDataExpectedSituation = new MoodDataExpectedSituation();
         MoodDataExpectedAction moodDataExpectedAction = new MoodDataExpectedAction();
 
@@ -144,6 +147,9 @@ public class MainActivity extends BaseActivity {
 
         MissedInsulinAdminSituation missedInsulinAdminSituation = new MissedInsulinAdminSituation();
         MissedInsulinAdminAction missedInsulinAdminAction = new MissedInsulinAdminAction();
+
+        MissedFoodImageSituation missedFoodImageSituation = new MissedFoodImageSituation();
+        MissedFoodAction missedFoodAction = new MissedFoodAction();
 
         MoodAnnotationExpectedSituation moodAnnotationExpectedSituation = new MoodAnnotationExpectedSituation();
         MoodAnnotationExpectedAction moodAnnotationExpectedAction = new MoodAnnotationExpectedAction();

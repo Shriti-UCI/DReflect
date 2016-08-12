@@ -21,4 +21,8 @@ public abstract class AndroidStreamGenerator<T extends DataRecord>
     public AndroidStreamGenerator(Context aApplicationContext) {
         this.mApplicationContext = aApplicationContext;
     }
+
+    public AndroidStreamGenerator() {
+
+    }
 }

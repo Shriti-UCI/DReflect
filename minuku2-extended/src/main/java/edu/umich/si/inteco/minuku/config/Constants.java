@@ -54,6 +54,7 @@ public class Constants {
     public static final String MOOD_REMINDER_TITLE = "How are you feeling right now?";
     public static final String MISSED_DATA_GLUCOSE_READING_PROMPT_TITLE = "We want to hear from you!";
     public static final String MISSED_DATA_INSULIN_ADMIN_PROMPT_TITLE = "What are you upto?";
+    public static final String MISSED_DATA_FOOD_PROMPT_TITLE = "What are you upto?";
     public static final String MOOD_ANNOTATION_TITLE = "What happened to your mood?";
 
 
@@ -65,6 +66,7 @@ public class Constants {
     public static final int IMAGE_QUEUE_SIZE = 100;
     public static final int MOOD_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 15;
     public static final int IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 30;
+    public static final int FOOD_IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 180;
 
     public static final int MOOD_NOTIFICATION_EXPIRATION_TIME = 30 * 60 /* 30 minutes*/;
     public static final int MISSED_REPORT_NOTIFICATION_EXPIRATION_TIME = 60 * 60 /* 60 minutes*/;

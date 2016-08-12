@@ -37,8 +37,11 @@ public class AnnotatedImageStreamGenerator<T extends AnnotatedImageDataRecord>
     private AnnotatedImageDataRecord imageDataRecord;
     private Class<T> mDataRecordType;
 
-    AnnotatedImageDataRecordDAO mDAO;
+    private AnnotatedImageDataRecordDAO mDAO;
 
+    public AnnotatedImageStreamGenerator() {
+
+    }
     /**
      * The AnnotatedImageStreamGenerator class is extended by multiple classes and the type of
      * generic changes for each subclass. The stream generator needs to get the DAO the type of
@@ -120,6 +123,7 @@ public class AnnotatedImageStreamGenerator<T extends AnnotatedImageDataRecord>
     public void offer(T annotatedImageDataRecord) {
         try {
             //add to stream
+            Log.d(TAG, "Adding to stream in the offer method");
             mStream.add(annotatedImageDataRecord);
             //add to database
             mDAO.add(annotatedImageDataRecord);

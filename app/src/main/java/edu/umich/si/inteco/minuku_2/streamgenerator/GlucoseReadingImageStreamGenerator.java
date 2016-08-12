@@ -6,10 +6,15 @@ import android.util.Log;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
+import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
+import edu.umich.si.inteco.minuku.stream.AnnotatedImageStream;
 import edu.umich.si.inteco.minuku.streamgenerator.AnnotatedImageStreamGenerator;
+import edu.umich.si.inteco.minuku_2.dao.GlucoseReadingImageDAO;
 import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
+import edu.umich.si.inteco.minuku_2.stream.GlucoseReadingImageStream;
+import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.event.IsDataExpectedEvent;
 import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 
@@ -20,8 +25,14 @@ public class GlucoseReadingImageStreamGenerator extends
         AnnotatedImageStreamGenerator<GlucoseReadingImage> {
 
     String TAG = "GlucoseReadingImageStreamGenerator";
+    private GlucoseReadingImageStream glucoseReadingImageStream;
+    private GlucoseReadingImageDAO glucoseReadingImageDAO;
+
     public GlucoseReadingImageStreamGenerator(Context applicationContext) {
         super(applicationContext, GlucoseReadingImage.class);
+        this.glucoseReadingImageStream = new GlucoseReadingImageStream(Constants.DEFAULT_QUEUE_SIZE);
+        this.glucoseReadingImageDAO = MinukuDAOManager.getInstance().getDaoFor(GlucoseReadingImage.class);
+        this.register();
     }
 
     @Override
@@ -38,5 +49,18 @@ public class GlucoseReadingImageStreamGenerator extends
     @Override
     public long getUpdateFrequency() {
         return Constants.IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES;
+    }
+
+    @Override
+    public void offer(GlucoseReadingImage anImage) {
+        try {
+            //add to stream
+            Log.d(TAG, "Adding to stream in the offer method");
+            glucoseReadingImageStream.add(anImage);
+            //add to database
+            glucoseReadingImageDAO.add(anImage);
+        } catch (DAOException e){
+            e.printStackTrace();
+        }
     }
 }
