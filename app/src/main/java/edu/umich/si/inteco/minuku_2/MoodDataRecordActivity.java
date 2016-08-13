@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 
 import java.text.DecimalFormat;
+import java.util.Date;
 
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
@@ -299,6 +300,7 @@ public class MoodDataRecordActivity extends BaseActivity {
             showToast("Please select a mood on the map above first.");
             return;
         }
+        moodFirst.creationTime = new Date().getTime();
 
         //Create a new mood data record
         MoodDataRecord moodDataRecordToSave = moodFirst;
