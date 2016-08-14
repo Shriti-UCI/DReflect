@@ -34,14 +34,22 @@ import edu.umich.si.inteco.minukucore.user.User;
 public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> implements
         DAO<T> {
 
-    private String TAG = "AnnotatedImageDataRecordDAO";
+    protected static String TAG = "AnnotatedImageDataRecordDAO";
     protected String myUserEmail;
+    protected String mFirebaseUrl;
     protected UUID uuID;
     protected Class<T> mDataRecordType;
 
     public AnnotatedImageDataRecordDAO(Class aDataRecordType) {
         myUserEmail = UserPreferences.getInstance().getPreference(Constants.KEY_ENCODED_EMAIL);
         this.mDataRecordType = aDataRecordType;
+        this.mFirebaseUrl = Constants.FIREBASE_URL_IMAGES;
+    }
+
+    public AnnotatedImageDataRecordDAO(Class aDataRecordType,
+                                       String aFirebaseUrl) {
+        new AnnotatedImageDataRecordDAO(aDataRecordType);
+        this.mFirebaseUrl = aFirebaseUrl;
     }
 
     @Override
@@ -52,7 +60,7 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
     @Override
     public void add(AnnotatedImageDataRecord entity) throws DAOException {
         Log.d(TAG, "Adding image data record");
-        Firebase imageListRef = new Firebase(Constants.FIREBASE_URL_IMAGES)
+        Firebase imageListRef = new Firebase(this.mFirebaseUrl)
                 .child(myUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
         imageListRef.push().setValue((AnnotatedImageDataRecord) entity);
@@ -67,7 +75,7 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
     public Future<List<T>> getAll() throws DAOException {
         final SettableFuture<List<T>> settableFuture =
                 SettableFuture.create();
-        Firebase imageListRef = new Firebase(Constants.FIREBASE_URL_IMAGES)
+        Firebase imageListRef = new Firebase(this.mFirebaseUrl)
                 .child(myUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
 
@@ -96,14 +104,12 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
         final List<T> lastNRecords = Collections.synchronizedList(
                 new ArrayList<T>());
 
-        String databaseURL = Constants.FIREBASE_URL_IMAGES;
-
         getLastNValues(N,
                 myUserEmail,
                 today,
                 lastNRecords,
                 settableFuture,
-                databaseURL);
+                this.mFirebaseUrl);
 
         return settableFuture;
     }
@@ -113,11 +119,11 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
     }
 
     public final void getLastNValues(final int N,
-                                             final String userEmail,
-                                             final Date someDate,
-                                             final List<T> synchronizedListOfRecords,
-                                             final SettableFuture settableFuture,
-                                             final String databaseURL) {
+                                     final String userEmail,
+                                     final Date someDate,
+                                     final List<T> synchronizedListOfRecords,
+                                     final SettableFuture settableFuture,
+                                     final String databaseURL) {
         Firebase firebaseRef = new Firebase(databaseURL)
                 .child(userEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(someDate).toString());

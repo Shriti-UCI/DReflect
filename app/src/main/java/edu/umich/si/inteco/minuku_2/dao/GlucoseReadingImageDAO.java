@@ -29,62 +29,11 @@ import edu.umich.si.inteco.minukucore.dao.DAOException;
  */
 public class GlucoseReadingImageDAO extends AnnotatedImageDataRecordDAO<GlucoseReadingImage> {
 
-    private String TAG = "GlucoseReadingImageDAO";
+    protected static String TAG = "FoodImageDAO";
+
     public GlucoseReadingImageDAO() {
-        super(GlucoseReadingImage.class);
+        super(GlucoseReadingImage.class,
+                ApplicationConstants.FIREBASE_URL_GLUCOSE_READING_IMAGES);
     }
 
-    @Override
-    public void add(GlucoseReadingImage entity) throws DAOException {
-        Log.d(TAG, "Adding glucose reading image data record");
-        Firebase imageListRef = new Firebase(ApplicationConstants.FIREBASE_URL_GLUCOSE_READING_IMAGES)
-                .child(myUserEmail)
-                .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
-        imageListRef.push().setValue((GlucoseReadingImage) entity);
-    }
-
-    @Override
-    public Future<List<GlucoseReadingImage>> getLast(int N) throws DAOException {
-        final SettableFuture<List<GlucoseReadingImage>> settableFuture = SettableFuture.create();
-        final Date today = new Date();
-
-        final List<GlucoseReadingImage> lastNRecords = Collections.synchronizedList(
-                new ArrayList<GlucoseReadingImage>());
-
-        String databaseURL = ApplicationConstants.FIREBASE_URL_GLUCOSE_READING_IMAGES;
-
-        getLastNValues(N,
-                myUserEmail,
-                today,
-                lastNRecords,
-                settableFuture,
-                databaseURL);
-
-        return settableFuture;
-    }
-
-    @Override
-    public Future<List<GlucoseReadingImage>> getAll() throws DAOException {
-        final SettableFuture<List<GlucoseReadingImage>> settableFuture =
-                SettableFuture.create();
-        Firebase imageListRef = new Firebase(ApplicationConstants.FIREBASE_URL_GLUCOSE_READING_IMAGES)
-                .child(myUserEmail)
-                .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
-
-        imageListRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, GlucoseReadingImage> imageListMap =
-                        (HashMap<String,GlucoseReadingImage>) dataSnapshot.getValue();
-                List<GlucoseReadingImage> values = (List) imageListMap.values();
-                settableFuture.set(values);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                settableFuture.set(null);
-            }
-        });
-        return settableFuture;
-    }
 }

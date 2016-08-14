@@ -29,62 +29,10 @@ import edu.umich.si.inteco.minukucore.dao.DAOException;
  */
 public class InsulinAdminImageDAO extends AnnotatedImageDataRecordDAO<InsulinAdminImage> {
 
-    private String TAG = "InsulinAdminImageDAO";
+    protected static String TAG = "FoodImageDAO";
+
     public InsulinAdminImageDAO() {
-        super(InsulinAdminImage.class);
-    }
-
-    @Override
-    public void add(InsulinAdminImage entity) throws DAOException {
-        Log.d(TAG, "Adding insulin admin image data record");
-        Firebase imageListRef = new Firebase(ApplicationConstants.FIREBASE_URL_INSULIN_ADMIN_IMAGES)
-                .child(myUserEmail)
-                .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
-        imageListRef.push().setValue((InsulinAdminImage) entity);
-    }
-
-    @Override
-    public Future<List<InsulinAdminImage>> getLast(int N) throws DAOException {
-        final SettableFuture<List<InsulinAdminImage>> settableFuture = SettableFuture.create();
-        final Date today = new Date();
-
-        final List<InsulinAdminImage> lastNRecords = Collections.synchronizedList(
-                new ArrayList<InsulinAdminImage>());
-
-        String databaseURL = ApplicationConstants.FIREBASE_URL_INSULIN_ADMIN_IMAGES;
-
-        getLastNValues(N,
-                myUserEmail,
-                today,
-                lastNRecords,
-                settableFuture,
-                databaseURL);
-
-        return settableFuture;
-    }
-
-    @Override
-    public Future<List<InsulinAdminImage>> getAll() throws DAOException {
-        final SettableFuture<List<InsulinAdminImage>> settableFuture =
-                SettableFuture.create();
-        Firebase imageListRef = new Firebase(ApplicationConstants.FIREBASE_URL_INSULIN_ADMIN_IMAGES)
-                .child(myUserEmail)
-                .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
-
-        imageListRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, InsulinAdminImage> imageListMap =
-                        (HashMap<String,InsulinAdminImage>) dataSnapshot.getValue();
-                List<InsulinAdminImage> values = (List) imageListMap.values();
-                settableFuture.set(values);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                settableFuture.set(null);
-            }
-        });
-        return settableFuture;
+        super(InsulinAdminImage.class,
+                ApplicationConstants.FIREBASE_URL_INSULIN_ADMIN_IMAGES);
     }
 }
