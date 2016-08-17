@@ -21,43 +21,21 @@ import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 public class InsulinAdminImageStreamGenerator extends
         AnnotatedImageStreamGenerator<InsulinAdminImage> {
 
-    private String TAG = "InsulinAdminImageStreamGen";
-    private InsulinAdminImageStream insulinAdminImageStream;
-    private InsulinAdminImageDAO insulinAdminImageDAO;
-
     public InsulinAdminImageStreamGenerator(Context applicationContext) {
         super(applicationContext,InsulinAdminImage.class);
-        this.insulinAdminImageStream = new InsulinAdminImageStream(Constants.DEFAULT_QUEUE_SIZE);
-        this.insulinAdminImageDAO = MinukuDAOManager.getInstance().getDaoFor(InsulinAdminImage.class);
-        this.register();
+        TAG = "InsulinAdminImageStreamGen";
     }
 
     @Override
     public boolean updateStream() {
-        Log.d(TAG,
-                "Update Stream called: The preference values are - \n" +
+        Log.d(TAG, "Update Stream called: The preference values are - \n" +
                         UserPreferences.getInstance().getPreferenceSet("insulinTimes") + "\n" +
                         UserPreferences.getInstance().getPreference("endTime"));
-        MinukuStreamManager.getInstance().handleNoDataChangeEvent(
-                new NoDataChangeEvent(InsulinAdminImage.class));
-        return true;
+        return super.updateStream();
     }
 
     @Override
     public long getUpdateFrequency() {
         return Constants.IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES;
-    }
-
-    @Override
-    public void offer(InsulinAdminImage anImage) {
-        try {
-            //add to stream
-            Log.d(TAG, "Adding to stream in the offer method");
-            insulinAdminImageStream.add(anImage);
-            //add to database
-            insulinAdminImageDAO.add(anImage);
-        } catch (DAOException e){
-            e.printStackTrace();
-        }
     }
 }

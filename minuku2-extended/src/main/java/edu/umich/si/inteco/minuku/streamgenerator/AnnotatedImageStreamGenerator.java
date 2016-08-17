@@ -19,6 +19,7 @@ import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.stream.AnnotatedImageStream;
 import edu.umich.si.inteco.minuku.stream.ImageStream;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
+import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.stream.Stream;
@@ -33,8 +34,7 @@ public class AnnotatedImageStreamGenerator<T extends AnnotatedImageDataRecord>
         extends AndroidStreamGenerator<T> {
 
     private AnnotatedImageStream<T> mStream;
-    private String TAG = "AnnotatedImageStreamGenerator";
-    private AnnotatedImageDataRecord imageDataRecord;
+    protected String TAG = "AnnotatedImageStreamGenerator";
     private Class<T> mDataRecordType;
 
     private AnnotatedImageDataRecordDAO mDAO;
@@ -78,7 +78,11 @@ public class AnnotatedImageStreamGenerator<T extends AnnotatedImageDataRecord>
 
     @Override
     public boolean updateStream() {
-        Log.d(TAG, "Update Stream called: Currently doing nothing on this stream");
+        Log.d(TAG,
+                "Update Stream called: The update frequency is - \n" +
+                        Constants.FOOD_IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES);
+        MinukuStreamManager.getInstance().handleNoDataChangeEvent(
+                new NoDataChangeEvent(mDataRecordType));
         return true;
     }
 

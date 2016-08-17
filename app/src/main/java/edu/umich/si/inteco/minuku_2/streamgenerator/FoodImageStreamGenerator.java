@@ -20,41 +20,13 @@ import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
  */
 public class FoodImageStreamGenerator extends AnnotatedImageStreamGenerator<FoodImage> {
 
-    private String TAG = "FoodImageStreamGenerator";
-    private FoodImageStream foodImageStream;
-    private FoodImageDAO foodImageDAO;
     public FoodImageStreamGenerator(Context applicationContext) {
         super(applicationContext, FoodImage.class);
-        this.foodImageStream = new FoodImageStream(Constants.DEFAULT_QUEUE_SIZE);
-        this.foodImageDAO = MinukuDAOManager.getInstance().getDaoFor(FoodImage.class);
-        this.register();
-    }
-
-    @Override
-    public boolean updateStream() {
-        Log.d(TAG,
-                "Update Stream called: The update frequency is - \n" +
-        Constants.FOOD_IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES);
-        MinukuStreamManager.getInstance().handleNoDataChangeEvent(
-                new NoDataChangeEvent(FoodImage.class));
-        return true;
+        TAG = "FoodImageStreamGenerator";
     }
 
     @Override
     public long getUpdateFrequency() {
         return Constants.FOOD_IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES;
-    }
-
-    @Override
-    public void offer(FoodImage anImage) {
-        try {
-            //add to stream
-            Log.d(TAG, "Adding to stream in the offer method");
-            foodImageStream.add(anImage);
-            //add to database
-            foodImageDAO.add(anImage);
-        } catch (DAOException e){
-            e.printStackTrace();
-        }
     }
 }
