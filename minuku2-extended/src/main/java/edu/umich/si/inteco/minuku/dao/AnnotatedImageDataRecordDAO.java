@@ -48,7 +48,7 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
 
     public AnnotatedImageDataRecordDAO(Class aDataRecordType,
                                        String aFirebaseUrl) {
-        new AnnotatedImageDataRecordDAO(aDataRecordType);
+        this(aDataRecordType);
         this.mFirebaseUrl = aFirebaseUrl;
     }
 
