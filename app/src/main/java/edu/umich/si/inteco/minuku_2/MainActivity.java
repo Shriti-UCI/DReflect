@@ -2,7 +2,6 @@ package edu.umich.si.inteco.minuku_2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +38,6 @@ import edu.umich.si.inteco.minuku_2.action.MoodDataExpectedAction;
 import edu.umich.si.inteco.minuku_2.dao.FoodImageDAO;
 import edu.umich.si.inteco.minuku_2.dao.GlucoseReadingImageDAO;
 import edu.umich.si.inteco.minuku_2.dao.InsulinAdminImageDAO;
-import edu.umich.si.inteco.minuku_2.event.MissedInsulinAdminEvent;
 import edu.umich.si.inteco.minuku_2.model.FoodImage;
 import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
@@ -50,7 +48,6 @@ import edu.umich.si.inteco.minuku_2.situation.MissedGlucoseReadingSituation;
 import edu.umich.si.inteco.minuku_2.situation.MissedInsulinAdminSituation;
 import edu.umich.si.inteco.minuku_2.situation.MoodAnnotationExpectedSituation;
 import edu.umich.si.inteco.minuku_2.situation.MoodDataExpectedSituation;
-import edu.umich.si.inteco.minuku_2.stream.FoodImageStream;
 import edu.umich.si.inteco.minuku_2.streamgenerator.FoodImageStreamGenerator;
 import edu.umich.si.inteco.minuku_2.streamgenerator.GlucoseReadingImageStreamGenerator;
 import edu.umich.si.inteco.minuku_2.streamgenerator.InsulinAdminImageStreamGenerator;
@@ -58,11 +55,10 @@ import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
-import edu.umich.si.inteco.minukucore.user.User;
 
 public class MainActivity extends BaseActivity {
 
-    private static final String LOG_TAG = "MainActivity";
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +164,8 @@ public class MainActivity extends BaseActivity {
                 new ActionObject("Take Glucose Reading Picture", "A", R.drawable.glucose_reading),
                 new ActionObject("Take Insulin Shot Picture", "A", R.drawable.insulin_shot),
                 new ActionObject("Take Food Pitcure", "A", R.drawable.food),
-                new ActionObject("Record Your Mood", "A", R.drawable.mood)
+                new ActionObject("Record Your Mood", "A", R.drawable.mood),
+                new ActionObject("Configure locations", "A", R.drawable.ic_location_on_black_24dp)
                 //new ActionObject("Answer some questions", "A", R.drawable.blue_circle)
         };
         // The adapter takes the action object array and converts it into a view that can be
@@ -204,9 +201,11 @@ public class MainActivity extends BaseActivity {
                     case 3:
                         Intent addMoodIntent = new Intent(MainActivity.this, MoodDataRecordActivity.class);
                         startActivity(addMoodIntent);
-                    //case 2:
-                        //Intent answerQuestionsIntent = new Intent(MainActivity.this, QuestionnaireActivity.class);
-                        //startActivity(answerQuestionsIntent);
+                        break;
+                    case 4:
+                        Intent configureLocations = new Intent(MainActivity.this, LocationConfigurationActivity.class);
+                        startActivity(configureLocations);
+                        break;
                     default:
                         showToast("Clicked unknown");
                         break;
@@ -242,4 +241,5 @@ public class MainActivity extends BaseActivity {
         Intent preferencesIntent = new Intent(this, SettingsActivity.class);
         startActivity(preferencesIntent);
     }
+
 }

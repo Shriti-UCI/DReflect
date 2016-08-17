@@ -23,25 +23,18 @@ repositories {
     jcenter()
 }
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile project(':minuku2-extended')
     compile project(':minukucore')
-
     /* Google Guava */
     compile 'com.google.guava:guava:19.0'
-
     /* Third party camera API */
     compile 'com.github.boxme:squarecamera:1.1.0'
-
     compile 'com.h6ah4i.android.compat:mulsellistprefcompat:1.0.0'
-
     compile 'com.github.dkharrat.nexusdialog:nexusdialog:0.4.0'
-
     /* place picker */
-    compile 'com.github.stephenbaidu:placepicker:1.1'
-
 }
 
 allprojects {

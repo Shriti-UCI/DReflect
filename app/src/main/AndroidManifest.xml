@@ -21,6 +21,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- API KEY FOR PLACES
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCov5ldsUp0u15l_xijtbBjHF54l2xGnDo"
+            /> -->
+        <!-- API KEY FOR MAPS -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyB0t35c44rDCvs_o3ZEVdoUy3r5iRB6Oog" />
+
         <activity android:name=".MainActivity"
             android:launchMode="singleInstance">
             <meta-data
@@ -35,6 +45,12 @@
         </activity>
 
         <activity android:name=".QuestionnaireActivity">
+        </activity>
+
+        <activity android:name=".LocationListViewRenderActivity">
+        </activity>
+
+        <activity android:name=".LocationConfigurationActivity">
         </activity>
 
         <activity android:name=".SettingsActivity"
