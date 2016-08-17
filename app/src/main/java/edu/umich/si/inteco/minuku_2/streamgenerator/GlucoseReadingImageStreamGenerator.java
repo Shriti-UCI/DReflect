@@ -24,15 +24,10 @@ import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 public class GlucoseReadingImageStreamGenerator extends
         AnnotatedImageStreamGenerator<GlucoseReadingImage> {
 
-    String TAG = "GlucoseReadingImageStreamGenerator";
-    private GlucoseReadingImageStream glucoseReadingImageStream;
-    private GlucoseReadingImageDAO glucoseReadingImageDAO;
 
     public GlucoseReadingImageStreamGenerator(Context applicationContext) {
         super(applicationContext, GlucoseReadingImage.class);
-        this.glucoseReadingImageStream = new GlucoseReadingImageStream(Constants.DEFAULT_QUEUE_SIZE);
-        this.glucoseReadingImageDAO = MinukuDAOManager.getInstance().getDaoFor(GlucoseReadingImage.class);
-        this.register();
+        TAG = "GlucoseReadingImageStreamGenerator";
     }
 
     @Override
@@ -49,18 +44,5 @@ public class GlucoseReadingImageStreamGenerator extends
     @Override
     public long getUpdateFrequency() {
         return Constants.IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES;
-    }
-
-    @Override
-    public void offer(GlucoseReadingImage anImage) {
-        try {
-            //add to stream
-            Log.d(TAG, "Adding to stream in the offer method");
-            glucoseReadingImageStream.add(anImage);
-            //add to database
-            glucoseReadingImageDAO.add(anImage);
-        } catch (DAOException e){
-            e.printStackTrace();
-        }
     }
 }

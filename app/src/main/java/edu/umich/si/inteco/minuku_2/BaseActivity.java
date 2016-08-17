@@ -26,8 +26,11 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
 
+import org.greenrobot.eventbus.EventBus;
+
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
+import edu.umich.si.inteco.minukucore.event.NotificationClickedEvent;
 
 /**
  * Created by shriti on 7/22/16.
@@ -93,6 +96,17 @@ public class BaseActivity extends AppCompatActivity implements
         mEmail = mSharedPref.getPreference(Constants.ID_SHAREDPREF_EMAIL);
         mProvider = mSharedPref.getPreference(Constants.ID_SHAREDPREF_PROVIDER);
 
+        // The base activity takes care of getting information about the notification that started
+        // the activity (if there is one), and posting the NotificationClickEvent on the bus.
+        String tappedNotificationId = savedInstanceState.getString(
+                Constants.TAPPED_NOTIFICATION_ID_KEY);
+
+        if(tappedNotificationId != null
+                && !tappedNotificationId.equals("")
+                && !tappedNotificationId.trim().equals("")) {
+            EventBus.getDefault().post(new NotificationClickedEvent(tappedNotificationId));
+        }
+
         requestAllPermissions();
     }
 
@@ -153,7 +167,7 @@ public class BaseActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         mSharedPref.writePreference(Constants.CAN_SHOW_NOTIFICATION, Constants.NO);
-        // mSharedPref.writePreference(Constants.ID_SHAREDPREF_CANGOOFFLINE, Constants.NO);
+
     }
 
     @Override

@@ -14,11 +14,33 @@ public class ShowNotificationEvent {
     private Class<Object> viewToShow;
     private ExpirationAction expirationAction;
     private Map<String, String> params;
+    private long creationTimeMs = 0;
+    private long clickedTimeMs = 0;
+    private String category = null;
 
     public enum ExpirationAction {
         ALERT_AGAIN,
         DISMISS,
         KEEP_SHOWING_WITHOUT_ALERT
+    }
+
+    public ShowNotificationEvent(String title,
+                                 String message,
+                                 int iconID,
+                                 int expirationTimeSeconds,
+                                 Class viewToShow,
+                                 ExpirationAction expirationAction,
+                                 Map<String, String> params,
+                                 String category) {
+        this.category = category;
+        new ShowNotificationEvent(
+                title,
+                message,
+                iconID,
+                expirationTimeSeconds,
+                viewToShow,
+                expirationAction,
+                params);
     }
 
     public ShowNotificationEvent(String title,
@@ -63,5 +85,26 @@ public class ShowNotificationEvent {
 
     public Map<String, String> getParams() {
         return params;
+    }
+
+    public String getCategory() {
+        return this.category;
+    }
+
+
+    public long getCreationTimeMs() {
+        return this.creationTimeMs;
+    }
+
+    public void setCreationTimeMs(long creationTimeMs) {
+        this.creationTimeMs = creationTimeMs;
+    }
+
+    public long getClickedTimeMs() {
+        return this.clickedTimeMs;
+    }
+
+    public void setClickedTimeMs(long clickedTimeMs) {
+        this.clickedTimeMs = clickedTimeMs;
     }
 }

@@ -18,7 +18,8 @@ public class Constants {
     public static final String FIREBASE_URL_LOCATION = FIREBASE_URL + "/location";
     public static final String FIREBASE_URL_SEMANTIC_LOCATION = FIREBASE_URL + "/semantic_location";
     public static final String FIREBASE_URL_QUESTIONS = FIREBASE_URL + "/questions";
-
+    public static final String FIREBASE_URL_MCQ = FIREBASE_URL_QUESTIONS + "/mcq";
+    public static final String FIREBASE_URL_FREE_RESPONSE = FIREBASE_URL_QUESTIONS + "/freeresponse";
 
 
 
@@ -72,4 +73,5 @@ public class Constants {
     public static final int MISSED_REPORT_NOTIFICATION_EXPIRATION_TIME = 60 * 60 /* 60 minutes*/;
 
 
+    public static final String TAPPED_NOTIFICATION_ID_KEY = "TAPPED_NOTIFICATION_ID" ;
 }

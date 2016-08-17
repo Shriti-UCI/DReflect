@@ -6,7 +6,6 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.SettableFuture;
 
 import java.text.SimpleDateFormat;
@@ -22,34 +21,26 @@ import java.util.concurrent.Future;
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
-import edu.umich.si.inteco.minuku.model.LocationDataRecord;
-import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minukucore.dao.DAO;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
+import edu.umich.si.inteco.minukucore.model.question.Question;
 import edu.umich.si.inteco.minukucore.user.User;
 
 /**
- * Created by shriti on 7/22/16.
+ * Created by neerajkumar on 8/16/16.
  */
-public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> implements
-        DAO<T> {
+public class AbstractQuestionDAO<T extends Question> implements DAO<T> {
 
-    protected static String TAG = "AnnotatedImageDataRecordDAO";
-    protected String myUserEmail;
+    protected static String TAG = "AbstractQuestionDAO";
+    protected String mUserEmail;
     protected String mFirebaseUrl;
-    protected UUID uuID;
     protected Class<T> mDataRecordType;
 
-    public AnnotatedImageDataRecordDAO(Class aDataRecordType) {
-        myUserEmail = UserPreferences.getInstance().getPreference(Constants.KEY_ENCODED_EMAIL);
-        this.mDataRecordType = aDataRecordType;
-        this.mFirebaseUrl = Constants.FIREBASE_URL_IMAGES;
-    }
 
-    public AnnotatedImageDataRecordDAO(Class aDataRecordType,
-                                       String aFirebaseUrl) {
-        this(aDataRecordType);
-        this.mFirebaseUrl = aFirebaseUrl;
+    public AbstractQuestionDAO(Class questionType, String aFirebaseUrl) {
+        mFirebaseUrl = aFirebaseUrl;
+        mDataRecordType = questionType;
+        mUserEmail = UserPreferences.getInstance().getPreference(Constants.KEY_ENCODED_EMAIL);
     }
 
     @Override
@@ -58,25 +49,25 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
     }
 
     @Override
-    public void add(AnnotatedImageDataRecord entity) throws DAOException {
-        Log.d(TAG, "Adding image data record");
+    public void add(T entity) throws DAOException {
+        Log.d(TAG, "Adding question data record");
         Firebase imageListRef = new Firebase(this.mFirebaseUrl)
-                .child(myUserEmail)
+                .child(mUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
-        imageListRef.push().setValue((AnnotatedImageDataRecord) entity);
+        imageListRef.push().setValue((T) entity);
     }
 
     @Override
-    public void delete(AnnotatedImageDataRecord entity) throws DAOException {
-        //do nothing for now
+    public void delete(T entity) throws DAOException {
+
     }
 
     @Override
     public Future<List<T>> getAll() throws DAOException {
         final SettableFuture<List<T>> settableFuture =
                 SettableFuture.create();
-        Firebase imageListRef = new Firebase(this.mFirebaseUrl)
-                .child(myUserEmail)
+        Firebase imageListRef = new Firebase(mFirebaseUrl)
+                .child(mUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
 
         imageListRef.addValueEventListener(new ValueEventListener() {
@@ -105,17 +96,13 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
                 new ArrayList<T>());
 
         getLastNValues(N,
-                myUserEmail,
+                mUserEmail,
                 today,
                 lastNRecords,
                 settableFuture,
-                this.mFirebaseUrl);
+                mFirebaseUrl);
 
         return settableFuture;
-    }
-
-    @Override
-    public void update(AnnotatedImageDataRecord oldEntity, AnnotatedImageDataRecord newEntity) throws DAOException {
     }
 
     public final void getLastNValues(final int N,
@@ -165,12 +152,16 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
                 // This would mean that the firebase ref does not exist thereby meaning that
                 // the number of entries for all dates are over before we could get the last N
                 // results
                 settableFuture.set(synchronizedListOfRecords);
             }
         });
+    }
+
+    @Override
+    public void update(T oldEntity, T newEntity) throws DAOException {
+
     }
 }
