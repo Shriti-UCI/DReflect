@@ -12,6 +12,7 @@ public class ShowNotificationEventBuilder {
     private Class viewToShow;
     private ShowNotificationEvent.ExpirationAction expirationAction;
     private Map<String, String> params;
+    private String category;
 
     private String TAG = "ShowNotificationEventBuilder";
 
@@ -45,6 +46,11 @@ public class ShowNotificationEventBuilder {
         return this;
     }
 
+    public ShowNotificationEventBuilder setCategory(String category) {
+        this.category = category;
+        return this;
+    }
+
     public ShowNotificationEvent createShowNotificationEvent() {
         Log.d(TAG, "Returing show notification event for " + title);
         return new ShowNotificationEvent(title,
@@ -53,7 +59,8 @@ public class ShowNotificationEventBuilder {
                 expirationTimeSeconds,
                 viewToShow,
                 expirationAction,
-                params);
+                params,
+                category);
     }
 
     public ShowNotificationEventBuilder setParams(Map<String, String> someParams) {

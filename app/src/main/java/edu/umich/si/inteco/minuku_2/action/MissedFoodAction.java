@@ -12,6 +12,7 @@ import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku_2.QuestionnaireActivity;
 import edu.umich.si.inteco.minuku_2.R;
 import edu.umich.si.inteco.minuku_2.event.MissedFoodEvent;
+import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEventBuilder;
 
@@ -36,6 +37,7 @@ public class MissedFoodAction {
                 .setViewToShow(QuestionnaireActivity.class)
                 .setIconID(R.drawable.analysis)
                 .setTitle("")
+                .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MISSED_ACTIVITY)
                 .setMessage(Constants.MISSED_DATA_FOOD_PROMPT_TITLE)
                 .setParams(new HashMap<String, String>())
                 .createShowNotificationEvent());

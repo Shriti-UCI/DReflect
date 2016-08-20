@@ -48,15 +48,13 @@ public class Constants {
 
 
     // Notification related constants
-    public static final String REMINDER_NOTIFICATION_TITLE = "DStudio Reminder";
-    public static final String REMINDER_NOTIFICATION_CONTENT = "Everyone forgets, we get that! That's why god made reminders";
     public static final String CAN_SHOW_NOTIFICATION = "ENABLE_NOTIFICATIONS";
 
-    public static final String MOOD_REMINDER_TITLE = "How are you feeling right now?";
-    public static final String MISSED_DATA_GLUCOSE_READING_PROMPT_TITLE = "We want to hear from you!";
-    public static final String MISSED_DATA_INSULIN_ADMIN_PROMPT_TITLE = "What are you upto?";
-    public static final String MISSED_DATA_FOOD_PROMPT_TITLE = "What are you upto?";
-    public static final String MOOD_ANNOTATION_TITLE = "What happened to your mood?";
+    public static final String MOOD_REMINDER_TITLE = "From Mood Reminder: How are you feeling right now?";
+    public static final String MISSED_DATA_GLUCOSE_READING_PROMPT_TITLE = "From Glucose Reading: We want to hear from you!";
+    public static final String MISSED_DATA_INSULIN_ADMIN_PROMPT_TITLE = "From Insulin Admin: What are you upto?";
+    public static final String MISSED_DATA_FOOD_PROMPT_TITLE = "From Food: What are you upto?";
+    public static final String MOOD_ANNOTATION_TITLE = "From Mood Annotation: What happened to your mood?";
 
 
     //default queue size
@@ -65,6 +63,8 @@ public class Constants {
     //specific queue sizes
     public static final int LOCATION_QUEUE_SIZE = 100;
     public static final int IMAGE_QUEUE_SIZE = 100;
+    public static final int MOOD_QUEUE_SIZE = 10;
+
     public static final int MOOD_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 15;
     public static final int IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 30;
     public static final int FOOD_IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 180;

@@ -11,6 +11,7 @@ import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku_2.MoodDataRecordActivity;
 import edu.umich.si.inteco.minuku_2.R;
 import edu.umich.si.inteco.minuku_2.event.MoodDataExpectedActionEvent;
+import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEventBuilder;
 
@@ -35,6 +36,7 @@ public class MoodDataExpectedAction {
                         .setIconID(R.drawable.analysis)
                         .setTitle(Constants.MOOD_REMINDER_TITLE)
                         .setMessage("")
+                        .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MOOD_REPORT)
                         .setParams(new HashMap<String, String>())
                         .createShowNotificationEvent());
     }

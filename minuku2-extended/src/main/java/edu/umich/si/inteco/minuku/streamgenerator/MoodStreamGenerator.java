@@ -106,7 +106,7 @@ public class MoodStreamGenerator extends AndroidStreamGenerator<MoodDataRecord> 
                 {
                     Log.d(TAG, "Stream " + TAG + "initialized from previous state");
                     Future<List<MoodDataRecord>> listFuture =
-                            mDAO.getLast(Constants.DEFAULT_QUEUE_SIZE);
+                            mDAO.getLast(Constants.MOOD_QUEUE_SIZE);
                     while(!listFuture.isDone()) {
                         Thread.sleep(1000);
                     }

@@ -14,6 +14,12 @@ public class ApplicationConstants {
     public static final String FIREBASE_URL_INSULIN_ADMIN_IMAGES = Constants.FIREBASE_URL_IMAGES + "/insulin_admin";
     public static final String FIREBASE_URL_FOOD_IMAGES = Constants.FIREBASE_URL_IMAGES + "/food";
 
+    public static final String NOTIFICATION_CATEGORY_MISSED_ACTIVITY = "MISSED_IMAGE_REPORT_NOTIF";
+    public static final String NOTIFICATION_CATEGORY_MOOD_REPORT = "MOOD_REPORT_NOTIF";
+    public static final String NOTIFICATION_CATEGORY_MOOD_ANNOTATION = "MOOD_ANNOTATION_NOTIF";
+
+
+
 
 }
 

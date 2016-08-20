@@ -13,6 +13,7 @@ import edu.umich.si.inteco.minuku_2.QuestionnaireActivity;
 import edu.umich.si.inteco.minuku_2.R;
 import edu.umich.si.inteco.minuku_2.event.MissedGlucoseReadingEvent;
 import edu.umich.si.inteco.minuku_2.event.MissedInsulinAdminEvent;
+import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEventBuilder;
 
@@ -37,6 +38,7 @@ public class MissedInsulinAdminAction {
                         .setIconID(R.drawable.analysis)
                         .setTitle(Constants.MISSED_DATA_INSULIN_ADMIN_PROMPT_TITLE)
                         .setMessage("")
+                        .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MISSED_ACTIVITY)
                         .setParams(new HashMap<String, String>())
                         .createShowNotificationEvent());    }
 }

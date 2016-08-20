@@ -32,15 +32,15 @@ public class ShowNotificationEvent {
                                  ExpirationAction expirationAction,
                                  Map<String, String> params,
                                  String category) {
-        this.category = category;
-        new ShowNotificationEvent(
-                title,
+        this(title,
                 message,
                 iconID,
                 expirationTimeSeconds,
                 viewToShow,
                 expirationAction,
                 params);
+
+        this.category = category;
     }
 
     public ShowNotificationEvent(String title,
@@ -106,5 +106,9 @@ public class ShowNotificationEvent {
 
     public void setClickedTimeMs(long clickedTimeMs) {
         this.clickedTimeMs = clickedTimeMs;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

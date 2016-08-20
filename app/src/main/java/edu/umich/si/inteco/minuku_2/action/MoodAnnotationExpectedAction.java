@@ -14,6 +14,7 @@ import edu.umich.si.inteco.minuku_2.R;
 import edu.umich.si.inteco.minuku_2.event.MissedInsulinAdminEvent;
 import edu.umich.si.inteco.minuku_2.event.MoodAnnotationExpectedActionEvent;
 import edu.umich.si.inteco.minuku_2.event.MoodDataExpectedActionEvent;
+import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEventBuilder;
 
@@ -38,8 +39,9 @@ public class MoodAnnotationExpectedAction {
                         .setExpirationTimeSeconds(Constants.MOOD_NOTIFICATION_EXPIRATION_TIME)
                         .setViewToShow(QuestionnaireActivity.class)
                         .setIconID(R.drawable.analysis)
-                        .setTitle(Constants.MOOD_REMINDER_TITLE)
+                        .setTitle(Constants.MOOD_ANNOTATION_TITLE)
                         .setMessage("")
+                        .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MOOD_ANNOTATION)
                         .setParams(new HashMap<String, String>())
                         .createShowNotificationEvent()
         );
