@@ -75,9 +75,9 @@ public class BaseActivity extends AppCompatActivity implements
 
         mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
 
-        if(this instanceof LoginActivity) {
+        if (this instanceof LoginActivity) {
             // do nothing
-        } else if(this instanceof CreateAccountActivity) {
+        } else if (this instanceof CreateAccountActivity) {
             // do nothing
         } else {
             mAuthListener = new Firebase.AuthStateListener() {
@@ -98,13 +98,15 @@ public class BaseActivity extends AppCompatActivity implements
 
         // The base activity takes care of getting information about the notification that started
         // the activity (if there is one), and posting the NotificationClickEvent on the bus.
-        String tappedNotificationId = savedInstanceState.getString(
-                Constants.TAPPED_NOTIFICATION_ID_KEY);
+        if (savedInstanceState != null) {
+            String tappedNotificationId = savedInstanceState.getString(
+                    Constants.TAPPED_NOTIFICATION_ID_KEY);
 
-        if(tappedNotificationId != null
-                && !tappedNotificationId.equals("")
-                && !tappedNotificationId.trim().equals("")) {
-            EventBus.getDefault().post(new NotificationClickedEvent(tappedNotificationId));
+            if (tappedNotificationId != null
+                    && !tappedNotificationId.equals("")
+                    && !tappedNotificationId.trim().equals("")) {
+                EventBus.getDefault().post(new NotificationClickedEvent(tappedNotificationId));
+            }
         }
 
         requestAllPermissions();
