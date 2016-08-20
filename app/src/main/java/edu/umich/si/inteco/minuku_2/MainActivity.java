@@ -76,11 +76,6 @@ public class MainActivity extends BaseActivity {
         LocationDataRecordDAO locationDataRecordDAO = new LocationDataRecordDAO();
         daoManager.registerDaoFor(LocationDataRecord.class, locationDataRecordDAO);
 
-        //For image
-        AnnotatedImageDataRecordDAO annotatedImageDataRecordDAO = new AnnotatedImageDataRecordDAO(
-                AnnotatedImageDataRecord.class);
-        daoManager.registerDaoFor(AnnotatedImageDataRecord.class, annotatedImageDataRecordDAO);
-
         //For mood
         MoodDataRecordDAO moodDataRecordDAO = new MoodDataRecordDAO();
         daoManager.registerDaoFor(MoodDataRecord.class, moodDataRecordDAO);
@@ -111,9 +106,6 @@ public class MainActivity extends BaseActivity {
         //creating a new stream registers it with the stream manager
         LocationStreamGenerator locationStreamGenerator =
                 new LocationStreamGenerator(getApplicationContext());
-        AnnotatedImageStreamGenerator annotatedImageStreamGenerator =
-                new AnnotatedImageStreamGenerator(getApplicationContext(),
-                        AnnotatedImageDataRecord.class);
         MoodStreamGenerator moodStreamGenerator =
                 new MoodStreamGenerator(getApplicationContext());
         SemanticLocationStreamGenerator semanticLocationStreamGenerator =
