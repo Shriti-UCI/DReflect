@@ -52,17 +52,18 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestPermission();
         setContentView(R.layout.add_image_activity);
         imageView = (ImageView) findViewById(R.id.image);
         mText = (EditText) findViewById(R.id.image_annotation);
 
         photoTypeValue = getIntent().getExtras().getString(photoTypeKey);
+        showToast("Checking type of photo : " + photoTypeValue);
+
 
         // Add click listeners for buttons
         ImageView acceptButton = (ImageView) findViewById(R.id.acceptButton);
         ImageView rejectButton = (ImageView) findViewById(R.id.rejectButton);
-
-        requestCameraPermission();
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +148,7 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
         finish();
     }
 
-    private String getBase64FromBitmap(Bitmap b) {
+    protected String getBase64FromBitmap(Bitmap b) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         b.compress(Bitmap.CompressFormat.JPEG, 20, stream);
         byte[] byteArray = stream.toByteArray();
@@ -188,8 +189,10 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void requestCameraPermission() {
+    public void requestPermission() {
         mLayout = findViewById(R.id.main_layout);
+
+        Log.d(TAG, "Requestin camera permission");
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {

@@ -18,9 +18,6 @@ public class ApplicationConstants {
     public static final String NOTIFICATION_CATEGORY_MOOD_REPORT = "MOOD_REPORT_NOTIF";
     public static final String NOTIFICATION_CATEGORY_MOOD_ANNOTATION = "MOOD_ANNOTATION_NOTIF";
 
-
-
-
 }
 
 

@@ -31,7 +31,7 @@ import edu.umich.si.inteco.minukucore.user.User;
 /**
  * Created by shriti on 7/22/16.
  */
-public abstract class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> implements
+public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> implements
         DAO<T> {
 
     protected static String TAG = "AnnotatedImageDataRecordDAO";
@@ -63,7 +63,7 @@ public abstract class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRe
         Firebase imageListRef = new Firebase(this.mFirebaseUrl)
                 .child(myUserEmail)
                 .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
-        imageListRef.push().setValue((AnnotatedImageDataRecord) entity);
+        imageListRef.push().setValue(entity);
     }
 
     @Override

@@ -102,6 +102,11 @@ public class MainActivity extends BaseActivity {
         FoodImageDAO foodImageDAO = new FoodImageDAO();
         daoManager.registerDaoFor(FoodImage.class, foodImageDAO);
 
+        //For other images
+        AnnotatedImageDataRecordDAO annotatedImageDataRecordDAO = new AnnotatedImageDataRecordDAO(
+                AnnotatedImageDataRecord.class);
+        daoManager.registerDaoFor(AnnotatedImageDataRecord.class, annotatedImageDataRecordDAO);
+
         // Create corresponding stream generators. Only to be created once in Main Activity
         //creating a new stream registers it with the stream manager
         LocationStreamGenerator locationStreamGenerator =
@@ -121,6 +126,8 @@ public class MainActivity extends BaseActivity {
                 new InsulinAdminImageStreamGenerator(getApplicationContext());
         FoodImageStreamGenerator foodImageStreamGenerator =
                 new FoodImageStreamGenerator(getApplicationContext());
+        AnnotatedImageStreamGenerator annotatedImageStreamGenerator =
+                new AnnotatedImageStreamGenerator(getApplicationContext(), AnnotatedImageDataRecord.class);
 
 
 
@@ -156,7 +163,9 @@ public class MainActivity extends BaseActivity {
                 new ActionObject("Take Glucose Reading Picture", "A", R.drawable.glucose_reading),
                 new ActionObject("Take Insulin Shot Picture", "A", R.drawable.insulin_shot),
                 new ActionObject("Take Food Pitcure", "A", R.drawable.food),
+                new ActionObject("Take Other Pictures", "A", R.drawable.camera),
                 new ActionObject("Record Your Mood", "A", R.drawable.mood),
+                new ActionObject("Upload Screenshot", "A", R.drawable.camera),
                 new ActionObject("Configure locations", "A", R.drawable.ic_location_on_black_24dp)
                 //new ActionObject("Answer some questions", "A", R.drawable.blue_circle)
         };
@@ -191,10 +200,22 @@ public class MainActivity extends BaseActivity {
                         startActivity(addFoodPhotoIntent);
                         break;
                     case 3:
+                        Intent addOtherPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
+                        extras.putString("photoType", "OTHER");
+                        addOtherPhotoIntent.putExtras(extras);
+                        startActivity(addOtherPhotoIntent);
+                        break;
+                    case 4:
                         Intent addMoodIntent = new Intent(MainActivity.this, MoodDataRecordActivity.class);
                         startActivity(addMoodIntent);
                         break;
-                    case 4:
+                    case 5:
+                        Intent uploadScreenshotIntent = new Intent(MainActivity.this, UploadScreenshotActivity.class);
+                        extras.putString("photoType", "GALLERY_PHOTO");
+                        uploadScreenshotIntent.putExtras(extras);
+                        startActivity(uploadScreenshotIntent);
+                        break;
+                    case 6:
                         Intent configureLocations = new Intent(MainActivity.this, LocationConfigurationActivity.class);
                         startActivity(configureLocations);
                         break;
