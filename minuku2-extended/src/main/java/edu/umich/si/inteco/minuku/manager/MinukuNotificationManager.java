@@ -138,6 +138,8 @@ public class MinukuNotificationManager extends Service implements NotificationMa
             if(!categorizedNotificationMap.containsKey(aShowNotificationEvent.getCategory())) {
                 categorizedNotificationMap.put(aShowNotificationEvent.getCategory(),
                         aShowNotificationEvent);
+            } else {
+                return;
             }
         }
         Notification n = buildNotificationForNotificationEvent(aShowNotificationEvent);
