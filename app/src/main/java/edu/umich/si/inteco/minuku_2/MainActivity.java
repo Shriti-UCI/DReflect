@@ -16,6 +16,7 @@ import edu.umich.si.inteco.minuku.dao.FreeResponseQuestionDAO;
 import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.MoodDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.MultipleChoiceQuestionDAO;
+import edu.umich.si.inteco.minuku.dao.NoteDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.SemanticLocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuNotificationManager;
@@ -23,12 +24,14 @@ import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
 import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
+import edu.umich.si.inteco.minuku.model.NoteDataRecord;
 import edu.umich.si.inteco.minuku.model.SemanticLocationDataRecord;
 import edu.umich.si.inteco.minuku.streamgenerator.AnnotatedImageStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.FreeResponseQuestionStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MoodStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MultipleChoiceQuestionStreamGenerator;
+import edu.umich.si.inteco.minuku.streamgenerator.NoteStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.SemanticLocationStreamGenerator;
 import edu.umich.si.inteco.minuku_2.action.MissedFoodAction;
 import edu.umich.si.inteco.minuku_2.action.MissedGlucoseReadingAction;
@@ -92,6 +95,10 @@ public class MainActivity extends BaseActivity {
         MultipleChoiceQuestionDAO multipleChoiceQuestionDAO = new MultipleChoiceQuestionDAO();
         daoManager.registerDaoFor(MultipleChoice.class, multipleChoiceQuestionDAO);
 
+        //note entry DAO
+        NoteDataRecordDAO noteDataRecordDAO = new NoteDataRecordDAO();
+        daoManager.registerDaoFor(NoteDataRecord.class, noteDataRecordDAO);
+
         //App speicif Image DAOs
         GlucoseReadingImageDAO glucoseReadingImageDAO = new GlucoseReadingImageDAO();
         daoManager.registerDaoFor(GlucoseReadingImage.class, glucoseReadingImageDAO);
@@ -130,6 +137,8 @@ public class MainActivity extends BaseActivity {
                 new AnnotatedImageStreamGenerator(getApplicationContext(), AnnotatedImageDataRecord.class);
 
 
+        NoteStreamGenerator noteStreamGenerator =
+                new NoteStreamGenerator(getApplicationContext());
 
         // All situations must be registered AFTER the stream generators are registers.
         MinukuSituationManager situationManager = MinukuSituationManager.getInstance();
@@ -166,6 +175,7 @@ public class MainActivity extends BaseActivity {
                 new ActionObject("Take Other Pictures", "A", R.drawable.camera),
                 new ActionObject("Record Your Mood", "A", R.drawable.mood),
                 new ActionObject("Upload Screenshot", "A", R.drawable.camera),
+                new ActionObject("Take Notes","A", R.drawable.blue_circle),
                 new ActionObject("Configure locations", "A", R.drawable.ic_location_on_black_24dp)
                 //new ActionObject("Answer some questions", "A", R.drawable.blue_circle)
         };
@@ -216,6 +226,10 @@ public class MainActivity extends BaseActivity {
                         startActivity(uploadScreenshotIntent);
                         break;
                     case 6:
+                        Intent noteEntryIntent = new Intent(MainActivity.this, NoteEntryActivity.class);
+                        startActivity(noteEntryIntent);
+                        break;
+                    case 7:
                         Intent configureLocations = new Intent(MainActivity.this, LocationConfigurationActivity.class);
                         startActivity(configureLocations);
                         break;
