@@ -18,6 +18,10 @@
         android:background="@color/primary_dark"
         android:textColor="@android:color/white"
         android:textSize="20dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/white"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="match_parent"
