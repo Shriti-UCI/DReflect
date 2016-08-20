@@ -95,15 +95,17 @@ public class MoodAnnotationExpectedSituation implements Situation {
     }
 
     private boolean areDatesEqual(long currentTime, long previousTime) {
-        Log.d(TAG, "checking if the both moods were recorded on the same day");
-        Calendar calendar = Calendar.getInstance();
+        Log.d(TAG, "Checking if the both moods were recorded on the same day");
 
-        calendar.setTimeInMillis(currentTime);
-        Date currentDate = calendar.getTime();
+        Calendar currentDate = Calendar.getInstance();
+        Calendar previousDate = Calendar.getInstance();
 
-        calendar.setTimeInMillis(previousTime);
-        Date previousDate = calendar.getTime();
+        currentDate.setTimeInMillis(currentTime);
+        previousDate.setTimeInMillis(previousTime);
+        Log.d(TAG, "Current:" + currentDate.toString() + " Previous:" + previousDate.toString());
 
-        return (currentDate.equals(previousDate));
+        boolean sameDay = currentDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                previousDate.get(Calendar.DAY_OF_YEAR) == previousDate.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
     }
 }
