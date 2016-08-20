@@ -52,6 +52,6 @@
     <string name="hint_enter_password">Enter password</string>
     <string name="image_view_logo_image">Logo Image</string>
 
-    <string name="text_login_via">Login using:</string>
+    <string name="text_login_via">Login using</string>
 
 </resources>

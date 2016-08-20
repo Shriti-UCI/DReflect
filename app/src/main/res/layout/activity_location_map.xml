@@ -11,12 +11,20 @@
         android:layout_height="400dp"/>
     <Button
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:text="Add new location"
-        android:id ="@+id/addLocationButton"/>
+        android:id ="@+id/addLocationButton"
+        style="?android:attr/buttonBarStyle"
+        android:background="@color/primary_dark"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"/>
     <Button
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="match_parent"
         android:text="View saved locations"
-        android:id ="@+id/seeLocationButton"/>
+        android:id ="@+id/seeLocationButton"
+        style="?android:attr/buttonBarStyle"
+        android:background="@color/primary_dark"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"/>
 </LinearLayout>

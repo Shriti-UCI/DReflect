@@ -39,7 +39,7 @@
     <style name="LoginCreateTextButton">
         <item name="android:textSize">@dimen/login_buttons_text_size</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/accent</item>
+        <item name="android:textColor">@color/primary_dark</item>
         <item name="android:layout_margin">2dp</item>
         <item name="android:clickable">true</item>
     </style>
