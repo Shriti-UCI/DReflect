@@ -31,7 +31,7 @@ import edu.umich.si.inteco.minukucore.user.User;
 /**
  * Created by shriti on 7/22/16.
  */
-public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> implements
+public abstract class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> implements
         DAO<T> {
 
     protected static String TAG = "AnnotatedImageDataRecordDAO";
@@ -131,6 +131,11 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
         Log.d(TAG, "Checking the value of N "+ N);
 
         if(N <= 0) {
+            /* TODO(neerajkumar): Get this f***up fixed! */
+            // The first element in the list is actually the last in the database.
+            // Reverse the list before setting the future with a result.
+            Collections.reverse(synchronizedListOfRecords);
+
             settableFuture.set(synchronizedListOfRecords);
             return;
         }
@@ -145,6 +150,10 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
                 // What it means is that no entries were added for this date, i.e.
                 // all the historic information has been exhausted.
                 if(!dataSnapshot.exists()) {
+                    // The first element in the list is actually the last in the database.
+                    // Reverse the list before setting the future with a result.
+                    Collections.reverse(synchronizedListOfRecords);
+
                     settableFuture.set(synchronizedListOfRecords);
                     return;
                 }
@@ -165,6 +174,11 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
+
+                // The first element in the list is actually the last in the database.
+                // Reverse the list before setting the future with a result.
+                Collections.reverse(synchronizedListOfRecords);
+
 
                 // This would mean that the firebase ref does not exist thereby meaning that
                 // the number of entries for all dates are over before we could get the last N

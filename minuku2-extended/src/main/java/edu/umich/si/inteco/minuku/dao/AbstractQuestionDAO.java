@@ -118,6 +118,10 @@ public class AbstractQuestionDAO<T extends Question> implements DAO<T> {
         Log.d(TAG, "Checking the value of N "+ N);
 
         if(N <= 0) {
+            // The first element in the list is actually the last in the database.
+            // Reverse the list before setting the future with a result.
+            Collections.reverse(synchronizedListOfRecords);
+
             settableFuture.set(synchronizedListOfRecords);
             return;
         }
@@ -132,6 +136,10 @@ public class AbstractQuestionDAO<T extends Question> implements DAO<T> {
                 // What it means is that no entries were added for this date, i.e.
                 // all the historic information has been exhausted.
                 if(!dataSnapshot.exists()) {
+                    // The first element in the list is actually the last in the database.
+                    // Reverse the list before setting the future with a result.
+                    Collections.reverse(synchronizedListOfRecords);
+
                     settableFuture.set(synchronizedListOfRecords);
                     return;
                 }
@@ -152,6 +160,12 @@ public class AbstractQuestionDAO<T extends Question> implements DAO<T> {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
+                /* TODO(neerajkumar): Get this f***up fixed! */
+
+                // The first element in the list is actually the last in the database.
+                // Reverse the list before setting the future with a result.
+                Collections.reverse(synchronizedListOfRecords);
+
                 // This would mean that the firebase ref does not exist thereby meaning that
                 // the number of entries for all dates are over before we could get the last N
                 // results
