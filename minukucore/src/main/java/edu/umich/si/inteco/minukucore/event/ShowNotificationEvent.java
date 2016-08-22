@@ -2,21 +2,30 @@ package edu.umich.si.inteco.minukucore.event;
 
 import java.util.Map;
 
+import edu.umich.si.inteco.minukucore.model.DataRecord;
+
 /**
  * Created by neerajkumar on 7/30/16.
  */
-public class ShowNotificationEvent {
+public class ShowNotificationEvent implements DataRecord {
 
-    private String title;
-    private String message;
-    private int iconID;
-    private int expirationTimeSeconds;
-    private Class<Object> viewToShow;
-    private ExpirationAction expirationAction;
-    private Map<String, String> params;
-    private long creationTimeMs = 0;
-    private long clickedTimeMs = 0;
-    private String category = null;
+    public String title;
+    public String message;
+    public int iconID;
+    public int expirationTimeSeconds;
+    public Class<Object> viewToShow;
+    public ExpirationAction expirationAction;
+    public Map<String, String> params;
+    public long creationTimeMs = 0;
+    public long clickedTimeMs = 0;
+    public String category = null;
+    public int expirationCount = 0;
+    public Integer id;
+
+    @Override
+    public long getCreationTime() {
+        return this.creationTimeMs;
+    }
 
     public enum ExpirationAction {
         ALERT_AGAIN,
@@ -110,5 +119,45 @@ public class ShowNotificationEvent {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setIconID(int iconID) {
+        this.iconID = iconID;
+    }
+
+    public void setExpirationTimeSeconds(int expirationTimeSeconds) {
+        this.expirationTimeSeconds = expirationTimeSeconds;
+    }
+
+    public void setViewToShow(Class<Object> viewToShow) {
+        this.viewToShow = viewToShow;
+    }
+
+    public void setExpirationAction(ExpirationAction expirationAction) {
+        this.expirationAction = expirationAction;
+    }
+
+    public void setParams(Map<String, String> params) {
+        this.params = params;
+    }
+
+    public int getExpirationCount() {
+        return expirationCount;
+    }
+
+    public void setExpirationCount(int expirationCount) {
+        this.expirationCount = expirationCount;
+    }
+
+    public void incrementExpirationCount() {
+        this.expirationCount++;
     }
 }
