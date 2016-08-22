@@ -16,6 +16,7 @@ import java.util.Date;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minuku_2.view.customview.MoodEntryView;
+import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 
 /**
@@ -306,10 +307,17 @@ public class MoodDataRecordActivity extends BaseActivity {
         MoodDataRecord moodDataRecordToSave = moodFirst;
         try {
             Log.d(TAG, "Saving mood to the stream and the database");
-            MinukuStreamManager.getInstance().getStreamGeneratorFor(MoodDataRecord.class).offer(moodDataRecordToSave);
+            MinukuStreamManager.getInstance()
+                    .getStreamGeneratorFor(MoodDataRecord.class)
+                    .offer(moodDataRecordToSave);
+            mUserSubmissionStats.incrementMoodCount();
+            updateUserSubmissionStats(mUserSubmissionStats);
         } catch (StreamNotFoundException e) {
             e.printStackTrace();
             Log.e(TAG, "The mood stream does not exist on this device");
+        } catch (DAOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "There was an error updating user stats information in the database.");
         }
         showToast("Your mood has been recorded");
 
