@@ -41,32 +41,32 @@ public class UserSubmissionStats implements DataRecord {
         return creationTime;
     }
 
-    public void incrementQuestionCount(int questionCount) {
+    public void incrementQuestionCount() {
         this.questionCount++;
         this.totalSubmissionCount++;
     }
 
-    public void incrementTotalImageCount(int totalImageCount) {
+    public void incrementTotalImageCount() {
         this.totalImageCount++;
         this.totalSubmissionCount++;
     }
 
-    public void incrementGlucoseReadingCount(int glucoseReadingCount) {
+    public void incrementGlucoseReadingCount() {
         this.glucoseReadingCount++;
         this.totalSubmissionCount++;
     }
 
-    public void incrementInsulinCount(int insulinCount) {
+    public void incrementInsulinCount() {
         this.insulinCount++;
         this.totalSubmissionCount++;
     }
 
-    public void incrementFoodCount(int foodCount) {
+    public void incrementFoodCount() {
         this.foodCount++;
         this.totalSubmissionCount++;
     }
 
-    public void incrementOthersCount(int othersCount) {
+    public void incrementOtherImagesCount() {
         this.othersCount++;
         this.totalSubmissionCount++;
     }

@@ -22,6 +22,7 @@ import java.util.*;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.manager.QuestionManager;
 import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
+import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
@@ -125,16 +126,15 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
                         .offer((MultipleChoice) question);
             }
         }
-        //q1.setAnswer(firstName.toString());
-        //q2.setAnswer(lastName.toString());
-
-        /*try {
-
-            MinukuStreamManager.getInstance().getStreamGeneratorFor(FreeResponse.class).offer(q1);
-            MinukuStreamManager.getInstance().getStreamGeneratorFor(FreeResponse.class).offer(q2);
-        } catch (StreamNotFoundException e) {
+        Log.d(TAG, "Increasing question count");
+        mUserSubmissionStats.incrementQuestionCount();
+        try {
+            Log.d(TAG, "Uploading user submission stats");
+            uploadUserSubmissionStats(mUserSubmissionStats);
+        } catch (DAOException e) {
+            Log.d(TAG, "Failed to upload user submission stats");
             e.printStackTrace();
-        }*/
+        }
         showToast("Your answer has been recorded");
         finish();
     }

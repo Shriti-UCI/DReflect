@@ -31,6 +31,7 @@ import edu.umich.si.inteco.minuku_2.model.FoodImage;
 import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
 import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
+import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
 
@@ -99,6 +100,8 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                                 getStreamGeneratorFor(GlucoseReadingImage.class);
                         Log.d(TAG, "Saving results to the database");
                         streamGenerator.offer(glucoseReadingImage);
+                        Log.d(TAG, "increment glucose reading image count");
+                        mUserSubmissionStats.incrementGlucoseReadingCount();
                     } catch (StreamNotFoundException e) {
                         e.printStackTrace();
                         Log.e(TAG, "The photo stream does not exist on this device.");
@@ -112,6 +115,8 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                                 getStreamGeneratorFor(InsulinAdminImage.class);
                         Log.d(TAG, "Saving results to the database");
                         streamGenerator.offer(insulinAdminImage);
+                        Log.d(TAG, "increment insulin shot image count");
+                        mUserSubmissionStats.incrementInsulinCount();
                     } catch (StreamNotFoundException e) {
                         e.printStackTrace();
                         Log.e(TAG, "The photo stream does not exist on this device.");
@@ -124,6 +129,8 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                                 getStreamGeneratorFor(FoodImage.class);
                         Log.d(TAG, "Saving results to the database");
                         streamGenerator.offer(foodImage);
+                        Log.d(TAG, "increment food image count");
+                        mUserSubmissionStats.incrementFoodCount();
                     } catch (StreamNotFoundException e) {
                         e.printStackTrace();
                         Log.e(TAG, "The photo stream does not exist on this device.");
@@ -138,12 +145,22 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                                 getStreamGeneratorFor(AnnotatedImageDataRecord.class);
                         Log.d(TAG, "Saving results to the database");
                         streamGenerator.offer(annotatedImageDataRecord);
+                        Log.d(TAG, "increment other image count");
+                        mUserSubmissionStats.incrementOtherImagesCount();
                     } catch (StreamNotFoundException e) {
                         e.printStackTrace();
                         Log.e(TAG, "The photo stream does not exist on this device.");
                     }
             }
-
+        Log.d(TAG, "increment total image count");
+        mUserSubmissionStats.incrementTotalImageCount();
+        try {
+            uploadUserSubmissionStats(mUserSubmissionStats);
+            Log.d(TAG, "Upoloaded user submission stats");
+        } catch (DAOException e) {
+            Log.d(TAG, "Failed to upload user submission stats");
+            e.printStackTrace();
+        }
         showToast("Starting the image stream annotated photo.");
 
         finish();
