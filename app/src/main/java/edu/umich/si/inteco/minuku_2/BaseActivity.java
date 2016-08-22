@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -28,8 +29,15 @@ import com.google.android.gms.location.places.Places;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
+import edu.umich.si.inteco.minuku.dao.UserSubmissionStatsDAO;
+import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
+import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
+import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.event.NotificationClickedEvent;
 
 /**
@@ -52,6 +60,8 @@ public class BaseActivity extends AppCompatActivity implements
     protected static final int CAMERA = 101;
 
     protected View mLayout;
+
+    protected UserSubmissionStats mUserSubmissionStats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +118,11 @@ public class BaseActivity extends AppCompatActivity implements
                 EventBus.getDefault().post(new NotificationClickedEvent(tappedNotificationId));
             }
         }
+
+        // Need this to register the UserSubmissionStatsDAO.
+        MinukuDAOManager daoManager = MinukuDAOManager.getInstance();
+        UserSubmissionStatsDAO userSubmissionStatsDAO = new UserSubmissionStatsDAO();
+        daoManager.registerDaoFor(UserSubmissionStats.class, userSubmissionStatsDAO);
 
         requestAllPermissions();
     }
@@ -170,6 +185,29 @@ public class BaseActivity extends AppCompatActivity implements
         super.onResume();
         mSharedPref.writePreference(Constants.CAN_SHOW_NOTIFICATION, Constants.NO);
 
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                Future<UserSubmissionStats> submissionStatsFuture = ((UserSubmissionStatsDAO)
+                        MinukuDAOManager.getInstance().getDaoFor(UserSubmissionStats.class)).get();
+                while (!submissionStatsFuture.isDone()) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    mUserSubmissionStats = submissionStatsFuture.get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    mUserSubmissionStats = new UserSubmissionStats();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                    mUserSubmissionStats = new UserSubmissionStats();
+                }
+            }
+        });
     }
 
     @Override
@@ -271,5 +309,12 @@ public class BaseActivity extends AppCompatActivity implements
                 }
             }*/
         }
+    }
+
+    public void updateUserSubmissionStats(UserSubmissionStats newUserSubmissionStats)
+            throws DAOException {
+        mUserSubmissionStats = newUserSubmissionStats;
+        MinukuDAOManager.getInstance().getDaoFor(UserSubmissionStats.class).update(null,
+                mUserSubmissionStats);
     }
 }
