@@ -10,9 +10,17 @@ import edu.umich.si.inteco.minuku.config.Constants;
  */
 public class ApplicationConstants {
 
-    public static final String FIREBASE_URL_GLUCOSE_READING_IMAGES = Constants.FIREBASE_URL_IMAGES + "/glucose_readings";
+    /** public static final String FIREBASE_URL_GLUCOSE_READING_IMAGES = Constants.FIREBASE_URL_IMAGES + "/glucose_readings";
     public static final String FIREBASE_URL_INSULIN_ADMIN_IMAGES = Constants.FIREBASE_URL_IMAGES + "/insulin_admin";
     public static final String FIREBASE_URL_FOOD_IMAGES = Constants.FIREBASE_URL_IMAGES + "/food";
+     **/
+
+    public static final String IMAGE_TYPE_GLUCOSE_READIMG = "GLUCOSE_READINGS";
+    public static final String IMAGE_TYPE_INSULIN_SHOT = "INSULIN_SHOT";
+    public static final String IMAGE_TYPE_FOOD = "FOOD";
+    public static final String IMAGE_TYPE_OTHERS = "OTHER_IMAGES";
+    public static final String IMAGE_TYPE_GALLERY_UPLOAD = "GALLERY_UPLOAD";
+
 
     public static final String NOTIFICATION_CATEGORY_MISSED_ACTIVITY = "MISSED_IMAGE_REPORT_NOTIF";
     public static final String NOTIFICATION_CATEGORY_MOOD_REPORT = "MOOD_REPORT_NOTIF";

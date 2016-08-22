@@ -11,7 +11,7 @@ public class InsulinAdminImage extends AnnotatedImageDataRecord {
 
     }
 
-    public InsulinAdminImage(String base64Data, String annotation) {
-        super(base64Data, annotation);
+    public InsulinAdminImage(String base64Data, String annotation, String imageSource) {
+        super(base64Data, annotation, imageSource);
     }
 }

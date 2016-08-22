@@ -12,7 +12,7 @@ public class FoodImage extends AnnotatedImageDataRecord {
 
     }
 
-    public FoodImage(String base64Data, String annotation) {
-        super(base64Data, annotation);
+    public FoodImage(String base64Data, String annotation, String imageSource) {
+        super(base64Data, annotation, imageSource);
     }
 }

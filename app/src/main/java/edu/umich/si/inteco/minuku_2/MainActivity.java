@@ -44,6 +44,7 @@ import edu.umich.si.inteco.minuku_2.dao.InsulinAdminImageDAO;
 import edu.umich.si.inteco.minuku_2.model.FoodImage;
 import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
+import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
 import edu.umich.si.inteco.minuku_2.situation.MissedFoodImageSituation;
@@ -193,25 +194,25 @@ public class MainActivity extends BaseActivity {
                 switch (position) {
                     case 0:
                         Intent addGlucoseReadingPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        extras.putString("photoType", "GLUCOSE_READING");
+                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_GLUCOSE_READIMG);
                         addGlucoseReadingPhotoIntent.putExtras(extras);
                         startActivity(addGlucoseReadingPhotoIntent);
                         break;
                     case 1:
                         Intent addInsulinShotPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        extras.putString("photoType", "INSULIN_SHOT");
+                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_INSULIN_SHOT);
                         addInsulinShotPhotoIntent.putExtras(extras);
                         startActivity(addInsulinShotPhotoIntent);
                         break;
                     case 2:
                         Intent addFoodPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        extras.putString("photoType", "FOOD");
+                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_FOOD);
                         addFoodPhotoIntent.putExtras(extras);
                         startActivity(addFoodPhotoIntent);
                         break;
                     case 3:
                         Intent addOtherPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        extras.putString("photoType", "OTHER");
+                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_OTHERS);
                         addOtherPhotoIntent.putExtras(extras);
                         startActivity(addOtherPhotoIntent);
                         break;
@@ -221,7 +222,7 @@ public class MainActivity extends BaseActivity {
                         break;
                     case 5:
                         Intent uploadScreenshotIntent = new Intent(MainActivity.this, UploadScreenshotActivity.class);
-                        extras.putString("photoType", "GALLERY_PHOTO");
+                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_GALLERY_UPLOAD);
                         uploadScreenshotIntent.putExtras(extras);
                         startActivity(uploadScreenshotIntent);
                         break;

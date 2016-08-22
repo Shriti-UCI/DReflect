@@ -32,7 +32,6 @@ public class InsulinAdminImageDAO extends AnnotatedImageDataRecordDAO<InsulinAdm
     protected static String TAG = "FoodImageDAO";
 
     public InsulinAdminImageDAO() {
-        super(InsulinAdminImage.class,
-                ApplicationConstants.FIREBASE_URL_INSULIN_ADMIN_IMAGES);
+        super(InsulinAdminImage.class, ApplicationConstants.IMAGE_TYPE_INSULIN_SHOT);
     }
 }

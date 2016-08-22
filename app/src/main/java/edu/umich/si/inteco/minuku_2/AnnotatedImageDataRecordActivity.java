@@ -30,6 +30,7 @@ import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
 import edu.umich.si.inteco.minuku_2.model.FoodImage;
 import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
+import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
 
@@ -90,9 +91,9 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
         String annotation = mText.getText().toString();
 
             switch (photoTypeValue) {
-                case "GLUCOSE_READING":
+                case ApplicationConstants.IMAGE_TYPE_GLUCOSE_READIMG:
                     GlucoseReadingImage glucoseReadingImage = new GlucoseReadingImage(base64ImageData,
-                            annotation);
+                            annotation, photoTypeValue);
                     try {
                         StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
                                 getStreamGeneratorFor(GlucoseReadingImage.class);
@@ -103,9 +104,9 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                         Log.e(TAG, "The photo stream does not exist on this device.");
                     }
                     break;
-                case "INSULIN_SHOT":
+                case ApplicationConstants.IMAGE_TYPE_INSULIN_SHOT:
                     InsulinAdminImage insulinAdminImage = new InsulinAdminImage(base64ImageData,
-                            annotation);
+                            annotation, photoTypeValue);
                     try {
                         StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
                                 getStreamGeneratorFor(InsulinAdminImage.class);
@@ -116,8 +117,8 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                         Log.e(TAG, "The photo stream does not exist on this device.");
                     }
                     break;
-                case "FOOD":
-                    FoodImage foodImage = new FoodImage(base64ImageData, annotation);
+                case ApplicationConstants.IMAGE_TYPE_FOOD:
+                    FoodImage foodImage = new FoodImage(base64ImageData, annotation, photoTypeValue);
                     try {
                         StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
                                 getStreamGeneratorFor(FoodImage.class);
@@ -131,7 +132,7 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                 default:
                     AnnotatedImageDataRecord annotatedImageDataRecord = new AnnotatedImageDataRecord(
                             base64ImageData,
-                            annotation);
+                            annotation, photoTypeValue);
                     try {
                         StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
                                 getStreamGeneratorFor(AnnotatedImageDataRecord.class);
@@ -192,7 +193,7 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
     public void requestPermission() {
         mLayout = findViewById(R.id.main_layout);
 
-        Log.d(TAG, "Requestin camera permission");
+        Log.d(TAG, "Requesting camera permission");
 
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {

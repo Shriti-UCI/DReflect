@@ -32,8 +32,7 @@ public class GlucoseReadingImageDAO extends AnnotatedImageDataRecordDAO<GlucoseR
     protected static String TAG = "FoodImageDAO";
 
     public GlucoseReadingImageDAO() {
-        super(GlucoseReadingImage.class,
-                ApplicationConstants.FIREBASE_URL_GLUCOSE_READING_IMAGES);
+        super(GlucoseReadingImage.class, ApplicationConstants.IMAGE_TYPE_GLUCOSE_READIMG);
     }
 
 }

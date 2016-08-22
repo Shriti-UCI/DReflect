@@ -39,17 +39,20 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
     protected String mFirebaseUrl;
     protected UUID uuID;
     protected Class<T> mDataRecordType;
+    protected String imageType;
 
     public AnnotatedImageDataRecordDAO(Class aDataRecordType) {
         myUserEmail = UserPreferences.getInstance().getPreference(Constants.KEY_ENCODED_EMAIL);
         this.mDataRecordType = aDataRecordType;
         this.mFirebaseUrl = Constants.FIREBASE_URL_IMAGES;
+        this.imageType = "DEFAULT";
     }
 
-    public AnnotatedImageDataRecordDAO(Class aDataRecordType,
-                                       String aFirebaseUrl) {
-        this(aDataRecordType);
-        this.mFirebaseUrl = aFirebaseUrl;
+    public AnnotatedImageDataRecordDAO(Class aDataRecordType, String imageTypeforURL) {
+        myUserEmail = UserPreferences.getInstance().getPreference(Constants.KEY_ENCODED_EMAIL);
+        this.mDataRecordType = aDataRecordType;
+        this.mFirebaseUrl = Constants.FIREBASE_URL_IMAGES;
+        this.imageType = imageTypeforURL;
     }
 
     @Override
@@ -60,9 +63,11 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
     @Override
     public void add(AnnotatedImageDataRecord entity) throws DAOException {
         Log.d(TAG, "Adding image data record");
-        Firebase imageListRef = new Firebase(this.mFirebaseUrl)
-                .child(myUserEmail)
-                .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
+
+            Firebase imageListRef = new Firebase(this.mFirebaseUrl)
+                    .child(myUserEmail)
+                    .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString())
+                    .child(imageType);
         imageListRef.push().setValue(entity);
     }
 
@@ -77,7 +82,8 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
                 SettableFuture.create();
         Firebase imageListRef = new Firebase(this.mFirebaseUrl)
                 .child(myUserEmail)
-                .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
+                .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString())
+                .child(imageType);
 
         imageListRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -126,7 +132,8 @@ public class AnnotatedImageDataRecordDAO<T extends AnnotatedImageDataRecord> imp
                                      final String databaseURL) {
         Firebase firebaseRef = new Firebase(databaseURL)
                 .child(userEmail)
-                .child(new SimpleDateFormat("MMddyyyy").format(someDate).toString());
+                .child(new SimpleDateFormat("MMddyyyy").format(someDate).toString())
+                .child(imageType);
 
         Log.d(TAG, "Checking the value of N "+ N);
 

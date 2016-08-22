@@ -33,6 +33,6 @@ public class FoodImageDAO extends AnnotatedImageDataRecordDAO<FoodImage> {
     protected static String TAG = "FoodImageDAO";
 
     public FoodImageDAO() {
-        super(FoodImage.class, ApplicationConstants.FIREBASE_URL_FOOD_IMAGES);
+        super(FoodImage.class, ApplicationConstants.IMAGE_TYPE_FOOD);
     }
 }

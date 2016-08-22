@@ -11,7 +11,7 @@ public class GlucoseReadingImage extends AnnotatedImageDataRecord{
 
     }
 
-    public GlucoseReadingImage(String base64Data, String annotation) {
-        super(base64Data, annotation);
+    public GlucoseReadingImage(String base64Data, String annotation, String imageSource) {
+        super(base64Data, annotation, imageSource);
     }
 }
