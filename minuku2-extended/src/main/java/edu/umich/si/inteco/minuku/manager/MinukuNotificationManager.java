@@ -6,6 +6,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.Nullable;
@@ -21,8 +22,11 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku.dao.NotificationDAO;
+import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.event.NotificationClickedEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
+import edu.umich.si.inteco.minukucore.manager.DAOManager;
 import edu.umich.si.inteco.minukucore.manager.NotificationManager;
 
 /**
@@ -35,12 +39,14 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     private Map<Integer, Integer> notificationCounterMap;
     private android.app.NotificationManager mNotificationManager;
     private Map<String, ShowNotificationEvent> categorizedNotificationMap;
+    private NotificationDAO mDAO;
 
     public MinukuNotificationManager() {
         Log.d(TAG, "Started minuku notification manager");
         registeredNotifications = new HashMap<>();
         notificationCounterMap = new HashMap<>();
         categorizedNotificationMap = new HashMap<>();
+        mDAO = MinukuDAOManager.getInstance().getDaoFor(ShowNotificationEvent.class);
         EventBus.getDefault().register(this);
     }
 
@@ -83,17 +89,24 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                         unregisterNotification(entry.getKey());
                         break;
                     case ALERT_AGAIN:
-                        //TODO(neerajkumar): Find a way to see if a notification was dismissed by
-                        // the user and unregister it, if it was.
+                        /**
+                         * TODO(neerajkumar): Find a way to see if a notification was dismissed by
+                         * the user and unregister it, if it was.
+                         */
+
                         Log.d(TAG, "Alerting again " + notification.getTitle());
                         mNotificationManager.cancel(entry.getKey());
                         mNotificationManager.notify(notificationID,
-                                buildNotificationForNotificationEvent(notification));
+                                buildNotificationForNotificationEvent(notification, entry.getKey()));
+                        notification.incrementExpirationCount();
                         break;
                     case KEEP_SHOWING_WITHOUT_ALERT:
-                        //TODO(neerajkumar): Find a way to see if a notification was dismissed by
-                        // the user and unregister it, if it was.
+                        /**
+                         * TODO(neerajkumar): Find a way to see if a notification was dismissed by
+                         * the user and unregister it, if it was.
+                         */
                         Log.d(TAG, "Ignoring " + notification.getTitle());
+                        notification.incrementExpirationCount();
                         break;
                     default:
                         break;
@@ -107,7 +120,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     }
 
     private Notification buildNotificationForNotificationEvent(
-            ShowNotificationEvent aShowNotificationEvent) {
+            ShowNotificationEvent aShowNotificationEvent, Integer id) {
 
         if(aShowNotificationEvent.getCreationTimeMs() != 0) {
             aShowNotificationEvent.setCreationTimeMs(new Date().getTime());
@@ -116,6 +129,12 @@ public class MinukuNotificationManager extends Service implements NotificationMa
         Intent launchIntent = new Intent(this, aShowNotificationEvent.getViewToShow());
         PendingIntent pIntent = PendingIntent.getActivity(this,
                 0, launchIntent, 0);
+        Bundle extras = launchIntent.getExtras();
+        for(Map.Entry<String, String> entry: aShowNotificationEvent.getParams().entrySet()) {
+            extras.putString(entry.getKey(), entry.getValue());
+        }
+        extras.putString(Constants.TAPPED_NOTIFICATION_ID_KEY, id.toString());
+
         Notification n  = new Notification.Builder(this)
                 .setContentTitle(aShowNotificationEvent.getTitle())
                 .setContentIntent(pIntent)
@@ -139,11 +158,27 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                 categorizedNotificationMap.put(aShowNotificationEvent.getCategory(),
                         aShowNotificationEvent);
             } else {
-                return;
+                ShowNotificationEvent previousNotification = categorizedNotificationMap.get(
+                        aShowNotificationEvent.getCategory());
+                if(previousNotification.getExpirationCount() > 0) {
+                    // If a previously existing notification has expired, then regardless of the
+                    // expiration mechanism of such notification, remove it from the map, push
+                    // that information to DAO and add the current notification to the map.
+                    Integer id;
+                    if((id = getIdForNotification(previousNotification)) != null) {
+                        unregisterNotification(id);
+                    }
+
+                    try {
+                        mDAO.add(previousNotification);
+                    } catch (DAOException e) {e.printStackTrace();
+
+                    }
+                }
             }
         }
-        Notification n = buildNotificationForNotificationEvent(aShowNotificationEvent);
         Integer notificationID = CURRENT_NOTIFICATION_ID.incrementAndGet();
+        Notification n = buildNotificationForNotificationEvent(aShowNotificationEvent, notificationID);
         registeredNotifications.put(notificationID, aShowNotificationEvent);
         notificationCounterMap.put(notificationID, 1);
         mNotificationManager.notify(notificationID, n);
@@ -182,8 +217,15 @@ public class MinukuNotificationManager extends Service implements NotificationMa
         if(registeredNotifications.containsKey(aNotificaitonId)) {
             registeredNotifications.get(aNotificaitonId).setClickedTimeMs(new Date().getTime());
             categorizedNotificationMap.remove(registeredNotifications.get(aNotificaitonId));
+            try {
+                MinukuDAOManager.getInstance()
+                        .getDaoFor(ShowNotificationEvent.class)
+                        .add(registeredNotifications.get(aNotificaitonId));
+            } catch (DAOException e) {
+                e.printStackTrace();
+                Log.e(TAG, "Could not notification info to DAO", e);
+            }
             notificationCounterMap.remove(aNotificaitonId);
-            //TODO(neerajkumar): Upload some info about notification via DAO.
         }
         // Notification was already unregistered at some earlier time or was never registered.
         // This is not a failure case, hence we return true.
@@ -193,6 +235,18 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    /**
+     * (TODO:neerajkumar): Start using BiMaps
+     */
+    public Integer getIdForNotification(ShowNotificationEvent notification) {
+        for(Map.Entry<Integer, ShowNotificationEvent> entry: registeredNotifications.entrySet()) {
+            if(entry.getValue().equals(notification)) {
+                return entry.getKey();
+            }
+        }
         return null;
     }
 }

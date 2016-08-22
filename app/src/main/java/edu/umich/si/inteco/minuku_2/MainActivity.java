@@ -1,5 +1,6 @@
 package edu.umich.si.inteco.minuku_2;
 
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.MoodDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.MultipleChoiceQuestionDAO;
 import edu.umich.si.inteco.minuku.dao.NoteDataRecordDAO;
+import edu.umich.si.inteco.minuku.dao.NotificationDAO;
 import edu.umich.si.inteco.minuku.dao.SemanticLocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuNotificationManager;
@@ -57,6 +59,7 @@ import edu.umich.si.inteco.minuku_2.streamgenerator.GlucoseReadingImageStreamGen
 import edu.umich.si.inteco.minuku_2.streamgenerator.InsulinAdminImageStreamGenerator;
 import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
+import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
 
@@ -114,6 +117,10 @@ public class MainActivity extends BaseActivity {
         AnnotatedImageDataRecordDAO annotatedImageDataRecordDAO = new AnnotatedImageDataRecordDAO(
                 AnnotatedImageDataRecord.class);
         daoManager.registerDaoFor(AnnotatedImageDataRecord.class, annotatedImageDataRecordDAO);
+
+        //Notification DAO
+        NotificationDAO notificationDAO = new NotificationDAO();
+        daoManager.registerDaoFor(ShowNotificationEvent.class, notificationDAO);
 
         // Create corresponding stream generators. Only to be created once in Main Activity
         //creating a new stream registers it with the stream manager
@@ -217,7 +224,8 @@ public class MainActivity extends BaseActivity {
                         startActivity(addOtherPhotoIntent);
                         break;
                     case 4:
-                        Intent addMoodIntent = new Intent(MainActivity.this, MoodDataRecordActivity.class);
+                        Intent addMoodIntent = new Intent(MainActivity.this,
+                                MoodDataRecordActivity.class);
                         startActivity(addMoodIntent);
                         break;
                     case 5:
@@ -227,11 +235,13 @@ public class MainActivity extends BaseActivity {
                         startActivity(uploadScreenshotIntent);
                         break;
                     case 6:
-                        Intent noteEntryIntent = new Intent(MainActivity.this, NoteEntryActivity.class);
+                        Intent noteEntryIntent = new Intent(MainActivity.this,
+                                NoteEntryActivity.class);
                         startActivity(noteEntryIntent);
                         break;
                     case 7:
-                        Intent configureLocations = new Intent(MainActivity.this, LocationConfigurationActivity.class);
+                        Intent configureLocations = new Intent(MainActivity.this,
+                                LocationConfigurationActivity.class);
                         startActivity(configureLocations);
                         break;
                     default:
