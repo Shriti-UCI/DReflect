@@ -35,12 +35,18 @@ public class LocationArrayListAdapter extends ArrayAdapter<SelectedLocation> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View rowView = inflater.inflate(R.layout.listitem_locationpreference, null, true);
 
         TextView txtTitle = (TextView) rowView.findViewById(R.id.firstLine);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                remove(LocationPreference.selectedLocationList.get(position));
+            }
+        });
 
         txtTitle.setText(items.get(position).getPlace());
         imageView.setImageResource(items.get(position).getImageResourceId());
@@ -55,5 +61,6 @@ public class LocationArrayListAdapter extends ArrayAdapter<SelectedLocation> {
     @Override
     public void remove(SelectedLocation object) {
         super.remove(object);
+        notifyDataSetChanged();
     }
 }

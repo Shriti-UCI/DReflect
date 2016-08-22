@@ -20,18 +20,20 @@ public class SelectedLocation extends ActionObject{
     private String address;
     private double latitude;
     private double longitude;
+    private String label;
 
     public SelectedLocation() {
         super();
     }
 
     public SelectedLocation(String place, String address, double latitude, double longitude,
-                            int imageResourceID) {
+                            String label, int imageResourceID) {
         super(place, imageResourceID);
         this.place = place;
         this.address = address;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.label = label;
         this.imageResourceId = imageResourceID;
     }
 
@@ -65,5 +67,15 @@ public class SelectedLocation extends ActionObject{
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
+    }
+
+    @Override
+    public void setLabel(String label) {
+        this.label = label;
     }
 }

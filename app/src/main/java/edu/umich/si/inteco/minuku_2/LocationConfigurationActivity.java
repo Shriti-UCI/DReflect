@@ -1,12 +1,16 @@
 package edu.umich.si.inteco.minuku_2;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -25,7 +29,6 @@ import edu.umich.si.inteco.minuku_2.preferences.SelectedLocation;
  * show a list view of locations where a location item can also be deleted.
  * Uses SelectedLocation model object.
  * Uses LocationPreference for storing and modifying the list of locations
- *
  */
 public class LocationConfigurationActivity extends BaseActivity implements OnMapReadyCallback {
 
@@ -34,6 +37,7 @@ public class LocationConfigurationActivity extends BaseActivity implements OnMap
 
     private int PLACE_PICKER_REQUEST = 1;
     private static GoogleMap mGoogleMap = null;
+    private String locationLabel;
 
     private String TAG = "LocationConfigurationActivity";
 
@@ -48,20 +52,21 @@ public class LocationConfigurationActivity extends BaseActivity implements OnMap
 
         addLocationButton = (Button) findViewById(R.id.addLocationButton);
         addLocationButton.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View v) {
-            //open the place picker widget
-            Log.d(TAG, "Creating intent for Place picker widget");
-            PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-            Intent placePickerIntent = null;
-            try {
-                placePickerIntent = builder.build(LocationConfigurationActivity.this);
-                startActivityForResult(placePickerIntent, PLACE_PICKER_REQUEST);
-            } catch (GooglePlayServicesRepairableException e) {
-                e.printStackTrace();
-            } catch (GooglePlayServicesNotAvailableException e) {
-                e.printStackTrace();
+            @Override
+            public void onClick(View v) {
+                //open the place picker widget
+                Log.d(TAG, "Creating intent for Place picker widget");
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                Intent placePickerIntent = null;
+                try {
+                    placePickerIntent = builder.build(LocationConfigurationActivity.this);
+                    startActivityForResult(placePickerIntent, PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
             }
-        }
         });
 
         seeLocationButton = (Button) findViewById(R.id.seeLocationButton);
@@ -79,7 +84,7 @@ public class LocationConfigurationActivity extends BaseActivity implements OnMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //TODO: not sure about this yet, need a better way to deal with map as a parameter to method calls
-        this.mGoogleMap = googleMap;
+        mGoogleMap = googleMap;
         if (ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this,
@@ -106,19 +111,59 @@ public class LocationConfigurationActivity extends BaseActivity implements OnMap
             if (resultCode == RESULT_OK) {
                 Log.d(TAG, "RESULT OK");
 
+                // get prompts.xml view
+                LayoutInflater li = LayoutInflater.from(this);
+                View promptsView = li.inflate(R.layout.location_label_prompt, null);
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        this);
+
+                // set prompts.xml to alertdialog builder
+                alertDialogBuilder.setView(promptsView);
+
+                final EditText userInput = (EditText) promptsView
+                        .findViewById(R.id.editTextDialogUserInput);
+
+                // set dialog message
+                alertDialogBuilder
+                        .setCancelable(false)
+                        .setPositiveButton("OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // get user input and set it to result
+                                        // edit text
+                                        locationLabel = userInput.getText().toString();
+                                    }
+                                })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
+
+                /////
+
                 Place place = PlacePicker.getPlace(data, this);
                 String placename = String.format("%s", place.getName());
                 String address = String.format("%s", place.getAddress());
                 Log.d(TAG, "Adding location to the preferred location list");
                 SelectedLocation newLocation = new SelectedLocation(placename, address,
-                        place.getLatLng().latitude, place.getLatLng().longitude,
+                        place.getLatLng().latitude, place.getLatLng().longitude, locationLabel,
                         R.drawable.ic_delete_black_24dp);
 
                 LocationPreference.addLocation(newLocation);
                 Log.d(TAG, "Updating the map with location markers");
-                LocationPreference.updateMapMarkers(this.mGoogleMap);
+                LocationPreference.updateMapMarkers(mGoogleMap);
 
             }
         }
+
+
     }
 }

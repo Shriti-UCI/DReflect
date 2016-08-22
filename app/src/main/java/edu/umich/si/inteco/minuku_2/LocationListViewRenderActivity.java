@@ -34,16 +34,5 @@ public class LocationListViewRenderActivity extends BaseActivity {
                 LocationPreference.selectedLocationList);
 
         locationListView.setAdapter(adapter);
-
-        //On clicking the delete button displayed with each location list item, do the following
-        locationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "Deleting location");
-                adapter.remove(LocationPreference.selectedLocationList.get(position));
-                //TODO: need to refresh the markers somehow. Need google maps from parent activity
-            }
-        });
-
     }
 }
