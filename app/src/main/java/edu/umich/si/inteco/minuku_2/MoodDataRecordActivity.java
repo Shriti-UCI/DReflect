@@ -1,13 +1,11 @@
 package edu.umich.si.inteco.minuku_2;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 
 import java.text.DecimalFormat;
@@ -310,8 +308,9 @@ public class MoodDataRecordActivity extends BaseActivity {
             MinukuStreamManager.getInstance()
                     .getStreamGeneratorFor(MoodDataRecord.class)
                     .offer(moodDataRecordToSave);
+            //update reports submitted by user
             mUserSubmissionStats.incrementMoodCount();
-            updateUserSubmissionStats(mUserSubmissionStats);
+            uploadUserSubmissionStats(mUserSubmissionStats);
         } catch (StreamNotFoundException e) {
             e.printStackTrace();
             Log.e(TAG, "The mood stream does not exist on this device");

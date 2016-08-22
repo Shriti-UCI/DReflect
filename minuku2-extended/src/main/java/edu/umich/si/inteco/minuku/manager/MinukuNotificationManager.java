@@ -61,7 +61,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
 
         AlarmManager alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
         alarm.set(
-                alarm.RTC_WAKEUP,
+                AlarmManager.RTC_WAKEUP,
                 System.currentTimeMillis() + Constants.PROMPT_SERVICE_REPEAT_MILLISECONDS,
                 PendingIntent.getService(this, 0, new Intent(this, MinukuNotificationManager.class), 0)
         );
@@ -127,13 +127,14 @@ public class MinukuNotificationManager extends Service implements NotificationMa
         }
 
         Intent launchIntent = new Intent(this, aShowNotificationEvent.getViewToShow());
-        PendingIntent pIntent = PendingIntent.getActivity(this,
-                0, launchIntent, 0);
-        Bundle extras = launchIntent.getExtras();
         for(Map.Entry<String, String> entry: aShowNotificationEvent.getParams().entrySet()) {
-            extras.putString(entry.getKey(), entry.getValue());
+            launchIntent.putExtra(entry.getKey(), entry.getValue());
         }
-        extras.putString(Constants.TAPPED_NOTIFICATION_ID_KEY, id.toString());
+        launchIntent.putExtra(Constants.TAPPED_NOTIFICATION_ID_KEY, id.toString());
+
+        PendingIntent pIntent = PendingIntent.getActivity(this,
+                0, launchIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
 
         Notification n  = new Notification.Builder(this)
                 .setContentTitle(aShowNotificationEvent.getTitle())
@@ -164,16 +165,19 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                     // If a previously existing notification has expired, then regardless of the
                     // expiration mechanism of such notification, remove it from the map, push
                     // that information to DAO and add the current notification to the map.
-                    Integer id;
+                    Integer id = null;
                     if((id = getIdForNotification(previousNotification)) != null) {
                         unregisterNotification(id);
                     }
 
                     try {
+                        Log.d(TAG, "Adding previous notification information.");
                         mDAO.add(previousNotification);
-                    } catch (DAOException e) {e.printStackTrace();
-
+                    } catch (DAOException e) {
+                        e.printStackTrace();
                     }
+                } else {
+                    return;
                 }
             }
         }
@@ -247,6 +251,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                 return entry.getKey();
             }
         }
+        Log.d(TAG, "Returning null object for notification");
         return null;
     }
 }

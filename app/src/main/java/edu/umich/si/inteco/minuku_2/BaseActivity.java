@@ -67,6 +67,7 @@ public class BaseActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         mSharedPref = UserPreferences.getInstance();
 
         // Allow google logins
@@ -108,13 +109,16 @@ public class BaseActivity extends AppCompatActivity implements
 
         // The base activity takes care of getting information about the notification that started
         // the activity (if there is one), and posting the NotificationClickEvent on the bus.
-        if (savedInstanceState != null) {
-            String tappedNotificationId = savedInstanceState.getString(
-                    Constants.TAPPED_NOTIFICATION_ID_KEY);
+        Log.d(LOG_TAG, "Checking for bundle passed onto base activity in oncreate method");
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            Log.d(LOG_TAG, "Trying to get notification id information from bundle");
+            String tappedNotificationId = bundle.getString(Constants.TAPPED_NOTIFICATION_ID_KEY);
 
             if (tappedNotificationId != null
                     && !tappedNotificationId.equals("")
                     && !tappedNotificationId.trim().equals("")) {
+                Log.d(LOG_TAG, "Got notifiation Id information from bundle: " + tappedNotificationId);
                 EventBus.getDefault().post(new NotificationClickedEvent(tappedNotificationId));
             }
         }
@@ -311,7 +315,7 @@ public class BaseActivity extends AppCompatActivity implements
         }
     }
 
-    public void updateUserSubmissionStats(UserSubmissionStats newUserSubmissionStats)
+    public void uploadUserSubmissionStats(UserSubmissionStats newUserSubmissionStats)
             throws DAOException {
         mUserSubmissionStats = newUserSubmissionStats;
         MinukuDAOManager.getInstance().getDaoFor(UserSubmissionStats.class).update(null,

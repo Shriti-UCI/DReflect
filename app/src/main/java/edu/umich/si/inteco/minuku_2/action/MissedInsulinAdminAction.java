@@ -40,5 +40,6 @@ public class MissedInsulinAdminAction {
                         .setMessage("")
                         .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MISSED_ACTIVITY)
                         .setParams(new HashMap<String, String>())
-                        .createShowNotificationEvent());    }
+                        .createShowNotificationEvent());
+    }
 }
