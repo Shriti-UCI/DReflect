@@ -17,6 +17,20 @@ public class UserSubmissionStats implements DataRecord {
     public int othersCount;
     public long creationTime;
     public int totalSubmissionCount;
+    public int moodCount;
+
+    public int getMoodCount() {
+        return moodCount;
+    }
+
+    public void setMoodCount(int moodCount) {
+        this.moodCount = moodCount;
+    }
+
+    public void incrementMoodCount() {
+        this.moodCount++;
+        this.totalSubmissionCount++;
+    }
 
     public UserSubmissionStats() {
         this.creationTime = new Date().getTime();
