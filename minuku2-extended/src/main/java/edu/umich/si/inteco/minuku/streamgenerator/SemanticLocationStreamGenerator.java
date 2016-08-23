@@ -16,6 +16,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku.config.LocationPreference;
+import edu.umich.si.inteco.minuku.config.SelectedLocation;
 import edu.umich.si.inteco.minuku.dao.SemanticLocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
@@ -106,7 +108,8 @@ public class SemanticLocationStreamGenerator
 
     @Override
     public void offer(SemanticLocationDataRecord dataRecord) {
-
+        // do nothing. The only way data records can be added to semantic location is via
+        // the onLocationDataChangeEvent
     }
 
     // This is how one streamgenerator listens to another stream generators events
@@ -125,28 +128,19 @@ public class SemanticLocationStreamGenerator
 
     private SemanticLocationDataRecord convertToSemanticLocation(
             LocationDataRecord aLocationDataRecord) {
-        // 42.276153, -83.744203
-        // 42.276169, -83.743226
-        // 42.273309, -83.743184
-        // 42.273629, -83.744373
-        List<Location> geoFence = new ArrayList<>(4);
-        //geoFence.add(new Location("").setLatitude(42.276152) -83.744203));
+        for(SelectedLocation selectedLocation: LocationPreference.getInstance().getLocations()) {
+            Location loc1 = new Location("");
+            loc1.setLatitude(aLocationDataRecord.getLatitude());
+            loc1.setLongitude(aLocationDataRecord.getLongitude());
 
-        return new SemanticLocationDataRecord("home");
-    }
+            Location loc2 = new Location("");
+            loc2.setLatitude(selectedLocation.getLatitude());
+            loc2.setLongitude(selectedLocation.getLongitude());
 
-    private boolean isAtHome(List<Location> geoFence, LocationDataRecord point) {
-        int i, j;
-        boolean isAtHome = false;
-        for (i = 0, j = geoFence.size() - 1; i < geoFence.size(); j = i++)
-        {
-            if ((((geoFence.get(i).getLatitude() <= point.getLatitude()) && (point.getLatitude() < geoFence.get(j).getLatitude()))
-                    || ((geoFence.get(i).getLatitude() <= point.getLatitude()) && (point.getLatitude() < geoFence.get(i).getLatitude())))
-                    && (point.getLongitude() < (geoFence.get(j).getLongitude() - geoFence.get(i).getLongitude())
-                            * (point.getLatitude() - geoFence.get(i).getLatitude())
-                            / (geoFence.get(j).getLatitude() - geoFence.get(i).getLatitude()) + geoFence.get(i).getLatitude()))
-                isAtHome = !isAtHome;
+            if(loc1.distanceTo(loc2) < 50) {
+                return new SemanticLocationDataRecord(selectedLocation.getLabel());
+            }
         }
-        return isAtHome;
+        return new SemanticLocationDataRecord("unknown");
     }
 }
