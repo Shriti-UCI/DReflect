@@ -44,4 +44,8 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.github.dkharrat.nexusdialog:nexusdialog:0.4.0'
+
+    /*GSON to store objects in user preferences*/
+    compile 'com.google.code.gson:gson:2.7'
+
 }

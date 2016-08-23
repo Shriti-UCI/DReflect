@@ -3,11 +3,13 @@ package edu.umich.si.inteco.minuku_2;
 import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.UUID;
@@ -28,6 +30,7 @@ import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minuku.model.NoteDataRecord;
 import edu.umich.si.inteco.minuku.model.SemanticLocationDataRecord;
+import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
 import edu.umich.si.inteco.minuku.streamgenerator.AnnotatedImageStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.FreeResponseQuestionStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
@@ -66,11 +69,13 @@ import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
 public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
+    private TextView compensationMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initializeActionList();
         startService(new Intent(getBaseContext(), BackgroundService.class));
         startService(new Intent(getBaseContext(), MinukuNotificationManager.class));
@@ -168,7 +173,6 @@ public class MainActivity extends BaseActivity {
 
         //create questionnaires
         QuestionConfig.getInstance().setUpQuestions(getApplicationContext());
-
     }
 
     //populate the list of elements in home screen
@@ -183,8 +187,7 @@ public class MainActivity extends BaseActivity {
                 new ActionObject("Take Other Pictures", "A", R.drawable.camera),
                 new ActionObject("Record Your Mood", "A", R.drawable.mood),
                 new ActionObject("Upload Screenshot", "A", R.drawable.camera),
-                new ActionObject("Take Notes","A", R.drawable.blue_circle),
-                new ActionObject("Configure locations", "A", R.drawable.ic_location_on_black_24dp)
+                new ActionObject("Take Notes","A", R.drawable.blue_circle)
                 //new ActionObject("Answer some questions", "A", R.drawable.blue_circle)
         };
         // The adapter takes the action object array and converts it into a view that can be
@@ -239,11 +242,6 @@ public class MainActivity extends BaseActivity {
                                 NoteEntryActivity.class);
                         startActivity(noteEntryIntent);
                         break;
-                    case 7:
-                        Intent configureLocations = new Intent(MainActivity.this,
-                                LocationConfigurationActivity.class);
-                        startActivity(configureLocations);
-                        break;
                     default:
                         showToast("Clicked unknown");
                         break;
@@ -271,7 +269,17 @@ public class MainActivity extends BaseActivity {
             showSettingsScreen();
             return true;
         }
+        if(id == R.id.configure_location) {
+            Intent configureLocations = new Intent(MainActivity.this,
+                    LocationConfigurationActivity.class);
+            startActivity(configureLocations);
+        }
         return super.onOptionsItemSelected(menuItem);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void showSettingsScreen() {
@@ -280,4 +288,21 @@ public class MainActivity extends BaseActivity {
         startActivity(preferencesIntent);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void gotUserStatsFromDatabase(UserSubmissionStats userSubmissionStats) {
+        super.gotUserStatsFromDatabase(userSubmissionStats);
+        compensationMessage = (TextView) findViewById(R.id.compensation_message);
+        if(userSubmissionStats != null) {
+            Log.d(TAG, "populating the compensation message");
+            compensationMessage.setText(getCompensationMessage());
+            Log.d(TAG, getCompensationMessage());
+        } else {
+            compensationMessage.setText(" ");
+        }
+    }
 }

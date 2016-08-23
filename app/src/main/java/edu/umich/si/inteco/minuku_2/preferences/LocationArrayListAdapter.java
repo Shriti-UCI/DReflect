@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku_2.R;
 import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 
@@ -21,12 +22,15 @@ public class LocationArrayListAdapter extends ArrayAdapter<SelectedLocation> {
 
     public final Context context;
     public final List<SelectedLocation> items;
+    public UserPreferences mUserPreferences;
 
 
-    public LocationArrayListAdapter(Context context, List<SelectedLocation> objects) {
+    public LocationArrayListAdapter(Context context, List<SelectedLocation> objects,
+                                    UserPreferences userPreferences) {
         super(context, R.layout.listitem_locationpreference, objects);
         this.context = context;
         this.items = objects;
+        this.mUserPreferences = userPreferences;
     }
 
     @Override
@@ -44,7 +48,10 @@ public class LocationArrayListAdapter extends ArrayAdapter<SelectedLocation> {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mUserPreferences.removePreference(LocationPreference.selectedLocationList.
+                        get(position).getPreferenceKey());
                 remove(LocationPreference.selectedLocationList.get(position));
+
             }
         });
 

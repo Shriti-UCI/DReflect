@@ -147,8 +147,6 @@ public class LocationConfigurationActivity extends BaseActivity implements OnMap
                 // show it
                 alertDialog.show();
 
-                /////
-
                 Place place = PlacePicker.getPlace(data, this);
                 String placename = String.format("%s", place.getName());
                 String address = String.format("%s", place.getAddress());
@@ -160,6 +158,8 @@ public class LocationConfigurationActivity extends BaseActivity implements OnMap
                 LocationPreference.addLocation(newLocation);
                 Log.d(TAG, "Updating the map with location markers");
                 LocationPreference.updateMapMarkers(mGoogleMap);
+                Log.d(TAG, "Adding location data to preferences");
+                mSharedPref.addObjectToPreference(newLocation, newLocation.getPreferenceKey());
 
             }
         }

@@ -78,4 +78,8 @@ public class SelectedLocation extends ActionObject{
     public void setLabel(String label) {
         this.label = label;
     }
+
+    public String getPreferenceKey() {
+        return this.place;
+    }
 }

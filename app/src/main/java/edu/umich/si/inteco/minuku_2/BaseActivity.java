@@ -3,7 +3,6 @@ package edu.umich.si.inteco.minuku_2;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -67,7 +66,6 @@ public class BaseActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         mSharedPref = UserPreferences.getInstance();
 
         // Allow google logins
@@ -129,6 +127,8 @@ public class BaseActivity extends AppCompatActivity implements
         daoManager.registerDaoFor(UserSubmissionStats.class, userSubmissionStatsDAO);
 
         requestAllPermissions();
+
+        //moving code from on resume here
     }
 
     @Override
@@ -201,17 +201,23 @@ public class BaseActivity extends AppCompatActivity implements
                         e.printStackTrace();
                     }
                 }
+                //
                 try {
-                    mUserSubmissionStats = submissionStatsFuture.get();
+                    gotUserStatsFromDatabase(submissionStatsFuture.get());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    mUserSubmissionStats = new UserSubmissionStats();
+                    Log.d(LOG_TAG, "Creating mUserSubmissionStats");
+                    gotUserStatsFromDatabase(null);
                 } catch (ExecutionException e) {
                     e.printStackTrace();
-                    mUserSubmissionStats = new UserSubmissionStats();
+                    gotUserStatsFromDatabase(null);
                 }
             }
         });
+    }
+
+    protected void gotUserStatsFromDatabase(UserSubmissionStats userSubmissionStats) {
+        mUserSubmissionStats = userSubmissionStats;
     }
 
     @Override
@@ -320,5 +326,38 @@ public class BaseActivity extends AppCompatActivity implements
         mUserSubmissionStats = newUserSubmissionStats;
         MinukuDAOManager.getInstance().getDaoFor(UserSubmissionStats.class).update(null,
                 mUserSubmissionStats);
+    }
+
+    public String getCompensationMessage() {
+        String compensationMessage;
+        int relevantDataCount = mUserSubmissionStats.getFoodCount()+
+                mUserSubmissionStats.getGlucoseReadingCount()+
+                mUserSubmissionStats.getInsulinCount()+
+                mUserSubmissionStats.getMoodCount();
+
+        double reward;
+        double compensationAmount = relevantDataCount*0.10;
+        if(compensationAmount<=1)
+            reward=compensationAmount;
+        else
+            reward = 1.0;
+
+        if(relevantDataCount>=2){
+            Log.d(LOG_TAG, "User has required number of data points for today");
+            compensationMessage = "You are now eligible for today's reward!\n" +
+                    "Total Responses today: " +String.valueOf(relevantDataCount)+".\n" +
+                    "Tasks Remaining: End of day diary\n" +
+                    "Today's Reward Point: $" + String.valueOf(reward);
+        }
+        else {
+            int remainingDataCount = 2-relevantDataCount;
+            compensationMessage = "You have "+ String.valueOf(remainingDataCount) +
+                    " more responses remaining before you become " +
+                    "eligible for today's reward.\n" +
+                    "Tasks Remaining: at least " + String.valueOf(remainingDataCount) + " reports" +
+                    " and End of day dairy\n" +
+                    "Today's Reward Point: $" + String.valueOf(reward);
+        }
+        return compensationMessage;
     }
 }

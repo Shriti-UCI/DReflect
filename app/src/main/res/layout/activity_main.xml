@@ -25,10 +25,9 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:id="@+id/compensation_message"
             android:text="You are now eligible for your daily reward!"
             android:textAlignment="center"/>
     </LinearLayout>
-
 </RelativeLayout>

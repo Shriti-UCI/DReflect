@@ -5,9 +5,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.user.User;
 
 /**
@@ -21,7 +24,7 @@ import edu.umich.si.inteco.minukucore.user.User;
  * user, firebase information etc.
  *
  */
-public class UserPreferences {
+public class UserPreferences<T> {
 
     private static AtomicInteger numActivities = new AtomicInteger(0);
     private String LOG_TAG = "UserPreferences";
@@ -46,6 +49,12 @@ public class UserPreferences {
     public void writePreference(String key, String value){
         SharedPreferences.Editor e = mMyPreferences.edit();
         e.putString(key, value);
+        e.commit();
+    }
+
+    public void removePreference(String key) {
+        SharedPreferences.Editor e = mMyPreferences.edit();
+        e.remove(key);
         e.commit();
     }
 
@@ -76,6 +85,22 @@ public class UserPreferences {
                 getPreference("userobject_userEmail")
                 );
         return storedUser;
+    }
+
+    public void addObjectToPreference(Object myObject, String key) {
+        writePreference(key,convertObjectToJson(myObject, key));
+    }
+
+    public T getObjectFromJson(Class<T> objectType, String key) {
+        Gson gson = new Gson();
+        String json = mMyPreferences.getString(key, "");
+         T obj = gson.fromJson(json, objectType);
+        return obj;
+    }
+    private String convertObjectToJson(Object myObject, String key) {
+        Gson gson = new Gson();
+        String json = gson.toJson(myObject);
+        return json;
     }
 
 }

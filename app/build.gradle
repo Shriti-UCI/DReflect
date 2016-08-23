@@ -34,7 +34,10 @@ dependencies {
     compile 'com.github.boxme:squarecamera:1.1.0'
     compile 'com.h6ah4i.android.compat:mulsellistprefcompat:1.0.0'
     compile 'com.github.dkharrat.nexusdialog:nexusdialog:0.4.0'
-    /* place picker */
+
+    compile 'com.google.code.gson:gson:2.7'
+
+
 }
 
 allprojects {

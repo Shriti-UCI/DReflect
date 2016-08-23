@@ -31,7 +31,7 @@ public class LocationListViewRenderActivity extends BaseActivity {
         //creating the location array list adapter for list view UI element
         final LocationArrayListAdapter adapter = new LocationArrayListAdapter(
                 this.getApplicationContext(),
-                LocationPreference.selectedLocationList);
+                LocationPreference.selectedLocationList, mSharedPref);
 
         locationListView.setAdapter(adapter);
     }
