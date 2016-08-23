@@ -1,4 +1,4 @@
-package edu.umich.si.inteco.minuku_2.preferences;
+package edu.umich.si.inteco.minuku.config;
 
 import android.location.Location;
 
@@ -9,18 +9,18 @@ import java.util.HashMap;
 
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.model.SemanticLocationDataRecord;
-import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 
 /**
  * Created by shriti on 8/16/16.
  */
-public class SelectedLocation extends ActionObject{
+public class SelectedLocation {
 
     private String place;
     private String address;
     private double latitude;
     private double longitude;
     private String label;
+    private int imageResourceId;
 
     public SelectedLocation() {
         super();
@@ -28,7 +28,7 @@ public class SelectedLocation extends ActionObject{
 
     public SelectedLocation(String place, String address, double latitude, double longitude,
                             String label, int imageResourceID) {
-        super(place, imageResourceID);
+        //super(place, imageResourceID);
         this.place = place;
         this.address = address;
         this.latitude = latitude;
@@ -69,12 +69,10 @@ public class SelectedLocation extends ActionObject{
         this.longitude = longitude;
     }
 
-    @Override
     public String getLabel() {
         return label;
     }
 
-    @Override
     public void setLabel(String label) {
         this.label = label;
     }
@@ -82,4 +80,6 @@ public class SelectedLocation extends ActionObject{
     public String getPreferenceKey() {
         return this.place;
     }
+
+    public int getImageResourceId() { return this.imageResourceId; }
 }

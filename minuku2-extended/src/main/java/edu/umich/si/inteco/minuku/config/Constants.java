@@ -76,4 +76,5 @@ public class Constants {
 
 
     public static final String TAPPED_NOTIFICATION_ID_KEY = "TAPPED_NOTIFICATION_ID" ;
+    public static final String SELECTED_LOCATIONS = "USERPREF_SELECTED_LOCATIONS";
 }

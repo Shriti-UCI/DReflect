@@ -1,4 +1,4 @@
-package edu.umich.si.inteco.minuku_2.preferences;
+package edu.umich.si.inteco.minuku.config;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -8,10 +8,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import edu.umich.si.inteco.minuku.config.UserPreferences;
 
 /**
  * Created by neerajkumar on 8/23.
@@ -77,7 +74,7 @@ public class LocationPreference {
         Type typeOfListObject = new TypeToken<List<SelectedLocation>>(){}.getType();
         Gson gson = new Gson();
         String serializedLocationList = UserPreferences.getInstance()
-                .getPreference(ApplicationConstants.SELECTED_LOCATIONS);
+                .getPreference(Constants.SELECTED_LOCATIONS);
         if(serializedLocationList == null) {
             return new ArrayList<>();
         }
@@ -87,7 +84,7 @@ public class LocationPreference {
     private void persistSelectedLocations() {
         Type typeOfListObject = new TypeToken<List<SelectedLocation>>(){}.getType();
         Gson gson = new Gson();
-        UserPreferences.getInstance().writePreference(ApplicationConstants.SELECTED_LOCATIONS,
+        UserPreferences.getInstance().writePreference(Constants.SELECTED_LOCATIONS,
                 gson.toJson(selectedLocationList, typeOfListObject));
     }
 }

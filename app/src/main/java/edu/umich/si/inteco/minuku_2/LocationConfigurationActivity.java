@@ -20,8 +20,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
-import edu.umich.si.inteco.minuku_2.preferences.LocationPreference;
-import edu.umich.si.inteco.minuku_2.preferences.SelectedLocation;
+import edu.umich.si.inteco.minuku.config.LocationPreference;
+import edu.umich.si.inteco.minuku.config.SelectedLocation;
 
 /**
  * Created by shriti on 8/16/16.

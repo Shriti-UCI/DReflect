@@ -1,14 +1,10 @@
 package edu.umich.si.inteco.minuku_2;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import edu.umich.si.inteco.minuku_2.preferences.LocationArrayListAdapter;
-import edu.umich.si.inteco.minuku_2.preferences.LocationPreference;
+import edu.umich.si.inteco.minuku.config.LocationPreference;
 
 /**
  * Created by shriti on 8/15/16.

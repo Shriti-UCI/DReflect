@@ -6,14 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.List;
 
-import edu.umich.si.inteco.minuku.config.UserPreferences;
+import edu.umich.si.inteco.minuku.config.LocationPreference;
+import edu.umich.si.inteco.minuku.config.SelectedLocation;
 import edu.umich.si.inteco.minuku_2.R;
-import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 
 /**
  * Created by shriti on 8/16/16.
