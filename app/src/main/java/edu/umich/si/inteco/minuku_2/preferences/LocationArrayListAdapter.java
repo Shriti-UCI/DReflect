@@ -22,15 +22,12 @@ public class LocationArrayListAdapter extends ArrayAdapter<SelectedLocation> {
 
     public final Context context;
     public final List<SelectedLocation> items;
-    public UserPreferences mUserPreferences;
 
 
-    public LocationArrayListAdapter(Context context, List<SelectedLocation> objects,
-                                    UserPreferences userPreferences) {
+    public LocationArrayListAdapter(Context context, List<SelectedLocation> objects) {
         super(context, R.layout.listitem_locationpreference, objects);
         this.context = context;
         this.items = objects;
-        this.mUserPreferences = userPreferences;
     }
 
     @Override
@@ -48,10 +45,8 @@ public class LocationArrayListAdapter extends ArrayAdapter<SelectedLocation> {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUserPreferences.removePreference(LocationPreference.selectedLocationList.
-                        get(position).getPreferenceKey());
-                remove(LocationPreference.selectedLocationList.get(position));
-
+                remove(LocationPreference.getInstance().getLocations().get(position));
+                LocationPreference.getInstance().deleteLocation(position);
             }
         });
 

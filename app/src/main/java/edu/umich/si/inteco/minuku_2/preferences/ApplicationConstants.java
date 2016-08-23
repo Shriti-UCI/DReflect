@@ -26,6 +26,7 @@ public class ApplicationConstants {
     public static final String NOTIFICATION_CATEGORY_MOOD_REPORT = "MOOD_REPORT_NOTIF";
     public static final String NOTIFICATION_CATEGORY_MOOD_ANNOTATION = "MOOD_ANNOTATION_NOTIF";
 
+    public static final String SELECTED_LOCATIONS = "USERPREF_SELECTED_LOCATIONS";
 }
 
 

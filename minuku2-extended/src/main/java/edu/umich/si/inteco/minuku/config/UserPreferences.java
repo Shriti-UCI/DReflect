@@ -24,7 +24,7 @@ import edu.umich.si.inteco.minukucore.user.User;
  * user, firebase information etc.
  *
  */
-public class UserPreferences<T> {
+public class UserPreferences {
 
     private static AtomicInteger numActivities = new AtomicInteger(0);
     private String LOG_TAG = "UserPreferences";
@@ -87,21 +87,7 @@ public class UserPreferences<T> {
         return storedUser;
     }
 
-    public void addObjectToPreference(Object myObject, String key) {
-        writePreference(key,convertObjectToJson(myObject, key));
-    }
 
-    public T getObjectFromJson(Class<T> objectType, String key) {
-        Gson gson = new Gson();
-        String json = mMyPreferences.getString(key, "");
-         T obj = gson.fromJson(json, objectType);
-        return obj;
-    }
-    private String convertObjectToJson(Object myObject, String key) {
-        Gson gson = new Gson();
-        String json = gson.toJson(myObject);
-        return json;
-    }
 
 }
 

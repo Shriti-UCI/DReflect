@@ -100,7 +100,7 @@ public class LocationConfigurationActivity extends BaseActivity implements OnMap
             return;
         }
         Log.d(TAG, "Check for location permissions. Now updating location markers on map");
-        LocationPreference.updateMapMarkers(googleMap);
+        LocationPreference.getInstance().updateMapMarkers(googleMap);
     }
 
     @Override
@@ -155,12 +155,10 @@ public class LocationConfigurationActivity extends BaseActivity implements OnMap
                         place.getLatLng().latitude, place.getLatLng().longitude, locationLabel,
                         R.drawable.ic_delete_black_24dp);
 
-                LocationPreference.addLocation(newLocation);
+                LocationPreference.getInstance().addLocation(newLocation);
                 Log.d(TAG, "Updating the map with location markers");
-                LocationPreference.updateMapMarkers(mGoogleMap);
+                LocationPreference.getInstance().updateMapMarkers(mGoogleMap);
                 Log.d(TAG, "Adding location data to preferences");
-                mSharedPref.addObjectToPreference(newLocation, newLocation.getPreferenceKey());
-
             }
         }
 
