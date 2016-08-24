@@ -79,6 +79,12 @@ public class MinukuNotificationManager extends Service implements NotificationMa
             ShowNotificationEvent notification = entry.getValue();
             Integer notificationID = entry.getKey();
             Integer counter = notificationCounterMap.get(notificationID);
+            if(counter == null) {
+                /* TODO(neerajkumar): This is happening due to concurrent modification. Fix it */
+                continue;
+            }
+            Log.d(TAG, "Counter : " + counter);
+            Log.d(TAG, "Notification " + notification.getExpirationTimeSeconds());
             if(counter == notification.getExpirationTimeSeconds()) {
                 Log.d(TAG, "Counter for " + notification.getTitle() + " is matching.");
 
@@ -194,6 +200,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                 notificationClickedEvent.getNotificationId());
         Integer notificationId = getNotificationIdIfValid(
                 notificationClickedEvent.getNotificationId());
+        Log.d(TAG, "Valid notifiation id retrieved is " + notificationId);
         unregisterNotification(notificationId);
     }
 
@@ -219,8 +226,11 @@ public class MinukuNotificationManager extends Service implements NotificationMa
      */
     private boolean unregisterNotification(Integer aNotificaitonId) {
         if(registeredNotifications.containsKey(aNotificaitonId)) {
-            registeredNotifications.get(aNotificaitonId).setClickedTimeMs(new Date().getTime());
-            categorizedNotificationMap.remove(registeredNotifications.get(aNotificaitonId));
+            ShowNotificationEvent notifiation = registeredNotifications.get(aNotificaitonId);
+            notifiation.setClickedTimeMs(new Date().getTime());
+            categorizedNotificationMap.remove(notifiation);
+            registeredNotifications.remove(notifiation);
+            notificationCounterMap.remove(aNotificaitonId);
             try {
                 MinukuDAOManager.getInstance()
                         .getDaoFor(ShowNotificationEvent.class)
@@ -229,7 +239,6 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                 e.printStackTrace();
                 Log.e(TAG, "Could not notification info to DAO", e);
             }
-            notificationCounterMap.remove(aNotificaitonId);
         }
         // Notification was already unregistered at some earlier time or was never registered.
         // This is not a failure case, hence we return true.

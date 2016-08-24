@@ -60,7 +60,7 @@ public class BaseActivity extends AppCompatActivity implements
 
     protected View mLayout;
 
-    protected UserSubmissionStats mUserSubmissionStats;
+    protected static UserSubmissionStats mUserSubmissionStats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,7 +187,7 @@ public class BaseActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        mSharedPref.writePreference(Constants.CAN_SHOW_NOTIFICATION, Constants.NO);
+        /*mSharedPref.writePreference(Constants.CAN_SHOW_NOTIFICATION, Constants.NO);
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -213,11 +213,14 @@ public class BaseActivity extends AppCompatActivity implements
                     gotUserStatsFromDatabase(null);
                 }
             }
-        });
+        });*/
     }
 
     protected void gotUserStatsFromDatabase(UserSubmissionStats userSubmissionStats) {
+        Log.d(LOG_TAG, "setting mUserSubmissionStats");
         mUserSubmissionStats = userSubmissionStats;
+        if(mUserSubmissionStats==null)
+            Log.d(LOG_TAG, "???");
     }
 
     @Override

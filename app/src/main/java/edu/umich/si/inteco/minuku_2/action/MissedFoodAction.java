@@ -7,12 +7,14 @@ import org.greenrobot.eventbus.Subscribe;
 
 
 import java.util.HashMap;
+import java.util.Map;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku_2.QuestionnaireActivity;
 import edu.umich.si.inteco.minuku_2.R;
 import edu.umich.si.inteco.minuku_2.event.MissedFoodEvent;
 import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
+import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEventBuilder;
 
@@ -30,6 +32,10 @@ public class MissedFoodAction {
     @Subscribe
     public void handleMissedFoodAction(MissedFoodEvent missedFoodEvent) {
         Log.d(TAG, "Handling no data event for  food image");
+        Map<String, String> dataSentToQuestinnaireActivity = new HashMap<>();
+        dataSentToQuestinnaireActivity.put(Constants.BUNDLE_KEY_FOR_QUESTIONNAIRE_ID,
+                String.valueOf(QuestionConfig.missedReportQuestionnaire_2.getID()));
+
         EventBus.getDefault().post(
                 new ShowNotificationEventBuilder()
                 .setExpirationAction(ShowNotificationEvent.ExpirationAction.DISMISS)
@@ -39,7 +45,7 @@ public class MissedFoodAction {
                 .setTitle("")
                 .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MISSED_ACTIVITY)
                 .setMessage(Constants.MISSED_DATA_FOOD_PROMPT_TITLE)
-                .setParams(new HashMap<String, String>())
+                .setParams(dataSentToQuestinnaireActivity)
                 .createShowNotificationEvent());
     }
 }

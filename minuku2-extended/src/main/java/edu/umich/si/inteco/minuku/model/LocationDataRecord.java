@@ -46,4 +46,9 @@ public class LocationDataRecord implements DataRecord {
     public void setCreationTime(long creationTime) {
         this.creationTime = creationTime;
     }
+
+    @Override
+    public String toString() {
+        return "Loc:" + this.latitude + ":" + this.longitude;
+    }
 }

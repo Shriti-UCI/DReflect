@@ -137,10 +137,20 @@ public class SemanticLocationStreamGenerator
             loc2.setLatitude(selectedLocation.getLatitude());
             loc2.setLongitude(selectedLocation.getLongitude());
 
+            Log.d(TAG, "Location 1 " + convertLocToString(loc1) +
+                    ", Location 2 " + convertLocToString(loc2));
+
             if(loc1.distanceTo(loc2) < 50) {
+                Log.d(TAG, "Found matching location " + selectedLocation.getAddress());
                 return new SemanticLocationDataRecord(selectedLocation.getLabel());
+            } else {
+                Log.d(TAG, "Distance was " + loc1.distanceTo(loc2));
             }
         }
         return new SemanticLocationDataRecord("unknown");
+    }
+
+    private String convertLocToString(Location l) {
+        return "" + l.getLongitude() + " : " + l.getLatitude();
     }
 }

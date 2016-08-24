@@ -2,7 +2,9 @@ package edu.umich.si.inteco.minuku_2;
 
 import android.app.Notification;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,8 +14,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.UUID;
+import org.greenrobot.eventbus.EventBus;
 
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.AnnotatedImageDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.FreeResponseQuestionDAO;
 import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
@@ -22,6 +29,7 @@ import edu.umich.si.inteco.minuku.dao.MultipleChoiceQuestionDAO;
 import edu.umich.si.inteco.minuku.dao.NoteDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.NotificationDAO;
 import edu.umich.si.inteco.minuku.dao.SemanticLocationDataRecordDAO;
+import edu.umich.si.inteco.minuku.dao.UserSubmissionStatsDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuNotificationManager;
 import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
@@ -62,7 +70,9 @@ import edu.umich.si.inteco.minuku_2.streamgenerator.GlucoseReadingImageStreamGen
 import edu.umich.si.inteco.minuku_2.streamgenerator.InsulinAdminImageStreamGenerator;
 import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
+import edu.umich.si.inteco.minukucore.event.MinukuEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
+import edu.umich.si.inteco.minukucore.event.Subscribe;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
 
@@ -71,10 +81,13 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
     private TextView compensationMessage;
 
+    //private UserSubmissionStats mUserSubmissionStats;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        compensationMessage = (TextView) findViewById(R.id.compensation_message);
 
         initializeActionList();
         startService(new Intent(getBaseContext(), BackgroundService.class));
@@ -126,6 +139,10 @@ public class MainActivity extends BaseActivity {
         //Notification DAO
         NotificationDAO notificationDAO = new NotificationDAO();
         daoManager.registerDaoFor(ShowNotificationEvent.class, notificationDAO);
+
+        //UserSubmissionStats DAO
+        UserSubmissionStatsDAO userSubmissionStatsDAO = new UserSubmissionStatsDAO();
+        daoManager.registerDaoFor(UserSubmissionStats.class, userSubmissionStatsDAO);
 
         // Create corresponding stream generators. Only to be created once in Main Activity
         //creating a new stream registers it with the stream manager
@@ -279,7 +296,42 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
+
         super.onResume();
+        mSharedPref.writePreference(Constants.CAN_SHOW_NOTIFICATION, Constants.NO);
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                Future<UserSubmissionStats> submissionStatsFuture = ((UserSubmissionStatsDAO)
+                        MinukuDAOManager.getInstance().getDaoFor(UserSubmissionStats.class)).get();
+                while (!submissionStatsFuture.isDone()) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                //
+                try {
+                    Log.d(TAG, "getting mUserSubmissionStats from future " +
+                            submissionStatsFuture.get().getTotalSubmissionCount());
+                    UserSubmissionStats userSubmissionStats = submissionStatsFuture.get();
+                    if(userSubmissionStats==null)
+                        userSubmissionStats = new UserSubmissionStats();
+                    gotUserStatsFromDatabase(userSubmissionStats);
+                    EventBus.getDefault().post(userSubmissionStats);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    Log.d(TAG, "Creating mUserSubmissionStats");
+                    gotUserStatsFromDatabase(null);
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                    Log.d(TAG, "Creating mUserSubmissionStats");
+                    gotUserStatsFromDatabase(null);
+                }
+            }
+        });
     }
 
     private void showSettingsScreen() {
@@ -296,7 +348,10 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void gotUserStatsFromDatabase(UserSubmissionStats userSubmissionStats) {
         super.gotUserStatsFromDatabase(userSubmissionStats);
-        compensationMessage = (TextView) findViewById(R.id.compensation_message);
+    }
+
+    @org.greenrobot.eventbus.Subscribe
+    public void populateCompensationMessage(UserSubmissionStats userSubmissionStats) {
         if(userSubmissionStats != null) {
             Log.d(TAG, "populating the compensation message");
             compensationMessage.setText(getCompensationMessage());

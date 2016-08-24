@@ -10,9 +10,8 @@ package edu.umich.si.inteco.minukucore.model.question;
 public class MultipleChoice extends Question {
 
     private int numChoices;
-    private String[] choiceValues;
-
-    private Integer[] answerValue;
+    private String[] labels;
+    private Integer[] selectedAnswerValues;
 
     public MultipleChoice () {
 
@@ -27,7 +26,7 @@ public class MultipleChoice extends Question {
     public MultipleChoice(String aQuestion, int aNumChoices, String[] aChoiceValues) {
         super(aQuestion);
         numChoices = aNumChoices;
-        choiceValues = aChoiceValues;
+        labels = aChoiceValues;
     }
 
     /**
@@ -42,23 +41,23 @@ public class MultipleChoice extends Question {
      *
      * @return The labels for choices.
      */
-    public String[] getChoiceValues() {
-        return choiceValues;
+    public String[] getLabels() {
+        return labels;
     }
 
     /**
      *
      * @return The answer selected by the user.
      */
-    public Integer[] getAnswerValue() {
-        return answerValue;
+    public Integer[] getSelectedAnswerValues() {
+        return selectedAnswerValues;
     }
 
     /**
      * Sets the answer value.
      * @param aAnswerValue The answer selected by the user.
      */
-    public void setAnswerValue(Integer[] aAnswerValue) {
-        this.answerValue = aAnswerValue;
+    public void setSelectedAnswerValues(Integer[] aAnswerValue) {
+        this.selectedAnswerValues = aAnswerValue;
     }
 }

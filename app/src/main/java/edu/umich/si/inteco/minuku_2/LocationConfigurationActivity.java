@@ -1,5 +1,6 @@
 package edu.umich.si.inteco.minuku_2;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -104,7 +105,7 @@ public class LocationConfigurationActivity extends BaseActivity implements OnMap
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             Log.d(TAG, "PLACE_PICKER_REQUEST obtained");
 
@@ -123,6 +124,7 @@ public class LocationConfigurationActivity extends BaseActivity implements OnMap
 
                 final EditText userInput = (EditText) promptsView
                         .findViewById(R.id.editTextDialogUserInput);
+                final Context mContext = this;
 
                 // set dialog message
                 alertDialogBuilder
@@ -133,6 +135,18 @@ public class LocationConfigurationActivity extends BaseActivity implements OnMap
                                         // get user input and set it to result
                                         // edit text
                                         locationLabel = userInput.getText().toString();
+                                        Place place = PlacePicker.getPlace(data, mContext);
+                                        String placename = String.format("%s", place.getName());
+                                        String address = String.format("%s", place.getAddress());
+                                        Log.d(TAG, "Adding location to the preferred location list");
+                                        SelectedLocation newLocation = new SelectedLocation(placename, address,
+                                                place.getLatLng().latitude, place.getLatLng().longitude, locationLabel,
+                                                R.drawable.ic_delete_black_24dp);
+
+                                        LocationPreference.getInstance().addLocation(newLocation);
+                                        Log.d(TAG, "Updating the map with location markers");
+                                        LocationPreference.getInstance().updateMapMarkers(mGoogleMap);
+                                        Log.d(TAG, "Adding location data to preferences");
                                     }
                                 })
                         .setNegativeButton("Cancel",
@@ -147,18 +161,6 @@ public class LocationConfigurationActivity extends BaseActivity implements OnMap
                 // show it
                 alertDialog.show();
 
-                Place place = PlacePicker.getPlace(data, this);
-                String placename = String.format("%s", place.getName());
-                String address = String.format("%s", place.getAddress());
-                Log.d(TAG, "Adding location to the preferred location list");
-                SelectedLocation newLocation = new SelectedLocation(placename, address,
-                        place.getLatLng().latitude, place.getLatLng().longitude, locationLabel,
-                        R.drawable.ic_delete_black_24dp);
-
-                LocationPreference.getInstance().addLocation(newLocation);
-                Log.d(TAG, "Updating the map with location markers");
-                LocationPreference.getInstance().updateMapMarkers(mGoogleMap);
-                Log.d(TAG, "Adding location data to preferences");
             }
         }
 

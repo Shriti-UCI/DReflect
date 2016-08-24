@@ -34,6 +34,14 @@ public class UserSubmissionStats implements DataRecord {
 
     public UserSubmissionStats() {
         this.creationTime = new Date().getTime();
+        this.questionCount =0;
+        this.moodCount =0;
+        this.totalImageCount=0;
+        this.totalSubmissionCount=0;
+        this.glucoseReadingCount=0;
+        this.insulinCount=0;
+        this.foodCount=0;
+        this.othersCount=0;
     }
 
     @Override

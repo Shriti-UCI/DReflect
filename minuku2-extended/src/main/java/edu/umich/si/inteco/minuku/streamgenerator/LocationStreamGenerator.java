@@ -130,6 +130,8 @@ public class LocationStreamGenerator extends AndroidStreamGenerator<LocationData
                 (float)latitude.get(),
                 (float)longitude.get());
         mStream.add(locationDataRecord);
+        Log.d(TAG, "Location to be sent to event bus" + locationDataRecord);
+
         // also post an event.
         EventBus.getDefault().post(locationDataRecord);
         try {
@@ -170,9 +172,12 @@ public class LocationStreamGenerator extends AndroidStreamGenerator<LocationData
 
             // If the location is accurate to 30 meters, it's good enough for us.
             // Post an update event and exit.
-            if (location.getAccuracy() < 30.0f) {
+            if (location.getAccuracy() < 50.0f) {
+                Log.d(TAG, "Location is accurate upto 50 meters");
                 this.latitude.set(location.getLatitude());
                 this.longitude.set(location.getLongitude());
+            } else {
+                Log.d(TAG, "Location is not accurate");
             }
         }
     }

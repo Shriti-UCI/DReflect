@@ -6,6 +6,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku_2.QuestionnaireActivity;
@@ -13,6 +14,7 @@ import edu.umich.si.inteco.minuku_2.R;
 import edu.umich.si.inteco.minuku_2.event.MissedGlucoseReadingEvent;
 import edu.umich.si.inteco.minuku_2.event.MoodDataExpectedActionEvent;
 import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
+import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEventBuilder;
 
@@ -30,6 +32,10 @@ public class MissedGlucoseReadingAction {
     @Subscribe
     public void handleMissedGlucoseReading(MissedGlucoseReadingEvent missedDataActionEvent) {
         Log.d(TAG, "Handling no data event for Glucose Reading Image");
+        Map<String, String> dataSentToQuestinnaireActivity = new HashMap<>();
+        dataSentToQuestinnaireActivity.put(Constants.BUNDLE_KEY_FOR_QUESTIONNAIRE_ID,
+                String.valueOf(QuestionConfig.missedReportQuestionnaire_1.getID()));
+
         EventBus.getDefault().post(
                 new ShowNotificationEventBuilder()
                         .setExpirationAction(ShowNotificationEvent.ExpirationAction.DISMISS)
@@ -39,6 +45,6 @@ public class MissedGlucoseReadingAction {
                         .setTitle(Constants.MISSED_DATA_GLUCOSE_READING_PROMPT_TITLE)
                         .setMessage("")
                         .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MISSED_ACTIVITY)
-                        .setParams(new HashMap<String, String>())
+                        .setParams(dataSentToQuestinnaireActivity)
                         .createShowNotificationEvent());    }
 }

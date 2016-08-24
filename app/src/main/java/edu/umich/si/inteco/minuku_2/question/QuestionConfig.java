@@ -63,6 +63,7 @@ public class QuestionConfig {
             new FreeResponse(MOOD_CHANGE_POS_QU_STRING);
 
     public static LinkedList<Question> questionsList = new LinkedList();
+    public static LinkedList<Questionnaire> questionnaires = new LinkedList<>();
     private static List<Question> list1 = new LinkedList<>();
     private static List<Question> list2 = new LinkedList<>();
     private static List<Question> list3 = new LinkedList<>();
@@ -104,6 +105,11 @@ public class QuestionConfig {
         list4.add(MOOD_CHANGE_POS_QU);
         moodChangePosQuestionnaire = new Questionnaire(4, list4);
 
+        questionnaires.add(missedReportQuestionnaire_1);
+        questionnaires.add(missedReportQuestionnaire_2);
+        questionnaires.add(moodChangeNegQuestionnaire);
+        questionnaires.add(moodChangePosQuestionnaire);
+
     }
 
     // make this a singleton
@@ -134,6 +140,9 @@ public class QuestionConfig {
                 e.printStackTrace();
             }
         }
+        for(Questionnaire questionnaire: questionnaires) {
+            QuestionManager.getInstance().registerQuestionnaire(questionnaire, questionnaire.getID());
+        }
     }
 
     public static <T extends Question, E extends FormElementController> E getControllerFor(
@@ -151,7 +160,7 @@ public class QuestionConfig {
                             String.valueOf(aQuestion.getID()),
                             aQuestion.getQuestion(),
                             true /* isRequired */,
-                            Arrays.asList(mcq.getChoiceValues()),
+                            Arrays.asList(mcq.getLabels()),
                             true /* useItemsAsValues */);
         }
         throw new QuestionNotFoundException();

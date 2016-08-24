@@ -5,24 +5,20 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.github.dkharrat.nexusdialog.FormActivity;
 import com.github.dkharrat.nexusdialog.FormController;
 import com.github.dkharrat.nexusdialog.FormElementController;
-import com.github.dkharrat.nexusdialog.controllers.EditTextController;
 import com.github.dkharrat.nexusdialog.controllers.FormSectionController;
-import com.github.dkharrat.nexusdialog.controllers.LabeledFieldController;
-import com.github.dkharrat.nexusdialog.controllers.SelectionController;
 
 import java.util.*;
 
+import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.manager.QuestionManager;
 import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
+import edu.umich.si.inteco.minukucore.exception.QuestionNotFoundException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
@@ -52,7 +48,8 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
         setContentView(R.layout.custom_form);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        setupForm(savedInstanceState);
+
+        setupForm(getIntent().getExtras());
 
         acceptButton = (ImageView) findViewById(R.id.acceptButton);
         rejectButton = (ImageView) findViewById(R.id.rejectButton);
@@ -73,22 +70,29 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
                 rejectResults();
             }
         });
-
+        questionControllerMap = QuestionManager.getInstance().getQuestionFormControllerMap();
     }
 
     protected void setupForm(Bundle savedInstanceState) {
         formController = new FormController(this);
 
-        Log.d(TAG, "creating form");
+        int questionnaireId = Integer.valueOf(savedInstanceState.getString(Constants.BUNDLE_KEY_FOR_QUESTIONNAIRE_ID));
+
+        Log.d(TAG, "creating form for questionnaire ID " + questionnaireId);
         //get questionnaire ID from bundle
         //QuestionManager.getInstance().getQuestionnaireForID(ID)
         //
         FormSectionController section = new FormSectionController(this, "Personal Info");
-        QuestionConfig.getInstance().setUpQuestions(getApplicationContext());
-        questionControllerMap = QuestionManager.getInstance().getQuestionFormControllerMap();
-        for (Map.Entry<T, FormElementController> entry:questionControllerMap.entrySet()) {
-            section.addElement(entry.getValue());
+
+        for(Question q : QuestionManager.getInstance().getQuestionnaireForID(questionnaireId).getQuestionnaire()) {
+            try {
+                section.addElement(QuestionConfig.getControllerFor(q, getApplicationContext()));
+            } catch (QuestionNotFoundException e) {
+                Log.d(TAG, "A question passed to question config was not found", e);
+
+            }
         }
+
         //section.addElement(new EditTextController(this, "firstName", "First name"));
         //section.addElement(new EditTextController(this, "lastName", "Last name"));
         formController.addSection(section);
@@ -104,23 +108,36 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
         //Object firstName = formController.getModel().getValue();
         //Object lastName = formController.getModel().getValue("lastName");
 
+
+
         for (Map.Entry<T, FormElementController> entry:questionControllerMap.entrySet()) {
             T question = entry.getKey();
             Object answer = formController.getModel().getValue(String.valueOf(question.getID()));
             if(question instanceof FreeResponse) {
-                ((FreeResponse) question).setAnswer(answer.toString());
+                if(answer!=null)
+                    ((FreeResponse) question).setAnswer(answer.toString());
+                else
+                    ((FreeResponse) question).setAnswer("");
                 MinukuStreamManager.getInstance()
-                        .getStreamGeneratorFor(FreeResponse.class)
-                        .offer((FreeResponse) question);
+                            .getStreamGeneratorFor(FreeResponse.class)
+                            .offer((FreeResponse) question);
             }
             if(question instanceof MultipleChoice) {
-                Log.d(TAG, answer.toString());
-                Set<Integer> answerSet = (HashSet<Integer>) answer;
-                List<Integer> answers = new ArrayList<Integer>();
-                for(Object someAnswer: answerSet.toArray()) {
-                    answers.add(Integer.valueOf((String)someAnswer));
+                Set<String> answerSet = new HashSet<>();
+                if(answer != null) {
+                    answerSet = (HashSet<String>) answer;
+                    Log.d(TAG, answer.toString());
                 }
-                ((MultipleChoice) question).setAnswerValue(answers.toArray(new Integer[0]));
+
+                List<Integer> answers = new ArrayList<Integer>();
+
+                MultipleChoice mcq = (MultipleChoice) question;
+                List<String> answerChoices = Arrays.asList(mcq.getLabels());
+
+                for(String someAnswer: answerSet) {
+                    answers.add(answerChoices.indexOf(someAnswer));
+                }
+                ((MultipleChoice) question).setSelectedAnswerValues(answers.toArray(new Integer[0]));
                 MinukuStreamManager.getInstance()
                         .getStreamGeneratorFor(MultipleChoice.class)
                         .offer((MultipleChoice) question);

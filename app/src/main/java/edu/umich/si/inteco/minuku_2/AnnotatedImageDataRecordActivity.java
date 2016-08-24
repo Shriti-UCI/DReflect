@@ -101,7 +101,10 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                         Log.d(TAG, "Saving results to the database");
                         streamGenerator.offer(glucoseReadingImage);
                         Log.d(TAG, "increment glucose reading image count");
-                        mUserSubmissionStats.incrementGlucoseReadingCount();
+                        if(mUserSubmissionStats!=null)
+                            mUserSubmissionStats.incrementGlucoseReadingCount();
+                        else
+                            Log.d(TAG, "mUSerSubmissionStats is null");
                     } catch (StreamNotFoundException e) {
                         e.printStackTrace();
                         Log.e(TAG, "The photo stream does not exist on this device.");
