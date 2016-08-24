@@ -137,6 +137,7 @@ public class SemanticLocationStreamGenerator
             loc2.setLatitude(selectedLocation.getLatitude());
             loc2.setLongitude(selectedLocation.getLongitude());
 
+            // Due to accuracy settings we have used, this can actually be upto 80 meters.
             Log.d(TAG, "Location 1 " + convertLocToString(loc1) +
                     ", Location 2 " + convertLocToString(loc2));
 

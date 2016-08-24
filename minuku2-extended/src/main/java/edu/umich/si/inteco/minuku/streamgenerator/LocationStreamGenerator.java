@@ -22,6 +22,8 @@ import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
+import edu.umich.si.inteco.minuku.event.DecrementLoadingProcessCountEvent;
+import edu.umich.si.inteco.minuku.event.IncrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
@@ -79,6 +81,9 @@ public class LocationStreamGenerator extends AndroidStreamGenerator<LocationData
         }
 
         Log.d(TAG, "Stream " + TAG + " registered successfully");
+
+        EventBus.getDefault().post(new IncrementLoadingProcessCountEvent());
+
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
@@ -98,6 +103,8 @@ public class LocationStreamGenerator extends AndroidStreamGenerator<LocationData
                     e.printStackTrace();
                 } catch (ExecutionException e) {
                     e.printStackTrace();
+                } finally {
+                    EventBus.getDefault().post(new DecrementLoadingProcessCountEvent());
                 }
             }
         });

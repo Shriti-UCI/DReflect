@@ -1,10 +1,9 @@
 package edu.umich.si.inteco.minuku_2;
 
-import android.app.Notification;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,10 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.AnnotatedImageDataRecordDAO;
@@ -54,6 +55,8 @@ import edu.umich.si.inteco.minuku_2.action.MoodDataExpectedAction;
 import edu.umich.si.inteco.minuku_2.dao.FoodImageDAO;
 import edu.umich.si.inteco.minuku_2.dao.GlucoseReadingImageDAO;
 import edu.umich.si.inteco.minuku_2.dao.InsulinAdminImageDAO;
+import edu.umich.si.inteco.minuku.event.DecrementLoadingProcessCountEvent;
+import edu.umich.si.inteco.minuku.event.IncrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku_2.model.FoodImage;
 import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
@@ -70,9 +73,7 @@ import edu.umich.si.inteco.minuku_2.streamgenerator.GlucoseReadingImageStreamGen
 import edu.umich.si.inteco.minuku_2.streamgenerator.InsulinAdminImageStreamGenerator;
 import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
-import edu.umich.si.inteco.minukucore.event.MinukuEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
-import edu.umich.si.inteco.minukucore.event.Subscribe;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
 
@@ -80,12 +81,15 @@ public class MainActivity extends BaseActivity {
 
     private static final String TAG = "MainActivity";
     private TextView compensationMessage;
+    private AtomicInteger loadingProcessCount = new AtomicInteger(0);
+    private ProgressDialog loadingProgressDialog;
 
     //private UserSubmissionStats mUserSubmissionStats;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         compensationMessage = (TextView) findViewById(R.id.compensation_message);
 
@@ -94,6 +98,10 @@ public class MainActivity extends BaseActivity {
         startService(new Intent(getBaseContext(), MinukuNotificationManager.class));
 
         UUID dummyUUID = UUID.randomUUID();
+        EventBus.getDefault().register(this);
+
+        loadingProgressDialog = ProgressDialog.show(MainActivity.this,
+                "Loading data", "Fetching information",true);
 
         // DAO initialization stuff
         MinukuDAOManager daoManager = MinukuDAOManager.getInstance();
@@ -350,14 +358,44 @@ public class MainActivity extends BaseActivity {
         super.gotUserStatsFromDatabase(userSubmissionStats);
     }
 
-    @org.greenrobot.eventbus.Subscribe
+    @Subscribe
     public void populateCompensationMessage(UserSubmissionStats userSubmissionStats) {
+        Log.d(TAG, "Attempting to update compesnation message");
         if(userSubmissionStats != null) {
             Log.d(TAG, "populating the compensation message");
-            compensationMessage.setText(getCompensationMessage());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    compensationMessage.setText(getCompensationMessage());
+                }});
             Log.d(TAG, getCompensationMessage());
         } else {
             compensationMessage.setText(" ");
+        }
+    }
+
+    @Subscribe
+    public void incrementLoadingProcessCount(IncrementLoadingProcessCountEvent event) {
+        Integer loadingCount = loadingProcessCount.incrementAndGet();
+        Log.d(TAG, "Incrementing loading processes count: " + loadingCount);
+    }
+
+    @Subscribe
+    public void decrementLoadingProcessCountEvent(DecrementLoadingProcessCountEvent event) {
+        Integer loadingCount = loadingProcessCount.decrementAndGet();
+        Log.d(TAG, "Decrementing loading processes count: " + loadingCount);
+        maybeRemoveProgressDialog(loadingCount);
+    }
+
+    private void maybeRemoveProgressDialog(Integer loadingCount) {
+        if(loadingCount <= 0) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    loadingProgressDialog.hide();
+                }
+            });
+
         }
     }
 }
