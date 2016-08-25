@@ -37,6 +37,9 @@ dependencies {
 
     compile 'com.google.code.gson:gson:2.7'
 
+    /* for custom shaped images in gridview */
+    compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+
 
 }
 

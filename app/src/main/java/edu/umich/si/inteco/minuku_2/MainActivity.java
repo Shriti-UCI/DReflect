@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +73,7 @@ import edu.umich.si.inteco.minuku_2.streamgenerator.FoodImageStreamGenerator;
 import edu.umich.si.inteco.minuku_2.streamgenerator.GlucoseReadingImageStreamGenerator;
 import edu.umich.si.inteco.minuku_2.streamgenerator.InsulinAdminImageStreamGenerator;
 import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
+import edu.umich.si.inteco.minuku_2.view.helper.CustomGridAdapter;
 import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
@@ -202,10 +204,11 @@ public class MainActivity extends BaseActivity {
 
     //populate the list of elements in home screen
     private void initializeActionList() {
-        final ListView listview = (ListView) findViewById(R.id.list_view_actions_list);
-
+        //final ListView listview = (ListView) findViewById(R.id.list_view_actions_list);
+        //final GridView gridView = (GridView) findViewById(R.id.list_view_actions_list);
+        final GridView gridView;
         // the action object is the model behind the list that is shown on the main screen.
-        final ActionObject[] array = {
+        /**final ActionObject[] array = {
                 new ActionObject("Take Glucose Reading Picture", "A", R.drawable.glucose_reading),
                 new ActionObject("Take Insulin Shot Picture", "A", R.drawable.insulin_shot),
                 new ActionObject("Take Food Pitcure", "A", R.drawable.food),
@@ -214,14 +217,92 @@ public class MainActivity extends BaseActivity {
                 new ActionObject("Upload Screenshot", "A", R.drawable.camera),
                 new ActionObject("Take Notes","A", R.drawable.blue_circle)
                 //new ActionObject("Answer some questions", "A", R.drawable.blue_circle)
+        };**/
+
+        String[] web = {
+                "Take Glucose Reading Picture",
+                "Take Insulin Shot Picture",
+                "Take Food Pitcure",
+                "Take Other Pictures",
+                "Record Your Mood",
+                "Upload Screenshot",
+                "Record Notes"
         };
+
+        int[] imageID = {
+                R.drawable.glucose_reading,
+                R.drawable.insulin_shot,
+                R.drawable.food,
+                R.drawable.camera,
+                R.drawable.mood,
+                R.drawable.blue_circle,
+                R.drawable.analysis
+        };
+
+        final CustomGridAdapter customGridAdapter = new CustomGridAdapter(MainActivity.this,
+                web, imageID);
+        gridView = (GridView) findViewById(R.id.list_view_actions_list);
+        gridView.setAdapter(customGridAdapter);
         // The adapter takes the action object array and converts it into a view that can be
         // rendered as a list, one item at a time.
-        final StableArrayAdapter adapter = new StableArrayAdapter(
+        /**final StableArrayAdapter adapter = new StableArrayAdapter(
                 this.getApplicationContext(), array);
         listview.setAdapter(adapter);
 
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle extras = new Bundle();
+                // The position here corresponds to position of objects in the array passed above.
+                switch (position) {
+                    case 0:
+                        Intent addGlucoseReadingPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
+                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_GLUCOSE_READIMG);
+                        addGlucoseReadingPhotoIntent.putExtras(extras);
+                        startActivity(addGlucoseReadingPhotoIntent);
+                        break;
+                    case 1:
+                        Intent addInsulinShotPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
+                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_INSULIN_SHOT);
+                        addInsulinShotPhotoIntent.putExtras(extras);
+                        startActivity(addInsulinShotPhotoIntent);
+                        break;
+                    case 2:
+                        Intent addFoodPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
+                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_FOOD);
+                        addFoodPhotoIntent.putExtras(extras);
+                        startActivity(addFoodPhotoIntent);
+                        break;
+                    case 3:
+                        Intent addOtherPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
+                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_OTHERS);
+                        addOtherPhotoIntent.putExtras(extras);
+                        startActivity(addOtherPhotoIntent);
+                        break;
+                    case 4:
+                        Intent addMoodIntent = new Intent(MainActivity.this,
+                                MoodDataRecordActivity.class);
+                        startActivity(addMoodIntent);
+                        break;
+                    case 5:
+                        Intent uploadScreenshotIntent = new Intent(MainActivity.this, UploadScreenshotActivity.class);
+                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_GALLERY_UPLOAD);
+                        uploadScreenshotIntent.putExtras(extras);
+                        startActivity(uploadScreenshotIntent);
+                        break;
+                    case 6:
+                        Intent noteEntryIntent = new Intent(MainActivity.this,
+                                NoteEntryActivity.class);
+                        startActivity(noteEntryIntent);
+                        break;
+                    default:
+                        showToast("Clicked unknown");
+                        break;
+                }
+            }
+        });**/
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Bundle extras = new Bundle();

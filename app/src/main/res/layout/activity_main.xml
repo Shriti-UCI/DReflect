@@ -13,21 +13,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <ListView
+        android:orientation="vertical"
+        android:gravity="center">
+        <GridView
             android:id="@+id/list_view_actions_list"
             android:drawSelectorOnTop="true"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
             android:layout_weight="1"
-            android:dividerHeight="2dp"
-            android:scrollbars="none" />
+            android:dividerHeight="5dp"
+            android:scrollbars="vertical"
+            android:numColumns="3"
+            android:gravity="center"
+            android:columnWidth="120dp"
+            android:stretchMode="spacingWidthUniform"
+            android:horizontalSpacing="8dp"
+            android:verticalSpacing="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/compensation_message"
-            android:text="You are now eligible for your daily reward!"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
     </LinearLayout>
 </RelativeLayout>
