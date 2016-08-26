@@ -82,7 +82,7 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
         //get questionnaire ID from bundle
         //QuestionManager.getInstance().getQuestionnaireForID(ID)
         //
-        FormSectionController section = new FormSectionController(this, "Personal Info");
+        FormSectionController section = new FormSectionController(this, "Please answer the following questions");
 
         for(Question q : QuestionManager.getInstance().getQuestionnaireForID(questionnaireId).getQuestionnaire()) {
             try {
@@ -93,8 +93,6 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
             }
         }
 
-        //section.addElement(new EditTextController(this, "firstName", "First name"));
-        //section.addElement(new EditTextController(this, "lastName", "Last name"));
         formController.addSection(section);
 
         ViewGroup containerView = (ViewGroup)findViewById(R.id.form_elements_container);

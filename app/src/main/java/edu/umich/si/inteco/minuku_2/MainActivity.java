@@ -78,6 +78,7 @@ import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
+import edu.umich.si.inteco.minukucore.user.User;
 
 public class MainActivity extends BaseActivity {
 
@@ -220,23 +221,25 @@ public class MainActivity extends BaseActivity {
         };**/
 
         String[] web = {
-                "Take Glucose Reading Picture",
-                "Take Insulin Shot Picture",
-                "Take Food Pitcure",
-                "Take Other Pictures",
-                "Record Your Mood",
-                "Upload Screenshot",
-                "Record Notes"
+                "Record Glucose Reading",
+                "Record Insulin Shot   ",
+                "Record Food           ",
+                "Record Mood           ",
+                "Record Notes          ",
+                "Upload Screenshots    ",
+                "Record Other Pictures ",
+                "Check Credit          "
         };
 
         int[] imageID = {
-                R.drawable.glucose_reading,
-                R.drawable.insulin_shot,
-                R.drawable.food,
-                R.drawable.camera,
-                R.drawable.mood,
-                R.drawable.blue_circle,
-                R.drawable.analysis
+                R.drawable.glucometer_color,
+                R.drawable.vaccine_color,
+                R.drawable.food_plate_color,
+                R.drawable.smiley_color,
+                R.drawable.note_color,
+                R.drawable.picture_color,
+                R.drawable.photo_camera_color,
+                R.drawable.money_bag_color
         };
 
         final CustomGridAdapter customGridAdapter = new CustomGridAdapter(MainActivity.this,
@@ -326,13 +329,13 @@ public class MainActivity extends BaseActivity {
                         addFoodPhotoIntent.putExtras(extras);
                         startActivity(addFoodPhotoIntent);
                         break;
-                    case 3:
+                    case 6:
                         Intent addOtherPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
                         extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_OTHERS);
                         addOtherPhotoIntent.putExtras(extras);
                         startActivity(addOtherPhotoIntent);
                         break;
-                    case 4:
+                    case 3:
                         Intent addMoodIntent = new Intent(MainActivity.this,
                                 MoodDataRecordActivity.class);
                         startActivity(addMoodIntent);
@@ -343,10 +346,15 @@ public class MainActivity extends BaseActivity {
                         uploadScreenshotIntent.putExtras(extras);
                         startActivity(uploadScreenshotIntent);
                         break;
-                    case 6:
+                    case 4:
                         Intent noteEntryIntent = new Intent(MainActivity.this,
                                 NoteEntryActivity.class);
                         startActivity(noteEntryIntent);
+                        break;
+                    case 7:
+                        //money bag
+                        Intent displayCreditIntent = new Intent(MainActivity.this, DisplayCreditActivity.class);
+                        startActivity(displayCreditIntent);
                         break;
                     default:
                         showToast("Clicked unknown");
@@ -442,17 +450,18 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void populateCompensationMessage(UserSubmissionStats userSubmissionStats) {
         Log.d(TAG, "Attempting to update compesnation message");
-        if(userSubmissionStats != null) {
+        if(userSubmissionStats != null && isEligibleForReward(userSubmissionStats)) {
             Log.d(TAG, "populating the compensation message");
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    compensationMessage.setText(getCompensationMessage());
+                    compensationMessage.setText("You are now eligible for today's reward!");
+                    compensationMessage.setVisibility(View.VISIBLE);
                 }});
-            Log.d(TAG, getCompensationMessage());
         } else {
-            compensationMessage.setText(" ");
-        }
+                compensationMessage.setText("");
+                compensationMessage.setVisibility(View.INVISIBLE);
+            }
     }
 
     @Subscribe
@@ -478,5 +487,10 @@ public class MainActivity extends BaseActivity {
             });
 
         }
+    }
+
+    @Subscribe
+    public boolean isEligibleForReward(UserSubmissionStats userSubmissionStats) {
+        return getRewardRelevantSubmissionCount(userSubmissionStats) >= ApplicationConstants.MIN_REPORTS_TO_GET_REWARD;
     }
 }

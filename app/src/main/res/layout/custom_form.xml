@@ -20,7 +20,6 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:descendantFocusability="beforeDescendants"
-            android:theme="@style/Base.TextAppearance.AppCompat.Display1"
             style="@style/NormalText">
         </LinearLayout>
 
@@ -28,8 +27,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Base.TextAppearance.AppCompat.Display1">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/rejectButton"

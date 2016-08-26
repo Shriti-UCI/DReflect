@@ -3,6 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Got somthing more to say? Please use this space to record anything you want!"
+        android:id="@+id/note_hint"
+        android:background="@color/primary_dark"
+        android:textColor="@android:color/white" />
     <EditText
         android:id="@+id/note_data"
         android:layout_alignParentTop="true"

@@ -18,15 +18,14 @@
         <GridView
             android:id="@+id/list_view_actions_list"
             android:drawSelectorOnTop="true"
-            android:layout_weight="1"
             android:dividerHeight="5dp"
             android:scrollbars="vertical"
-            android:numColumns="3"
+            android:numColumns="2"
             android:gravity="center"
-            android:columnWidth="120dp"
+            android:columnWidth="160dp"
             android:stretchMode="spacingWidthUniform"
-            android:horizontalSpacing="8dp"
-            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+            android:verticalSpacing="3dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -34,6 +33,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/compensation_message"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:background="@color/primary_dark"
+            android:textColor="@android:color/white"
+            android:visibility="invisible"/>
+
     </LinearLayout>
+
 </RelativeLayout>

@@ -10,34 +10,23 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:gravity="center">
-        <!-- <ImageView
-            android:id="@+id/grid_icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginRight="6dip" />-->
         <com.github.siyamed.shapeimageview.CircularImageView
-            android:id="@+id/grid_icon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:siBorderWidth="2dp"
-            app:siBorderColor="@color/dark_grey" />
-        <!--<com.github.siyamed.shapeimageview.RoundedImageView
             android:id="@+id/grid_icon"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            app:siRadius="6dp"
             app:siBorderWidth="2dp"
-            app:siBorderColor="@color/dark_grey"
-            app:siSquare="true"/> -->
+            app:siBorderColor="@color/primary_dark"
+            android:layout_alignParentLeft="true"/>
         <TextView
-            style="@style/NormalText"
             android:id="@+id/grid_text"
             android:layout_marginTop="5dp"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="13dp"
             android:layout_below="@+id/grid_icon"
-            android:gravity="left"/>
+            android:gravity="left"
+            android:textColor="@android:color/tertiary_text_dark"
+            android:textStyle="bold"/>
     </RelativeLayout>
 
 

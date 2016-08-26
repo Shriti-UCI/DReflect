@@ -28,6 +28,7 @@ import com.google.android.gms.location.places.Places;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -38,6 +39,7 @@ import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.event.NotificationClickedEvent;
+import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 
 /**
  * Created by shriti on 7/22/16.
@@ -331,36 +333,10 @@ public class BaseActivity extends AppCompatActivity implements
                 mUserSubmissionStats);
     }
 
-    public String getCompensationMessage() {
-        String compensationMessage;
-        int relevantDataCount = mUserSubmissionStats.getFoodCount()+
-                mUserSubmissionStats.getGlucoseReadingCount()+
-                mUserSubmissionStats.getInsulinCount()+
-                mUserSubmissionStats.getMoodCount();
-
-        double reward;
-        double compensationAmount = relevantDataCount*0.10;
-        if(compensationAmount<=1)
-            reward=compensationAmount;
-        else
-            reward = 1.0;
-
-        if(relevantDataCount>=2){
-            Log.d(LOG_TAG, "User has required number of data points for today");
-            compensationMessage = "You are now eligible for today's reward!\n" +
-                    "Total Responses today: " +String.valueOf(relevantDataCount)+".\n" +
-                    "Tasks Remaining: End of day diary\n" +
-                    "Today's Reward Point: $" + String.valueOf(reward);
-        }
-        else {
-            int remainingDataCount = 2-relevantDataCount;
-            compensationMessage = "You have "+ String.valueOf(remainingDataCount) +
-                    " more responses remaining before you become " +
-                    "eligible for today's reward.\n" +
-                    "Tasks Remaining: at least " + String.valueOf(remainingDataCount) + " reports" +
-                    " and End of day dairy\n" +
-                    "Today's Reward Point: $" + String.valueOf(reward);
-        }
-        return compensationMessage;
+    public int getRewardRelevantSubmissionCount(UserSubmissionStats userSubmissionStats) {
+        return (userSubmissionStats.getGlucoseReadingCount() +
+                userSubmissionStats.getInsulinCount() +
+                userSubmissionStats.getFoodCount()+
+                userSubmissionStats.getMoodCount());
     }
 }

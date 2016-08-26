@@ -25,6 +25,8 @@ public class ApplicationConstants {
     public static final String NOTIFICATION_CATEGORY_MISSED_ACTIVITY = "MISSED_IMAGE_REPORT_NOTIF";
     public static final String NOTIFICATION_CATEGORY_MOOD_REPORT = "MOOD_REPORT_NOTIF";
     public static final String NOTIFICATION_CATEGORY_MOOD_ANNOTATION = "MOOD_ANNOTATION_NOTIF";
+
+    public static final int MIN_REPORTS_TO_GET_REWARD = 2;
 }
 
 

@@ -8,9 +8,9 @@
         android:id="@+id/image"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
         android:layout_width="match_parent"
-        android:layout_height="350dp" />
+        android:layout_height="350dp"
+        android:background="@color/primary_dark"/>
 
     <TextView
         android:id="@+id/annotation_title"
@@ -24,29 +24,36 @@
         android:background="@color/primary_dark"
         android:textColor="@android:color/white"/>
 
-    <EditText
-        android:id="@+id/image_annotation"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/annotation_title"
-        android:layout_centerHorizontal="true" />
+        android:id="@+id/text_input_section">
+        <EditText
+            android:id="@+id/image_annotation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="#828587"
+            android:inputType="text"/>
+    </android.support.design.widget.TextInputLayout>
 
     <ImageView
         android:id="@+id/rejectButton"
-        android:src="@drawable/ic_clear_black_24dp"
+        android:src="@drawable/cancel_grey"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginLeft="10dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/image_annotation"/>
+        android:layout_below="@+id/text_input_section"/>
 
     <ImageView
         android:id="@+id/acceptButton"
-        android:src="@drawable/ic_done_black_24dp"
+        android:src="@drawable/checked_grey"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/image_annotation"/>
+        android:layout_below="@+id/text_input_section"/>
 
 </RelativeLayout>
