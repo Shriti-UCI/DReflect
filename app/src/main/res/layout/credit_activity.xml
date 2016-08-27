@@ -9,7 +9,7 @@
         android:id="@+id/general_compensation_message"
         android:textColor="@android:color/white"
         android:padding="10dp"
-        android:background="@color/primary_dark"
+        android:background="@color/colorPrimaryDark"
         style="@style/Base.TextAppearance.AppCompat.Medium"
         android:textAlignment="center"/>
     <TextView

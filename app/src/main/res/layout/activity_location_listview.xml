@@ -11,7 +11,7 @@
         android:paddingTop="10dp"
         style="@style/NormalText"
         android:textColor="@android:color/white"
-        android:background="@color/primary_dark"/>
+        android:background="@color/colorPrimaryDark"/>
 <ListView
     android:layout_width="match_parent"
     android:layout_height="match_parent"

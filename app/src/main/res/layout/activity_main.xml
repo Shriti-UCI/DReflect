@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/compensation_message"
         android:gravity="center"
-        android:background="@color/primary_dark"
+        android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
         android:visibility="invisible"
         android:layout_below="@+id/list_view_actions_list"

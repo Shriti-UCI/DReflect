@@ -8,7 +8,7 @@
         android:layout_height="80dp"
         android:text="Got somthing more to say? Please use this space to record anything you want!"
         android:id="@+id/note_hint"
-        android:background="@color/primary_dark"
+        android:background="@color/colorPrimaryDark"
         android:textColor="@android:color/white"
         style="@style/Base.TextAppearance.AppCompat.Medium"
         android:padding="10dp"/>
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="E.g., comment for researchers, feedback for the application."
-        android:background="@color/primary_dark"
+        android:background="@color/colorPrimaryDark"
         android:textColor="@android:color/white"
         style="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_below="@+id/note_hint"
@@ -38,7 +38,7 @@
 
         <ImageView
             android:id="@+id/rejectButton"
-            android:src="@drawable/reject"
+            android:src="@drawable/close_red"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginLeft="10dp"
@@ -47,7 +47,7 @@
 
         <ImageView
             android:id="@+id/acceptButton"
-            android:src="@drawable/accept"
+            android:src="@drawable/tick_green"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginRight="10dp"

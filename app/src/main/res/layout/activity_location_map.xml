@@ -19,7 +19,7 @@
             android:text="Add New Location"
             android:id ="@+id/addLocationButton"
             style="?android:attr/buttonBarStyle"
-            android:background="@color/primary_dark"
+            android:background="@color/colorPrimaryDark"
             android:textColor="@android:color/white"
             android:textSize="20dp"/>
         <View
@@ -34,7 +34,7 @@
             android:text="View Saved Locations"
             android:id ="@+id/seeLocationButton"
             style="?android:attr/buttonBarStyle"
-            android:background="@color/primary_dark"
+            android:background="@color/colorPrimaryDark"
             android:textColor="@android:color/white"
             android:textSize="20dp"
             android:layout_below="@+id/button_divider"/>

@@ -40,7 +40,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:src="@drawable/cancel_grey" />
+            android:src="@drawable/close_red" />
 
         <ImageView
             android:layout_width="45dp"
@@ -56,6 +56,6 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:src="@drawable/checked_grey" />
+            android:src="@drawable/tick_green" />
     </RelativeLayout>
 </LinearLayout>
