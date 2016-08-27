@@ -9,26 +9,36 @@
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="400dp"/>
-    <Button
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:text="Add new location"
-        android:id ="@+id/addLocationButton"
-        style="?android:attr/buttonBarStyle"
-        android:background="@color/primary_dark"
-        android:textColor="@android:color/white"
-        android:textSize="20dp"/>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/white"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="View saved locations"
-        android:id ="@+id/seeLocationButton"
-        style="?android:attr/buttonBarStyle"
-        android:background="@color/primary_dark"
-        android:textColor="@android:color/white"
-        android:textSize="20dp"/>
+        android:layout_height="200dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Add New Location"
+            android:id ="@+id/addLocationButton"
+            style="?android:attr/buttonBarStyle"
+            android:background="@color/primary_dark"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/white"
+            android:id="@+id/button_divider"
+            android:layout_below="@id/addLocationButton"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="View Saved Locations"
+            android:id ="@+id/seeLocationButton"
+            style="?android:attr/buttonBarStyle"
+            android:background="@color/primary_dark"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:layout_below="@+id/button_divider"/>
+
+    </RelativeLayout>
+
 </LinearLayout>

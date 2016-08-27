@@ -5,17 +5,31 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:text="Got somthing more to say? Please use this space to record anything you want!"
         android:id="@+id/note_hint"
         android:background="@color/primary_dark"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:padding="10dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="E.g., comment for researchers, feedback for the application."
+        android:background="@color/primary_dark"
+        android:textColor="@android:color/white"
+        style="@style/Base.TextAppearance.AppCompat.Medium"
+        android:layout_below="@+id/note_hint"
+        android:paddingLeft="10dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="10dp" />
     <EditText
         android:id="@+id/note_data"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:singleLine="false"
-        android:layout_height="200dp" />
+        android:layout_height="400dp"
+        style="@style/Base.Theme.AppCompat.Dialog.Alert"/>
 
     <RelativeLayout
         android:layout_below="@id/note_data"

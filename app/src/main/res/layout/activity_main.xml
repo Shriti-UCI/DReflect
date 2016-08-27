@@ -10,11 +10,6 @@
     tools:context="edu.umich.si.inteco.minuku_2.MainActivity"
     android:id="@+id/main_layout">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
         <GridView
             android:id="@+id/list_view_actions_list"
             android:drawSelectorOnTop="true"
@@ -27,17 +22,18 @@
             android:horizontalSpacing="10dp"
             android:verticalSpacing="3dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TextView
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/compensation_message"
-            android:textAlignment="center"
-            android:background="@color/primary_dark"
-            android:textColor="@android:color/white"
-            android:visibility="invisible"/>
+            android:paddingTop="5dp"
+            android:paddingBottom="15dp"/>
 
-    </LinearLayout>
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/compensation_message"
+        android:gravity="center"
+        android:background="@color/primary_dark"
+        android:textColor="@android:color/white"
+        android:visibility="invisible"
+        android:layout_below="@+id/list_view_actions_list"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>
