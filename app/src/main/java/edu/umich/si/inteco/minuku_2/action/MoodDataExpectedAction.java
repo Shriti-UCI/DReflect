@@ -33,9 +33,9 @@ public class MoodDataExpectedAction {
                         .setExpirationAction(ShowNotificationEvent.ExpirationAction.DISMISS)
                         .setExpirationTimeSeconds(Constants.MOOD_NOTIFICATION_EXPIRATION_TIME)
                         .setViewToShow(MoodDataRecordActivity.class)
-                        .setIconID(R.drawable.analysis)
+                        .setIconID(R.drawable.bell_yellow)
                         .setTitle(Constants.MOOD_REMINDER_TITLE)
-                        .setMessage("")
+                        .setMessage(Constants.MOOD_REMINDER_MESSAGE)
                         .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MOOD_REPORT)
                         .setParams(new HashMap<String, String>())
                         .createShowNotificationEvent());

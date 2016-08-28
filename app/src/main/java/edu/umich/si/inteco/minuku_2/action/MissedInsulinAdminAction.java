@@ -41,9 +41,9 @@ public class MissedInsulinAdminAction {
                         .setExpirationAction(ShowNotificationEvent.ExpirationAction.DISMISS)
                         .setExpirationTimeSeconds(Constants.MISSED_REPORT_NOTIFICATION_EXPIRATION_TIME)
                         .setViewToShow(QuestionnaireActivity.class)
-                        .setIconID(R.drawable.analysis)
-                        .setTitle(Constants.MISSED_DATA_INSULIN_ADMIN_PROMPT_TITLE)
-                        .setMessage("")
+                        .setIconID(R.drawable.bell_yellow)
+                        .setTitle(Constants.MISSED_ACTIVITY_DATA_PROMPT_TITLE)
+                        .setMessage(Constants.MISSED_ACTIVITY_DATA_PROMPT_MESSAGE)
                         .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MISSED_ACTIVITY)
                         .setParams(dataSentToQuestinnaireActivity)
                         .createShowNotificationEvent());

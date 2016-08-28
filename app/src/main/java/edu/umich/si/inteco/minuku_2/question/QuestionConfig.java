@@ -29,8 +29,11 @@ public class QuestionConfig {
     // notification title - we want to hear from you!
     public static final String MISSED_REPORT_QU_1_STRING =
             "How busy are you currently?";
+    public static final String[] MISSED_REPORT_QU_1_VALUES =
+            {"Very Busy", "Somewhat Busy", "Not Busy", "Don't Know"};
+
     public static final Question MISSED_REPORT_QU_1 =
-            new FreeResponse(MISSED_REPORT_QU_1_STRING);
+            new MultipleChoice(MISSED_REPORT_QU_1_STRING, 4, MISSED_REPORT_QU_1_VALUES);
 
     public static final String MISSED_REPORT_QU_2_STRING =
             "What have you been doing in the last 2 hours?";
@@ -50,7 +53,20 @@ public class QuestionConfig {
 
     //mood change questions
     //notification title - tell us what happened?
-    public static final String MOOD_CHANGE_NEG_QU_STRING =
+    public static final String MOOD_CHANGE_QU_1_STRING =
+            "There seems to be a considerable change in your mood. " +
+                    "Did something happen that changed your mood?";
+    public static final String[] MOOD_CHANGE_QU_1_VALUES ={"Yes", "No"};
+    public static final Question MOOD_CHANGE_QU_1=
+            new MultipleChoice(MOOD_CHANGE_QU_1_STRING, 2, MOOD_CHANGE_QU_1_VALUES);
+
+    public static final String MOOD_CHANGE_QU_2_STRING =
+            "If yes, what happened?";
+    public static final Question MOOD_CHANGE_QU_2=
+            new FreeResponse(MOOD_CHANGE_QU_2_STRING);
+
+
+    /**public static final String MOOD_CHANGE_NEG_QU_STRING =
             "You went from being in a good mood to bad mood." +
             "Did something happen that changed your mood?";
     public static final Question MOOD_CHANGE_NEG_QU=
@@ -60,19 +76,17 @@ public class QuestionConfig {
             "You went from being in a bad mood to good mood." +
             "Did something happen that changed your mood?";
     public static final Question MOOD_CHANGE_POS_QU=
-            new FreeResponse(MOOD_CHANGE_POS_QU_STRING);
+            new FreeResponse(MOOD_CHANGE_POS_QU_STRING);**/
 
     public static LinkedList<Question> questionsList = new LinkedList();
     public static LinkedList<Questionnaire> questionnaires = new LinkedList<>();
     private static List<Question> list1 = new LinkedList<>();
     private static List<Question> list2 = new LinkedList<>();
     private static List<Question> list3 = new LinkedList<>();
-    private static List<Question> list4 = new LinkedList<>();
 
     public static Questionnaire missedReportQuestionnaire_1;
     public static Questionnaire missedReportQuestionnaire_2;
-    public static Questionnaire moodChangeNegQuestionnaire;
-    public static Questionnaire moodChangePosQuestionnaire;
+    public static Questionnaire moodChangeQuestionnaire;
 
 
 
@@ -81,15 +95,15 @@ public class QuestionConfig {
         MISSED_REPORT_QU_2.setID(2);
         MISSED_REPORT_QU_3.setID(3);
         MISSED_REPORT_QU_4.setID(4);
-        MOOD_CHANGE_NEG_QU.setID(5);
-        MOOD_CHANGE_POS_QU.setID(6);
+        MOOD_CHANGE_QU_1.setID(5);
+        MOOD_CHANGE_QU_2.setID(6);
 
         questionsList.add(MISSED_REPORT_QU_1);
         questionsList.add(MISSED_REPORT_QU_2);
         questionsList.add(MISSED_REPORT_QU_3);
         questionsList.add(MISSED_REPORT_QU_4);
-        questionsList.add(MOOD_CHANGE_NEG_QU);
-        questionsList.add(MOOD_CHANGE_POS_QU);
+        questionsList.add(MOOD_CHANGE_QU_1);
+        questionsList.add(MOOD_CHANGE_QU_2);
 
         list1.add(MISSED_REPORT_QU_1);
         list1.add(MISSED_REPORT_QU_2);
@@ -99,17 +113,13 @@ public class QuestionConfig {
         list2.add(MISSED_REPORT_QU_4);
         missedReportQuestionnaire_2 = new Questionnaire(2, list2);
 
-        list3.add(MOOD_CHANGE_NEG_QU);
-        moodChangeNegQuestionnaire = new Questionnaire(3, list3);
-
-        list4.add(MOOD_CHANGE_POS_QU);
-        moodChangePosQuestionnaire = new Questionnaire(4, list4);
+        list3.add(MOOD_CHANGE_QU_1);
+        list3.add(MOOD_CHANGE_QU_2);
+        moodChangeQuestionnaire = new Questionnaire(3, list3);
 
         questionnaires.add(missedReportQuestionnaire_1);
         questionnaires.add(missedReportQuestionnaire_2);
-        questionnaires.add(moodChangeNegQuestionnaire);
-        questionnaires.add(moodChangePosQuestionnaire);
-
+        questionnaires.add(moodChangeQuestionnaire);
     }
 
     // make this a singleton

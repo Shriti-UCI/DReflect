@@ -37,16 +37,16 @@ public class MoodAnnotationExpectedAction {
 
         Map<String, String> dataSentToQuestinnaireActivity = new HashMap<>();
         dataSentToQuestinnaireActivity.put(Constants.BUNDLE_KEY_FOR_QUESTIONNAIRE_ID,
-                String.valueOf(QuestionConfig.moodChangeNegQuestionnaire.getID()));
+                String.valueOf(QuestionConfig.moodChangeQuestionnaire.getID()));
 
         EventBus.getDefault().post(
                 new ShowNotificationEventBuilder()
                         .setExpirationAction(ShowNotificationEvent.ExpirationAction.DISMISS)
                         .setExpirationTimeSeconds(Constants.MOOD_NOTIFICATION_EXPIRATION_TIME)
                         .setViewToShow(QuestionnaireActivity.class)
-                        .setIconID(R.drawable.analysis)
+                        .setIconID(R.drawable.bell_yellow)
                         .setTitle(Constants.MOOD_ANNOTATION_TITLE)
-                        .setMessage("")
+                        .setMessage(Constants.MOOD_ANNOTATION_MESSAGE)
                         .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MOOD_ANNOTATION)
                         .setParams(dataSentToQuestinnaireActivity)
                         .createShowNotificationEvent()

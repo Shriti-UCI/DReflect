@@ -41,10 +41,10 @@ public class MissedFoodAction {
                 .setExpirationAction(ShowNotificationEvent.ExpirationAction.DISMISS)
                 .setExpirationTimeSeconds(Constants.MISSED_REPORT_NOTIFICATION_EXPIRATION_TIME)
                 .setViewToShow(QuestionnaireActivity.class)
-                .setIconID(R.drawable.analysis)
-                .setTitle("")
+                .setIconID(R.drawable.bell_yellow)
+                .setTitle(Constants.MISSED_ACTIVITY_DATA_PROMPT_TITLE)
                 .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MISSED_ACTIVITY)
-                .setMessage(Constants.MISSED_DATA_FOOD_PROMPT_TITLE)
+                .setMessage(Constants.MISSED_ACTIVITY_DATA_PROMPT_MESSAGE)
                 .setParams(dataSentToQuestinnaireActivity)
                 .createShowNotificationEvent());
     }

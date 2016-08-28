@@ -52,11 +52,17 @@ public class Constants {
     // Notification related constants
     public static final String CAN_SHOW_NOTIFICATION = "ENABLE_NOTIFICATIONS";
 
-    public static final String MOOD_REMINDER_TITLE = "From Mood Reminder: How are you feeling right now?";
-    public static final String MISSED_DATA_GLUCOSE_READING_PROMPT_TITLE = "From Glucose Reading: We want to hear from you!";
-    public static final String MISSED_DATA_INSULIN_ADMIN_PROMPT_TITLE = "From Insulin Admin: What are you upto?";
-    public static final String MISSED_DATA_FOOD_PROMPT_TITLE = "From Food: What are you upto?";
-    public static final String MOOD_ANNOTATION_TITLE = "From Mood Annotation: What happened to your mood?";
+    public static final String MOOD_REMINDER_TITLE = "How are you feeling right now?";
+    public static final String MOOD_REMINDER_MESSAGE = "Tap here to report your mood.";
+
+    public static final String MOOD_ANNOTATION_TITLE = "Tell us more about your mood";
+    public static final String MOOD_ANNOTATION_MESSAGE = "Tap here answer one quick question.";
+
+    public static final String MISSED_ACTIVITY_DATA_PROMPT_TITLE = "We want to hear from you!";
+    public static final String MISSED_ACTIVITY_DATA_PROMPT_MESSAGE = "Tap here to answer some questions.";
+
+
+
 
 
     //default queue size
