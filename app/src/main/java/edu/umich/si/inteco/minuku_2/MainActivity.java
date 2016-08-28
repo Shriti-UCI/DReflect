@@ -17,6 +17,7 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -411,11 +412,15 @@ public class MainActivity extends BaseActivity {
                 }
                 //
                 try {
-                    Log.d(TAG, "getting mUserSubmissionStats from future " +
-                            submissionStatsFuture.get().getTotalSubmissionCount());
+                    /*Log.d(TAG, "getting mUserSubmissionStats from future " +
+                            submissionStatsFuture.get().getTotalSubmissionCount());*/
                     UserSubmissionStats userSubmissionStats = submissionStatsFuture.get();
-                    if(userSubmissionStats==null)
+                    //date check - ensuring that every day we have a new instance of submission
+                    // stats. Needs to be tested
+                    if(!areDatesEqual(userSubmissionStats.creationTime, new Date().getTime())
+                            || userSubmissionStats==null) {
                         userSubmissionStats = new UserSubmissionStats();
+                    }
                     gotUserStatsFromDatabase(userSubmissionStats);
                     EventBus.getDefault().post(userSubmissionStats);
                 } catch (InterruptedException e) {

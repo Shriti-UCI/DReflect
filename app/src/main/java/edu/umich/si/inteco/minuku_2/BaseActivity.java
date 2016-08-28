@@ -28,6 +28,7 @@ import com.google.android.gms.location.places.Places;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -338,5 +339,21 @@ public class BaseActivity extends AppCompatActivity implements
                 userSubmissionStats.getInsulinCount() +
                 userSubmissionStats.getFoodCount()+
                 userSubmissionStats.getMoodCount());
+    }
+
+
+    protected boolean areDatesEqual(long currentTime, long previousTime) {
+        Log.d(LOG_TAG, "Checking if the both moods were recorded on the same day");
+
+        Calendar currentDate = Calendar.getInstance();
+        Calendar previousDate = Calendar.getInstance();
+
+        currentDate.setTimeInMillis(currentTime);
+        previousDate.setTimeInMillis(previousTime);
+        Log.d(LOG_TAG, "Current:" + currentDate.toString() + " Previous:" + previousDate.toString());
+
+        boolean sameDay = currentDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                previousDate.get(Calendar.DAY_OF_YEAR) == previousDate.get(Calendar.DAY_OF_YEAR);
+        return sameDay;
     }
 }

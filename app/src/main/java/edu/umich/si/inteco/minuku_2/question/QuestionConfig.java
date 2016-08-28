@@ -28,15 +28,15 @@ public class QuestionConfig {
     //missed report questions v1
     // notification title - we want to hear from you!
     public static final String MISSED_REPORT_QU_1_STRING =
-            "How busy are you currently?";
+            "Have you been busy for the last couple hours?";
     public static final String[] MISSED_REPORT_QU_1_VALUES =
-            {"Very Busy", "Somewhat Busy", "Not Busy", "Don't Know"};
+            {"Yes", "No"};
 
     public static final Question MISSED_REPORT_QU_1 =
-            new MultipleChoice(MISSED_REPORT_QU_1_STRING, 4, MISSED_REPORT_QU_1_VALUES);
+            new MultipleChoice(MISSED_REPORT_QU_1_STRING, 2, MISSED_REPORT_QU_1_VALUES);
 
     public static final String MISSED_REPORT_QU_2_STRING =
-            "What have you been doing in the last 2 hours?";
+            "What have you been doing in the last two hours?";
     public static final Question MISSED_REPORT_QU_2 =
             new FreeResponse(MISSED_REPORT_QU_2_STRING);
 
