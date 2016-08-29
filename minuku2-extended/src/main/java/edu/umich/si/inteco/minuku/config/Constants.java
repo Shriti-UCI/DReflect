@@ -84,4 +84,6 @@ public class Constants {
     public static final String TAPPED_NOTIFICATION_ID_KEY = "TAPPED_NOTIFICATION_ID" ;
     public static final String SELECTED_LOCATIONS = "USERPREF_SELECTED_LOCATIONS";
     public static final String BUNDLE_KEY_FOR_QUESTIONNAIRE_ID = "QUESTIONNAIRE_ID";
+    public static final String APP_NAME = "Minuku";
+    public static final String RUNNING_APP_DECLARATION = APP_NAME + " is running in the background";
 }

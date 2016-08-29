@@ -27,7 +27,15 @@ public class BackgroundService extends Service {
 
     public BackgroundService() {
         streamManager = MinukuStreamManager.getInstance();
-        //EventBus.getDefault().register(this);
+
+        Notification note  = new Notification.Builder(this)
+                .setContentTitle(Constants.APP_NAME)
+                .setContentText(Constants.RUNNING_APP_DECLARATION)
+                .setSmallIcon(edu.umich.si.inteco.minuku.R.drawable.cast_ic_notification_small_icon)
+                .setAutoCancel(false)
+                .build();
+        note.flags |= Notification.FLAG_NO_CLEAR;
+        startForeground( 42, note );
     }
 
     @Override
@@ -45,7 +53,7 @@ public class BackgroundService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "Destroying service.");
+        Log.d(TAG, "Destroying service. Your state might be lost!");
     }
 
     @Override

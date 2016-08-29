@@ -1,6 +1,7 @@
 package edu.umich.si.inteco.minukucore.event;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 
@@ -21,6 +22,7 @@ public class ShowNotificationEvent implements DataRecord {
     public String category = null;
     public int expirationCount = 0;
     public Integer id;
+    public Integer counter;
 
     @Override
     public long getCreationTime() {
@@ -66,6 +68,7 @@ public class ShowNotificationEvent implements DataRecord {
         this.viewToShow = viewToShow;
         this.expirationAction = expirationAction;
         this.params = params;
+        this.counter = new Integer(0);
     }
 
     public String getTitle() {

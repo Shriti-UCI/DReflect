@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import edu.umich.si.inteco.minuku.R;
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.NotificationDAO;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
@@ -34,9 +35,8 @@ import edu.umich.si.inteco.minukucore.manager.NotificationManager;
  */
 public class MinukuNotificationManager extends Service implements NotificationManager {
 
-    private static AtomicInteger CURRENT_NOTIFICATION_ID = new AtomicInteger(Integer.MIN_VALUE);
+    private static AtomicInteger CURRENT_NOTIFICATION_ID = new AtomicInteger(Integer.MIN_VALUE + 5);
     private Map<Integer, ShowNotificationEvent> registeredNotifications;
-    private Map<Integer, Integer> notificationCounterMap;
     private android.app.NotificationManager mNotificationManager;
     private Map<String, ShowNotificationEvent> categorizedNotificationMap;
     private NotificationDAO mDAO;
@@ -44,10 +44,18 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     public MinukuNotificationManager() {
         Log.d(TAG, "Started minuku notification manager");
         registeredNotifications = new HashMap<>();
-        notificationCounterMap = new HashMap<>();
         categorizedNotificationMap = new HashMap<>();
         mDAO = MinukuDAOManager.getInstance().getDaoFor(ShowNotificationEvent.class);
         EventBus.getDefault().register(this);
+
+        Notification note  = new Notification.Builder(this)
+                .setContentTitle(Constants.APP_NAME)
+                .setContentText(Constants.RUNNING_APP_DECLARATION)
+                .setSmallIcon(R.drawable.cast_ic_notification_small_icon)
+                .setAutoCancel(false)
+                .build();
+        note.flags |= Notification.FLAG_NO_CLEAR;
+        startForeground( 42, note );
     }
 
     @Override
@@ -68,6 +76,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
 
         checkRegisteredNotifications();
 
+
         return START_STICKY_COMPATIBILITY;
     }
 
@@ -78,9 +87,9 @@ public class MinukuNotificationManager extends Service implements NotificationMa
         for(Map.Entry<Integer, ShowNotificationEvent> entry: registeredNotifications.entrySet()) {
             ShowNotificationEvent notification = entry.getValue();
             Integer notificationID = entry.getKey();
-            Integer counter = notificationCounterMap.get(notificationID);
+            Integer counter = entry.getValue().counter;
             Log.d(TAG, "Counter : " + counter);
-            Log.d(TAG, "Notification " + notification.getExpirationTimeSeconds());
+            Log.d(TAG, "Notification id " +  notificationID + "" + notification.getExpirationTimeSeconds());
             if(counter == null) {
                 Log.d(TAG, "The notification with " + notificationID + " is null.");
                 /* TODO(neerajkumar): This is happening due to concurrent modification. Fix it */
@@ -121,7 +130,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                 counter = 0;
             }
             counter++;
-            notificationCounterMap.put(notificationID, counter);
+            entry.getValue().counter = counter;
         }
 
     }
@@ -193,7 +202,6 @@ public class MinukuNotificationManager extends Service implements NotificationMa
         Integer notificationID = CURRENT_NOTIFICATION_ID.incrementAndGet();
         Notification n = buildNotificationForNotificationEvent(aShowNotificationEvent, notificationID);
         registeredNotifications.put(notificationID, aShowNotificationEvent);
-        notificationCounterMap.put(notificationID, 1);
         mNotificationManager.notify(notificationID, n);
     }
 
@@ -233,7 +241,6 @@ public class MinukuNotificationManager extends Service implements NotificationMa
             notifiation.setClickedTimeMs(new Date().getTime());
             categorizedNotificationMap.remove(notifiation);
             registeredNotifications.remove(notifiation);
-            notificationCounterMap.remove(aNotificaitonId);
             try {
                 MinukuDAOManager.getInstance()
                         .getDaoFor(ShowNotificationEvent.class)
@@ -265,5 +272,11 @@ public class MinukuNotificationManager extends Service implements NotificationMa
         }
         Log.d(TAG, "Returning null object for notification");
         return null;
+    }
+
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "Destroying service. Your state might be lost!");
     }
 }
