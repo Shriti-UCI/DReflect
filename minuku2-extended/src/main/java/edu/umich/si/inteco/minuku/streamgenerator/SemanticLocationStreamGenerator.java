@@ -138,10 +138,11 @@ public class SemanticLocationStreamGenerator
             loc2.setLongitude(selectedLocation.getLongitude());
 
             // Due to accuracy settings we have used, this can actually be upto 80 meters.
-            Log.d(TAG, "Location 1 " + convertLocToString(loc1) +
-                    ", Location 2 " + convertLocToString(loc2));
+            Log.d(TAG, "Location 1 " + loc1.getLatitude() + ", " + loc1.getLongitude() +
+                    ",     Location 2 " + loc2.getLatitude() + ", " + loc2.getLongitude());
+            Log.d(TAG, "Label for Location 2: " + selectedLocation.getLabel());
 
-            if(loc1.distanceTo(loc2) < 50) {
+            if(loc1.distanceTo(loc2) < 150) {
                 Log.d(TAG, "Found matching location " + selectedLocation.getAddress());
                 return new SemanticLocationDataRecord(selectedLocation.getLabel());
             } else {

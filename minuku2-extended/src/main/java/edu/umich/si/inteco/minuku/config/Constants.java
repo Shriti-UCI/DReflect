@@ -66,12 +66,12 @@ public class Constants {
 
 
     //default queue size
-    public static final int DEFAULT_QUEUE_SIZE = 100;
+    public static final int DEFAULT_QUEUE_SIZE = 20;
 
     //specific queue sizes
-    public static final int LOCATION_QUEUE_SIZE = 100;
-    public static final int IMAGE_QUEUE_SIZE = 100;
-    public static final int MOOD_QUEUE_SIZE = 10;
+    public static final int LOCATION_QUEUE_SIZE = 50;
+    public static final int IMAGE_QUEUE_SIZE = 20;
+    public static final int MOOD_QUEUE_SIZE = 20;
 
     public static final int MOOD_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 15;
     public static final int IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 30;
