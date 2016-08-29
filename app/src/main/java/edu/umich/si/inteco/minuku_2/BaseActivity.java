@@ -152,6 +152,7 @@ public class BaseActivity extends AppCompatActivity implements
         if (!((this instanceof LoginActivity) || (this instanceof CreateAccountActivity))) {
             mFirebaseRef.removeAuthStateListener(mAuthListener);
         }
+        Log.d(LOG_TAG, "Destroying instance of " + this.getClass().getSimpleName());
     }
 
     @Override
