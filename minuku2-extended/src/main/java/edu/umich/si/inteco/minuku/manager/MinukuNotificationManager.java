@@ -79,12 +79,14 @@ public class MinukuNotificationManager extends Service implements NotificationMa
             ShowNotificationEvent notification = entry.getValue();
             Integer notificationID = entry.getKey();
             Integer counter = notificationCounterMap.get(notificationID);
+            Log.d(TAG, "Counter : " + counter);
+            Log.d(TAG, "Notification " + notification.getExpirationTimeSeconds());
             if(counter == null) {
+                Log.d(TAG, "The notification with " + notificationID + " is null.");
                 /* TODO(neerajkumar): This is happening due to concurrent modification. Fix it */
                 continue;
             }
-            Log.d(TAG, "Counter : " + counter);
-            Log.d(TAG, "Notification " + notification.getExpirationTimeSeconds());
+
             if(counter == notification.getExpirationTimeSeconds()) {
                 Log.d(TAG, "Counter for " + notification.getTitle() + " is matching.");
 
@@ -99,7 +101,6 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                          * TODO(neerajkumar): Find a way to see if a notification was dismissed by
                          * the user and unregister it, if it was.
                          */
-
                         Log.d(TAG, "Alerting again " + notification.getTitle());
                         mNotificationManager.cancel(entry.getKey());
                         mNotificationManager.notify(notificationID,
@@ -182,6 +183,8 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                     } catch (DAOException e) {
                         e.printStackTrace();
                     }
+                    categorizedNotificationMap.put(aShowNotificationEvent.getCategory(),
+                            aShowNotificationEvent);
                 } else {
                     return;
                 }
@@ -200,7 +203,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                 notificationClickedEvent.getNotificationId());
         Integer notificationId = getNotificationIdIfValid(
                 notificationClickedEvent.getNotificationId());
-        Log.d(TAG, "Valid notifiation id retrieved is " + notificationId);
+        Log.d(TAG, "Valid notification id retrieved is " + notificationId);
         unregisterNotification(notificationId);
     }
 
