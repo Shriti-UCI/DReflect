@@ -107,6 +107,7 @@ public class MainActivity extends BaseActivity {
 
         if(!InstanceManager.isInitialized()) {
             InstanceManager.getInstance(getApplicationContext());
+
             loadingProgressDialog = ProgressDialog.show(MainActivity.this,
                     "Loading data", "Fetching information",true);
         }

@@ -59,7 +59,7 @@ public class InstanceManager {
 
     private InstanceManager(Context applicationContext) {
         this.mApplicationContext = applicationContext;
-
+        initialize();
     }
 
     public static InstanceManager getInstance(Context applicationContext) {

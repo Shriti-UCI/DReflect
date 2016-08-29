@@ -26,16 +26,8 @@ public class BackgroundService extends Service {
     MinukuStreamManager streamManager;
 
     public BackgroundService() {
+        super();
         streamManager = MinukuStreamManager.getInstance();
-
-        Notification note  = new Notification.Builder(this)
-                .setContentTitle(Constants.APP_NAME)
-                .setContentText(Constants.RUNNING_APP_DECLARATION)
-                .setSmallIcon(edu.umich.si.inteco.minuku.R.drawable.cast_ic_notification_small_icon)
-                .setAutoCancel(false)
-                .build();
-        note.flags |= Notification.FLAG_NO_CLEAR;
-        startForeground( 42, note );
     }
 
     @Override
@@ -47,6 +39,15 @@ public class BackgroundService extends Service {
                 System.currentTimeMillis() + Constants.PROMPT_SERVICE_REPEAT_MILLISECONDS,
                 PendingIntent.getService(this, 0, new Intent(this, BackgroundService.class), 0)
         );
+
+        Notification note  = new Notification.Builder(getBaseContext())
+                .setContentTitle(Constants.APP_NAME)
+                .setContentText(Constants.RUNNING_APP_DECLARATION)
+                .setSmallIcon(edu.umich.si.inteco.minuku.R.drawable.cast_ic_notification_small_icon)
+                .setAutoCancel(false)
+                .build();
+        note.flags |= Notification.FLAG_NO_CLEAR;
+        startForeground( 42, note );
 
         return START_STICKY_COMPATIBILITY;
     }

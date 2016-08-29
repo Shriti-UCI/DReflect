@@ -48,14 +48,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
         mDAO = MinukuDAOManager.getInstance().getDaoFor(ShowNotificationEvent.class);
         EventBus.getDefault().register(this);
 
-        Notification note  = new Notification.Builder(this)
-                .setContentTitle(Constants.APP_NAME)
-                .setContentText(Constants.RUNNING_APP_DECLARATION)
-                .setSmallIcon(R.drawable.cast_ic_notification_small_icon)
-                .setAutoCancel(false)
-                .build();
-        note.flags |= Notification.FLAG_NO_CLEAR;
-        startForeground( 42, note );
+
     }
 
     @Override
@@ -73,6 +66,15 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                 System.currentTimeMillis() + Constants.PROMPT_SERVICE_REPEAT_MILLISECONDS,
                 PendingIntent.getService(this, 0, new Intent(this, MinukuNotificationManager.class), 0)
         );
+
+        Notification note  = new Notification.Builder(getBaseContext())
+                .setContentTitle(Constants.APP_NAME)
+                .setContentText(Constants.RUNNING_APP_DECLARATION)
+                .setSmallIcon(R.drawable.cast_ic_notification_small_icon)
+                .setAutoCancel(false)
+                .build();
+        note.flags |= Notification.FLAG_NO_CLEAR;
+        startForeground( 42, note );
 
         checkRegisteredNotifications();
 
