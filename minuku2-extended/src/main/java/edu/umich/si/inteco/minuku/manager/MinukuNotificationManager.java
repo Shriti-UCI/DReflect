@@ -70,7 +70,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
         Notification note  = new Notification.Builder(getBaseContext())
                 .setContentTitle(Constants.APP_NAME)
                 .setContentText(Constants.RUNNING_APP_DECLARATION)
-                .setSmallIcon(R.drawable.cast_ic_notification_small_icon)
+                .setSmallIcon(R.drawable.self_reflection)
                 .setAutoCancel(false)
                 .build();
         note.flags |= Notification.FLAG_NO_CLEAR;
@@ -171,15 +171,18 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     @Subscribe
     @Override
     public void handleShowNotificationEvent(ShowNotificationEvent aShowNotificationEvent) {
-        Log.d(TAG, "Handling notification event.");
+        Log.d(TAG, "Handling notification event: " + aShowNotificationEvent);
         if(aShowNotificationEvent.getCategory() != null) {
             if(!categorizedNotificationMap.containsKey(aShowNotificationEvent.getCategory())) {
                 categorizedNotificationMap.put(aShowNotificationEvent.getCategory(),
                         aShowNotificationEvent);
             } else {
+                Log.d(TAG, "There is already a notification with the same category in map.");
                 ShowNotificationEvent previousNotification = categorizedNotificationMap.get(
                         aShowNotificationEvent.getCategory());
                 if(previousNotification.getExpirationCount() > 0) {
+                    Log.d(TAG, "The old notification already in the map seemed to have expired. " +
+                            "Will clean it up. You should see a new notification.");
                     // If a previously existing notification has expired, then regardless of the
                     // expiration mechanism of such notification, remove it from the map, push
                     // that information to DAO and add the current notification to the map.
@@ -197,19 +200,26 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                     categorizedNotificationMap.put(aShowNotificationEvent.getCategory(),
                             aShowNotificationEvent);
                 } else {
+                    Log.d(TAG, "The old notification already in the map has not  " +
+                            " expired. New notification ignored..");
                     return;
                 }
             }
+        } else {
+            Log.d(TAG, "The notification category was null, starting a basic notifiction.");
         }
+
         Integer notificationID = CURRENT_NOTIFICATION_ID.incrementAndGet();
-        Notification n = buildNotificationForNotificationEvent(aShowNotificationEvent, notificationID);
+        Log.d(TAG, "Getting new notification ID: " + notificationID);
+        Notification n = buildNotificationForNotificationEvent(aShowNotificationEvent,
+                notificationID);
         registeredNotifications.put(notificationID, aShowNotificationEvent);
         mNotificationManager.notify(notificationID, n);
     }
 
     @Subscribe
     public void handleNotificationClickEvent(NotificationClickedEvent notificationClickedEvent) {
-        Log.d(TAG, "Trigerred notification click handler for notification ID"  +
+        Log.d(TAG, "Triggered notification click handler for notification ID"  +
                 notificationClickedEvent.getNotificationId());
         Integer notificationId = getNotificationIdIfValid(
                 notificationClickedEvent.getNotificationId());

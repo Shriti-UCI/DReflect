@@ -43,7 +43,7 @@ public class BackgroundService extends Service {
         Notification note  = new Notification.Builder(getBaseContext())
                 .setContentTitle(Constants.APP_NAME)
                 .setContentText(Constants.RUNNING_APP_DECLARATION)
-                .setSmallIcon(edu.umich.si.inteco.minuku.R.drawable.cast_ic_notification_small_icon)
+                .setSmallIcon(edu.umich.si.inteco.minuku.R.drawable.self_reflection)
                 .setAutoCancel(false)
                 .build();
         note.flags |= Notification.FLAG_NO_CLEAR;

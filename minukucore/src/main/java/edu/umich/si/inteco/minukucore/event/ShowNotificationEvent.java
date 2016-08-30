@@ -163,4 +163,10 @@ public class ShowNotificationEvent implements DataRecord {
     public void incrementExpirationCount() {
         this.expirationCount++;
     }
+
+    @Override
+    public String toString() {
+        return this.title + ":\n" + this.expirationAction + ":\n" + this.expirationCount + ":\n" +
+                this.viewToShow + ":\n" + this.message;
+    }
 }
