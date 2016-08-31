@@ -195,9 +195,10 @@ public class LocationStreamGenerator extends AndroidStreamGenerator<LocationData
         Log.d(TAG, "onConnected");
 
         mLocationRequest = LocationRequest.create();
-        mLocationRequest.setInterval(5000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setInterval(10 * 60 * 1000);
+        mLocationRequest.setFastestInterval(10 * 60 * 1000);
+        mLocationRequest.setSmallestDisplacement(200);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
         LocationServices.FusedLocationApi
                 .requestLocationUpdates(mGoogleApiClient, mLocationRequest,
