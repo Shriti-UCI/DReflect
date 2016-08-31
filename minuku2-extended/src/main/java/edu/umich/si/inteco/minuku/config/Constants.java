@@ -86,4 +86,6 @@ public class Constants {
     public static final String BUNDLE_KEY_FOR_QUESTIONNAIRE_ID = "QUESTIONNAIRE_ID";
     public static final String APP_NAME = "Minuku";
     public static final String RUNNING_APP_DECLARATION = APP_NAME + " is running in the background";
+    public static final long INTERNAL_LOCATION_UPDATE_FREQUENCY = 10 * 60 * 1000;
+    public static final float LOCATION_MINUMUM_DISPLACEMENT_UPDATE_THRESHOLD = 150 ;
 }
