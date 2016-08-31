@@ -114,17 +114,21 @@ public class MissedGlucoseReadingSituation implements Situation {
         Log.d(TAG, "Time in seconds now is: " + secondsPassed);
         long time = 0;
         //long time = secondsPassed;
-        for(int i:getTimesForCheckingLastReports()) {
-            Log.d(TAG, "Seconds passed: " + secondsPassed + "; Time: " + i);
+        for(int oneOfExpectedReportingTimes:getTimesForCheckingLastReports()) {
+            Log.d(TAG, "Seconds passed: " + secondsPassed + "; Time: " + oneOfExpectedReportingTimes);
             Log.d(TAG, "upper bound for time: " + secondsPassed);
             Log.d(TAG, "Lower bound for time: " +
                     (secondsPassed - Constants.IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES*60));
 
-            if (i <= secondsPassed && secondsPassed< i + Constants.IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES*60) {
+            // If current time is between one of the expected reporting times and
+            // (one of the expected reporting times + update frequency), then
+            // assign "time" the value of oneOfExpectedReportingTimes and break.
+            if (oneOfExpectedReportingTimes <= secondsPassed
+                    && secondsPassed< oneOfExpectedReportingTimes + Constants.IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES*60) {
                 Log.d(TAG, "Setting the value of time");
                 //time = secondsPassed;
                 //time should be equal to i //TODO: check logic
-                time = i; //this is the relevant notification time for the current time.
+                time = oneOfExpectedReportingTimes; //this is the relevant notification time for the current time.
                 break;
             }
         }
@@ -139,9 +143,11 @@ public class MissedGlucoseReadingSituation implements Situation {
             long lastReportedTime = snapshot.getCurrentValue(GlucoseReadingImage.class).getCreationTime();
             Log.d(TAG, "Last reported time: " + lastReportedTime);
             long lastReportedTimeInSeconds = (lastReportedTime - c.getTimeInMillis())/1000;
-            Log.d(TAG, "Last reported time in seconds : " + lastReportedTimeInSeconds);
-            Log.d(TAG, "time - lastReportedTimeInSec: " + (time - lastReportedTimeInSeconds));
-            if((time - lastReportedTimeInSeconds) > (3600*2)) {// it means 2 hours
+            Log.d(TAG, "Last reported time in seconds since midnight : " + lastReportedTimeInSeconds);
+            long secondsPassedSinceLastReport = (time - lastReportedTimeInSeconds);
+            Log.d(TAG, "time - lastReportedTimeInSec: " + secondsPassedSinceLastReport);
+
+            if(secondsPassedSinceLastReport > (3600*2)) {// it means 2 hours
                 // TODO: there should also be = condition, last report can be >= to notificaiton check time minus delta
                 Log.d(TAG, "Situation returning true");
                 return true;
