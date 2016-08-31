@@ -38,13 +38,13 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     private static AtomicInteger CURRENT_NOTIFICATION_ID = new AtomicInteger(Integer.MIN_VALUE + 5);
     private Map<Integer, ShowNotificationEvent> registeredNotifications;
     private android.app.NotificationManager mNotificationManager;
-    private Map<String, ShowNotificationEvent> categorizedNotificationMap;
+    //private Map<String, ShowNotificationEvent> categorizedNotificationMap;
     private NotificationDAO mDAO;
 
     public MinukuNotificationManager() {
         Log.d(TAG, "Started minuku notification manager");
         registeredNotifications = new HashMap<>();
-        categorizedNotificationMap = new HashMap<>();
+        //categorizedNotificationMap = new HashMap<>();
         mDAO = MinukuDAOManager.getInstance().getDaoFor(ShowNotificationEvent.class);
         EventBus.getDefault().register(this);
 
@@ -85,27 +85,28 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     private void checkRegisteredNotifications() {
 
         Log.d(TAG, "Checking for registered notificaitons.");
-
+        Log.d(TAG, "Number of registered notifications: " + registeredNotifications.size());
         for(Map.Entry<Integer, ShowNotificationEvent> entry: registeredNotifications.entrySet()) {
             ShowNotificationEvent notification = entry.getValue();
             Integer notificationID = entry.getKey();
             Integer counter = entry.getValue().counter;
             Log.d(TAG, "Counter : " + counter);
-            Log.d(TAG, "Notification id " +  notificationID + "" + notification.getExpirationTimeSeconds());
+            Log.d(TAG, "Notification id " +  notificationID + "    " + notification.getExpirationTimeSeconds());
             if(counter == null) {
                 Log.d(TAG, "The notification with " + notificationID + " is null.");
                 /* TODO(neerajkumar): This is happening due to concurrent modification. Fix it */
                 continue;
             }
 
-            if(counter == notification.getExpirationTimeSeconds()) {
+            if(counter == notification.getExpirationTimeSeconds()/60) {
                 Log.d(TAG, "Counter for " + notification.getTitle() + " is matching.");
 
                 switch (notification.getExpirationAction()) {
                     case DISMISS:
                         Log.d(TAG, "Dismissing " + notification.getTitle());
                         mNotificationManager.cancel(entry.getKey());
-                        unregisterNotification(entry.getKey());
+                        unregisterNotification(notificationID);
+                        Log.d(TAG, "Number of registered notifications after dismissing: " + registeredNotifications.size());
                         break;
                     case ALERT_AGAIN:
                         /**
@@ -171,18 +172,20 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     @Subscribe
     @Override
     public void handleShowNotificationEvent(ShowNotificationEvent aShowNotificationEvent) {
-        Log.d(TAG, "Handling notification event: " + aShowNotificationEvent);
+        Log.d(TAG, "Handling notification event: " + aShowNotificationEvent.getCategory());
         if(aShowNotificationEvent.getCategory() != null) {
-            if(!categorizedNotificationMap.containsKey(aShowNotificationEvent.getCategory())) {
-                categorizedNotificationMap.put(aShowNotificationEvent.getCategory(),
-                        aShowNotificationEvent);
-            } else {
+            if(ifSameCategoryNotificationExists(aShowNotificationEvent)) {
                 Log.d(TAG, "There is already a notification with the same category in map.");
-                ShowNotificationEvent previousNotification = categorizedNotificationMap.get(
-                        aShowNotificationEvent.getCategory());
+                ShowNotificationEvent previousNotification = getSameCategoryNotification(aShowNotificationEvent);
+                Log.d(TAG, "1. Old notification is: Category" + previousNotification.getCategory() +
+                        "  Title:  " + previousNotification.getTitle() + " exp count: " +
+                        previousNotification.getExpirationCount());
                 if(previousNotification.getExpirationCount() > 0) {
                     Log.d(TAG, "The old notification already in the map seemed to have expired. " +
                             "Will clean it up. You should see a new notification.");
+                    Log.d(TAG, "2. Old notification is: Category" + previousNotification.getCategory() +
+                            "  Title:  " + previousNotification.getTitle() + "exp count: " +
+                            previousNotification.getExpirationCount());
                     // If a previously existing notification has expired, then regardless of the
                     // expiration mechanism of such notification, remove it from the map, push
                     // that information to DAO and add the current notification to the map.
@@ -197,8 +200,6 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                     } catch (DAOException e) {
                         e.printStackTrace();
                     }
-                    categorizedNotificationMap.put(aShowNotificationEvent.getCategory(),
-                            aShowNotificationEvent);
                 } else {
                     Log.d(TAG, "The old notification already in the map has not  " +
                             " expired. New notification ignored..");
@@ -249,10 +250,13 @@ public class MinukuNotificationManager extends Service implements NotificationMa
      */
     private boolean unregisterNotification(Integer aNotificaitonId) {
         if(registeredNotifications.containsKey(aNotificaitonId)) {
+            Log.d(TAG, "Removing notification: " + aNotificaitonId);
             ShowNotificationEvent notifiation = registeredNotifications.get(aNotificaitonId);
             notifiation.setClickedTimeMs(new Date().getTime());
-            categorizedNotificationMap.remove(notifiation);
-            registeredNotifications.remove(notifiation);
+            //categorizedNotificationMap.remove(aNotificaitonId);
+            registeredNotifications.remove(aNotificaitonId);
+            Log.d(TAG, "Number of registered notifications in unreg method: " + registeredNotifications.size());
+            //Log.d(TAG, "Number of categorized notifications in unreg method: " + categorizedNotificationMap.size());
             try {
                 MinukuDAOManager.getInstance()
                         .getDaoFor(ShowNotificationEvent.class)
@@ -290,5 +294,26 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     @Override
     public void onDestroy() {
         Log.d(TAG, "Destroying service. Your state might be lost!");
+    }
+
+    private boolean ifSameCategoryNotificationExists(ShowNotificationEvent aShowNotificationEvent) {
+
+        for(Map.Entry<Integer, ShowNotificationEvent> entry: registeredNotifications.entrySet()) {
+            ShowNotificationEvent notificationEvent = entry.getValue();
+            if(notificationEvent.getCategory().equals(aShowNotificationEvent.getCategory())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private ShowNotificationEvent getSameCategoryNotification(ShowNotificationEvent aShowNotificationEvent) {
+        for(Map.Entry<Integer, ShowNotificationEvent> entry: registeredNotifications.entrySet()) {
+            ShowNotificationEvent notificationEvent = entry.getValue();
+            if(notificationEvent.getCategory().equals(aShowNotificationEvent.getCategory())) {
+                return notificationEvent;
+            }
+        }
+        return null;
     }
 }

@@ -75,7 +75,7 @@ public class MissedInsulinAdminSituation implements Situation {
         }
         //int endTimeInSeconds = convertHHMMtoSeconds(endTime);
 
-        int partitionWindow = 1800; //30 mins
+        int partitionWindow = 3600; //30 mins
         for (Integer time: insulinAdminTimesInSeconds) {
             timesForNotification.add( time + partitionWindow);
         }
@@ -107,23 +107,37 @@ public class MissedInsulinAdminSituation implements Situation {
         long passed = now - c.getTimeInMillis();
         long secondsPassed = passed / 1000;
 
-        long time = secondsPassed;
+        //long time = secondsPassed;
+        long time =0;
         for(int i:getTimesForCheckingLastReports()) {
             Log.d(TAG, "Seconds passed: " + secondsPassed + "; Time: " + i);
             if (i <= secondsPassed && secondsPassed< i + Constants.IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES*60) {
-                time = secondsPassed;
+                Log.d(TAG, "Setting the value of time");
+                time = i;
                 break;
             }
         }
 
+        if(time==0) {
+            Log.d(TAG, "Situation Returning false because there is no relevant time to be checked");
+            return false;
+        }
+
+        Log.d(TAG, "Set value of time is: " + time);
+
         if(snapshot.getCurrentValue(InsulinAdminImage.class) != null) {
             long lastReportedTime = snapshot.getCurrentValue(InsulinAdminImage.class).getCreationTime();
             long lastReportedTimeInSeconds = (lastReportedTime - c.getTimeInMillis())/1000;
-            if((time - lastReportedTimeInSeconds) > (3600*2)) // it means 2 hours
+            if((time - lastReportedTimeInSeconds) > (3600*2)) {// it means 2 hours
+                Log.d(TAG, "Situation returning true");
                 return true;
-            else
+            }
+            else {
+                Log.d(TAG, "Situation returning false");
                 return false;
+            }
         } else {
+            Log.d(TAG, "current value from snapshot is null. Situation returning true");
             return true;
         }
     }

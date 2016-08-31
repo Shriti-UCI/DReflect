@@ -71,11 +71,16 @@ public class MissedFoodImageSituation implements Situation {
         if (snapshot.getCurrentValue(FoodImage.class) != null) {
             long lastReportedTime = snapshot.getCurrentValue(FoodImage.class).getCreationTime();
             long lastReportedTimeInSeconds = (lastReportedTime - c.getTimeInMillis()) / 1000;
-            if ((secondsPassed - lastReportedTimeInSeconds) > (3600 * 3)) /*3 hours*/
+            if ((secondsPassed - lastReportedTimeInSeconds) > (3600 * 3)) {
+                Log.d(TAG, "Situation returning true"); /*3 hours*/
                 return true;
-            else
+            }
+            else {
+                Log.d(TAG, "Situation returning false");
                 return false;
+            }
         } else {
+            Log.d(TAG, "current value from snapshot is null. Situation returning true");
             return true;
         }
     }

@@ -44,14 +44,14 @@ public class DisplayCreditActivity extends BaseActivity {
         else {
             compensationMessages = new HashMap<>();
             compensationMessages.put(GENERAL_MESSAGE, "You are not yet eligible for today's reward." +
-                    "Log some more data and get going!");
+                    " Log some more data and get going!");
             compensationMessages.put(REMAINING_TASKS, "at least 2 self reports to become eligible");
             compensationMessages.put(TOTAL_RESPONSE_COUNT, "0");
             compensationMessages.put(REWARD_COUNT, "0");
         }
 
         generalMessage.setText(compensationMessages.get(GENERAL_MESSAGE));
-        remainingTasks.setText("Reports needed to be eligible for reward : " + compensationMessages.get(REMAINING_TASKS));
+        remainingTasks.setText("Reports needed to earn today's reward : " + compensationMessages.get(REMAINING_TASKS));
         totalReportCount.setText("Total responses for today : " + compensationMessages.get(TOTAL_RESPONSE_COUNT));
         String reward = compensationMessages.get(REWARD_COUNT);
         rewardCount.setText("Total reward for today : $" + String.format("%.2f", Double.valueOf(reward)));
@@ -89,7 +89,7 @@ public class DisplayCreditActivity extends BaseActivity {
         else {
             int remainingDataCount = 2-relevantDataCount;
             compensationMessages.put(GENERAL_MESSAGE, "You are not yet eligible for today's reward." +
-                    "Log some more data and get going!");
+                    " Log some more data and get going!");
             compensationMessages.put(REMAINING_TASKS, String.valueOf(remainingDataCount) +
                     " reports and end of day diary");
             compensationMessages.put(TOTAL_RESPONSE_COUNT, String.valueOf(relevantDataCount));

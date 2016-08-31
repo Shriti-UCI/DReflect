@@ -79,7 +79,10 @@ public class MissedGlucoseReadingSituation implements Situation {
 
         int partitionWindow = 3600;
         for (Integer time: glucoseReadingTimesInSeconds) {
-                timesForNotification.add( time + partitionWindow);
+            int temp = time+partitionWindow;
+            Log.d(TAG, "time for glucose reading check: " + time);
+            Log.d(TAG, "time for notification: " + temp);
+            timesForNotification.add( temp);
         }
 
         return timesForNotification;
@@ -108,24 +111,48 @@ public class MissedGlucoseReadingSituation implements Situation {
         c.set(Calendar.MILLISECOND, 0);
         long passed = now - c.getTimeInMillis();
         long secondsPassed = passed / 1000;
-
-        long time = secondsPassed;
+        Log.d(TAG, "Time in seconds now is: " + secondsPassed);
+        long time = 0;
+        //long time = secondsPassed;
         for(int i:getTimesForCheckingLastReports()) {
             Log.d(TAG, "Seconds passed: " + secondsPassed + "; Time: " + i);
+            Log.d(TAG, "upper bound for time: " + secondsPassed);
+            Log.d(TAG, "Lower bound for time: " +
+                    (secondsPassed - Constants.IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES*60));
+
             if (i <= secondsPassed && secondsPassed< i + Constants.IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES*60) {
-                time = secondsPassed;
+                Log.d(TAG, "Setting the value of time");
+                //time = secondsPassed;
+                //time should be equal to i //TODO: check logic
+                time = i; //this is the relevant notification time for the current time.
                 break;
             }
         }
+        if(time==0) {
+            Log.d(TAG, "Situation Returning false because there is no relevant time to be checked");
+            return false;
+        }
+
+        Log.d(TAG, "Set value of time is: " + time);
 
         if(snapshot.getCurrentValue(GlucoseReadingImage.class) != null) {
             long lastReportedTime = snapshot.getCurrentValue(GlucoseReadingImage.class).getCreationTime();
+            Log.d(TAG, "Last reported time: " + lastReportedTime);
             long lastReportedTimeInSeconds = (lastReportedTime - c.getTimeInMillis())/1000;
-            if((time - lastReportedTimeInSeconds) > (3600*2)) // it means 2 hours
+            Log.d(TAG, "Last reported time in seconds : " + lastReportedTimeInSeconds);
+            Log.d(TAG, "time - lastReportedTimeInSec: " + (time - lastReportedTimeInSeconds));
+            if((time - lastReportedTimeInSeconds) > (3600*2)) {// it means 2 hours
+                // TODO: there should also be = condition, last report can be >= to notificaiton check time minus delta
+                Log.d(TAG, "Situation returning true");
                 return true;
-            else
+            }
+            else {
+                Log.d(TAG, "Situation returning false");
                 return false;
+            }
         } else {
+            Log.d(TAG, "current value from snapshot is null. Situation returning true");
+            //wait till notification time ("time from above") and then return true
             return true;
         }
     }

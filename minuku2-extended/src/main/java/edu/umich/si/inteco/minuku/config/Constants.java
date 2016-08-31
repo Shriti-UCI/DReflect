@@ -78,7 +78,7 @@ public class Constants {
     public static final int FOOD_IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 180;
 
     public static final int MOOD_NOTIFICATION_EXPIRATION_TIME = 30 * 60 /* 30 minutes*/;
-    public static final int MISSED_REPORT_NOTIFICATION_EXPIRATION_TIME = 60 * 60 /* 60 minutes*/;
+    public static final int MISSED_REPORT_NOTIFICATION_EXPIRATION_TIME = 5 * 60 /* 60 minutes*/;
 
 
     public static final String TAPPED_NOTIFICATION_ID_KEY = "TAPPED_NOTIFICATION_ID" ;
