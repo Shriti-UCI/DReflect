@@ -35,6 +35,11 @@ public class MissedFoodImageSituation implements Situation {
 
     @Override
     public <T extends ActionEvent> T assertSituation(StreamSnapshot snapshot, MinukuEvent aMinukuEvent) {
+        Log.d(TAG, "The type of minuku event received is:" + aMinukuEvent.getType().getSimpleName() );
+        if(!aMinukuEvent.getType().equals(FoodImage.class)) {
+            Log.e(TAG, "Something is fu**ed up. Expected type :" +
+                    " FoodImage , Received:" + aMinukuEvent.getType() );
+        }
         List<DataRecord> dataRecords = new ArrayList<>();
         dataRecords.add(snapshot.getCurrentValue(FoodImage.class));
         if (aMinukuEvent instanceof NoDataChangeEvent) {
