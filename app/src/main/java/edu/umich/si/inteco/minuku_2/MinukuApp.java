@@ -2,6 +2,7 @@ package edu.umich.si.inteco.minuku_2;
 
 import android.content.Context;
 
+import com.bugfender.sdk.Bugfender;
 import com.firebase.client.Firebase;
 
 import edu.umich.si.inteco.minuku.config.UserPreferences;
@@ -27,6 +28,10 @@ public class MinukuApp extends android.app.Application {
         super.onCreate();
         Firebase.setAndroidContext(this);
         UserPreferences.getInstance().Initialize(getApplicationContext());
+
+        Bugfender.init(this, "Nxfprfl78iMhECM0MmtsRJAERdPrPQvd", BuildConfig.DEBUG);
+        Bugfender.enableLogcatLogging();
+        Bugfender.enableUIEventLogging(this);
 
         //register questions registerStudyQuestions();
     }

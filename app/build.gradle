@@ -35,12 +35,12 @@ dependencies {
     compile 'com.github.boxme:squarecamera:1.1.0'
     compile 'com.h6ah4i.android.compat:mulsellistprefcompat:1.0.0'
     compile 'com.github.dkharrat.nexusdialog:nexusdialog:0.4.0'
-
     compile 'com.google.code.gson:gson:2.7'
-
     /* for custom shaped images in gridview */
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
-
+    compile files('libs/activation.jar')
+    compile files('libs/additionnal.jar')
+    compile files('libs/mail.jar')
 
 }
 
