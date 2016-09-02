@@ -51,6 +51,8 @@
     <string name="hint_enter_lastname">Enter your Last name</string>
     <string name="hint_enter_password">Enter password</string>
     <string name="image_view_logo_image">Logo Image</string>
+    <string name="tv_forgot_your_password">Forgot your password?</string>
+    <string name="tv_text_reset_password">Send Password Reset Email</string>
 
     <string name="text_login_via">Login using</string>
 

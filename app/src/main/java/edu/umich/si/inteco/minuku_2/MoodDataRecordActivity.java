@@ -1,7 +1,6 @@
 package edu.umich.si.inteco.minuku_2;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +15,7 @@ import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minuku_2.view.customview.MoodEntryView;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 7/21/16.
@@ -69,7 +69,7 @@ public class MoodDataRecordActivity extends BaseActivity {
     private void getDeviceWidth() {
         DEVICE_DENSITY = getResources().getDisplayMetrics().density;
         DEVICE_WIDTH = getResources().getDisplayMetrics().widthPixels;
-        Log.v("HomeActivity", "**Device Density=" + DEVICE_DENSITY + " " + "DEVICE_WIDTH="
+        Log.d(TAG, "**Device Density=" + DEVICE_DENSITY + " " + "DEVICE_WIDTH="
                 + DEVICE_WIDTH);
     }
 
@@ -94,7 +94,7 @@ public class MoodDataRecordActivity extends BaseActivity {
                         && event.getY() - 25 * scale < moodFirst.y
                         && event.getY() + 25 * scale > moodFirst.y)
                 {
-                    Log.v("First Mood", "Selected");
+                    Log.d("First Mood", "Selected");
                     moodFirst.isSelected = true;
                     moodSecond.isSelected = false;
                 }
@@ -105,14 +105,14 @@ public class MoodDataRecordActivity extends BaseActivity {
                         && event.getY() - (25 * scale) < moodSecond.y
                         && event.getY() + (25 * scale) > moodSecond.y)
                 {
-                    Log.v("Second Mood", "Selected");
+                    Log.d("Second Mood", "Selected");
                     moodFirst.isSelected = false;
                     moodSecond.isSelected = true;
                 }
                 // else no mood is selected
                 else
                 {
-                    Log.v("No Mood", "Selected");
+                    Log.d("No Mood", "Selected");
                     moodFirst.isSelected = false;
                     moodSecond.isSelected = false;
                 }
@@ -140,7 +140,7 @@ public class MoodDataRecordActivity extends BaseActivity {
                 float viewWidth = moodEntryView.getWidth();
                 float rectSize = viewWidth / 23;
                 // float rectSize = viewWidth/23;
-                Log.v("X* *,Y***", "==" + X + " , " + Y);
+                Log.d("X* *,Y***", "==" + X + " , " + Y);
 
                 if (X < ((viewWidth / 2) - 10 * scale) && (Y < (viewWidth / 2)))
                 {
@@ -151,7 +151,7 @@ public class MoodDataRecordActivity extends BaseActivity {
                     // first
                     // quadrant
                     tapY = (float) (Math.floor((viewWidth / 2) - Y) / rectSize);
-                    Log.v("Q", "1");
+                    Log.d("Q", "1");
                 }
                 if ((X > (viewWidth / 2)) && (Y < (viewWidth / 2)))
                 {
@@ -163,7 +163,7 @@ public class MoodDataRecordActivity extends BaseActivity {
                      */
                     tapX = (X / rectSize);
                     tapY = ((viewWidth / 2) - Y) / rectSize;
-                    Log.v("Q", "2");
+                    Log.d("Q", "2");
                 }
                 if ((X > (viewWidth / 2)) && (Y > (viewWidth / 2)))
                 {
@@ -178,7 +178,7 @@ public class MoodDataRecordActivity extends BaseActivity {
                     tapY = (Y / rectSize) * (-1);// Y should (-ve) in third
                     // quadrant
 
-                    Log.v("Q", "3");
+                    Log.d("Q", "3");
                 }
                 if ((X < (viewWidth / 2)) && (Y > (viewWidth / 2)))
                 {
@@ -188,7 +188,7 @@ public class MoodDataRecordActivity extends BaseActivity {
                      */
                     tapX = (X - (viewWidth / 2)) / rectSize;
                     tapY = ((viewWidth / 2) - Y) / rectSize;
-                    Log.v("Q", "4");
+                    Log.d("Q", "4");
                 }
 
                 if (tapX > 10.0)
@@ -201,7 +201,7 @@ public class MoodDataRecordActivity extends BaseActivity {
                 else if (tapY < -10.0)
                     tapY = (float) -10.0;
 
-                Log.v("TAPX,TAPY", "" + tapX + " , " + tapY);
+                Log.d("TAPX,TAPY", "" + tapX + " , " + tapY);
 
                 DecimalFormat df = new DecimalFormat("#.#");
                 String tapx = df.format(tapX);
@@ -236,7 +236,7 @@ public class MoodDataRecordActivity extends BaseActivity {
 
 
                     moodEntryView.invalidate();
-                    Log.v("Action", "Out of Bond");
+                    Log.d("Action", "Out of Bond");
                 }
                 moodFirst.isSelected = false;
                 moodSecond.isSelected = false;
@@ -245,17 +245,17 @@ public class MoodDataRecordActivity extends BaseActivity {
 
             if (event.getAction() == MotionEvent.ACTION_MOVE)
             {
-                Log.v("Action", "Move");
+                Log.d("Action", "Move");
                 if (moodFirst.isSelected)
                 {
-                    Log.v("first Mood ", "Moving");
+                    Log.d("first Mood ", "Moving");
                     moodFirst.x = event.getX() - 10 * scale;
                     moodFirst.y = event.getY() - 10 * scale;
                     setFirstMood(moodFirst);
                 }
                 else
                 {
-                    Log.v("NoMood", "X=" + event.getX() + " Y=" + event.getY());
+                    Log.d("NoMood", "X=" + event.getX() + " Y=" + event.getY());
                 }
 
                 /** Delete the mood entry */
@@ -271,11 +271,11 @@ public class MoodDataRecordActivity extends BaseActivity {
                     }
 
                     moodEntryView.invalidate();
-                    Log.v("Action", "Out of Bond");
+                    Log.d("Action", "Out of Bond");
                 }
             }
 
-            Log.v("TAPX formated ,TAPY", "" + tap_X + " , " + tap_Y);
+            Log.d("TAPX formated ,TAPY", "" + tap_X + " , " + tap_Y);
             return true;
         }
     };

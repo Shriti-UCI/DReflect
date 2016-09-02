@@ -1,14 +1,12 @@
 package edu.umich.si.inteco.minuku_2;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
-
-import com.fasterxml.jackson.databind.deser.Deserializers;
 
 import java.util.HashMap;
 
 import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 8/25/16.

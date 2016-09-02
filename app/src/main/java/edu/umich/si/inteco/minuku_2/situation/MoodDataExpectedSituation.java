@@ -1,25 +1,23 @@
 package edu.umich.si.inteco.minuku_2.situation;
 
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
 import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
-import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minuku_2.event.MoodDataExpectedActionEvent;
 import edu.umich.si.inteco.minukucore.event.ActionEvent;
 import edu.umich.si.inteco.minukucore.event.IsDataExpectedEvent;
 import edu.umich.si.inteco.minukucore.event.MinukuEvent;
-import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
+
 import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
 import edu.umich.si.inteco.minukucore.situation.Situation;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by neerajkumar on 7/30/16.
@@ -33,7 +31,8 @@ public class MoodDataExpectedSituation implements Situation {
             MinukuSituationManager.getInstance().register(this);
             Log.d(TAG, "Registered successfully.");
         } catch (DataRecordTypeNotFound dataRecordTypeNotFound) {
-            Log.e(TAG, "Registration failed.", dataRecordTypeNotFound);
+            Log.e(TAG, "Registration failed.");
+            dataRecordTypeNotFound.printStackTrace();
         }
     }
 

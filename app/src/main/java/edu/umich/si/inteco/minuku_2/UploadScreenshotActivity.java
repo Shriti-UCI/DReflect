@@ -2,15 +2,8 @@ package edu.umich.si.inteco.minuku_2;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 
-import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
-import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
-import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
-import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 8/20/16.

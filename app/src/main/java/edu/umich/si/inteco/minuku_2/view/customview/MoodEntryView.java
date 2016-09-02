@@ -6,10 +6,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import edu.umich.si.inteco.minuku_2.R;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 public class MoodEntryView extends View
 {
@@ -47,14 +47,14 @@ public class MoodEntryView extends View
 
     private int getColorId()
     {
-        Log.v("getColor id ", "************" + colorCode);
+        Log.d("getColor id ", "************" + colorCode);
         switch (colorCode) {
             case 0:
 
                 return R.drawable.blue_circle;
 
             case 1:
-                Log.v("getColor id ", "************ RedCircle");
+                Log.d("getColor id ", "************ RedCircle");
                 return R.drawable.red_circle;
 
             case 2:
@@ -117,7 +117,7 @@ public class MoodEntryView extends View
     }
 
     public void setPointsColor(int cCode) {
-        Log.v("setPointsColor ", "************" + cCode);
+        Log.d("setPointsColor ", "************" + cCode);
         this.colorCode = cCode;
         tapCircleBlue = BitmapFactory.decodeResource(mContext.getResources(), getColorId());
         scale = mContext.getResources().getDisplayMetrics().density;

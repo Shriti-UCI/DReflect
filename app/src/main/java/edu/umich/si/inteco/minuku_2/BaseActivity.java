@@ -3,13 +3,11 @@ package edu.umich.si.inteco.minuku_2;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,9 +27,6 @@ import com.google.android.gms.location.places.Places;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
@@ -40,7 +35,7 @@ import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.event.NotificationClickedEvent;
-import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 7/22/16.
@@ -48,7 +43,7 @@ import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 public class BaseActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String LOG_TAG = "BaseActivity";
+    private static final String TAG = "BaseActivity";
 
     protected GoogleApiClient mGoogleApiClient;
     protected Firebase.AuthStateListener mAuthListener;
@@ -70,6 +65,11 @@ public class BaseActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
 
         mSharedPref = UserPreferences.getInstance();
+
+        String endTime = UserPreferences.getInstance().getPreference("endTime");
+        Log.d(TAG, "end time " + endTime);
+        String startTime = UserPreferences.getInstance().getPreference("startTime");
+        Log.d(TAG, "start time " + startTime);
 
         // Allow google logins
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -96,7 +96,7 @@ public class BaseActivity extends AppCompatActivity implements
                 @Override
                 public void onAuthStateChanged(AuthData authData) {
                     if (authData == null) {
-                        Log.e(LOG_TAG, "Kicking user out.");
+                        Log.e(TAG, "Kicking user out.");
                         kickUserOut();
                     }
                 }
@@ -107,19 +107,20 @@ public class BaseActivity extends AppCompatActivity implements
         // Get the provider and email if set. A null value means the user is not yet authenticated.
         mEmail = mSharedPref.getPreference(Constants.ID_SHAREDPREF_EMAIL);
         mProvider = mSharedPref.getPreference(Constants.ID_SHAREDPREF_PROVIDER);
+        Log.setDeviceString(mEmail);
 
         // The base activity takes care of getting information about the notification that started
         // the activity (if there is one), and posting the NotificationClickEvent on the bus.
-        Log.d(LOG_TAG, "Checking for bundle passed onto base activity in oncreate method");
+        Log.d(TAG, "Checking for bundle passed onto base activity in oncreate method");
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            Log.d(LOG_TAG, "Trying to get notification id information from bundle");
+            Log.d(TAG, "Trying to get notification id information from bundle");
             String tappedNotificationId = bundle.getString(Constants.TAPPED_NOTIFICATION_ID_KEY);
 
             if (tappedNotificationId != null
                     && !tappedNotificationId.equals("")
                     && !tappedNotificationId.trim().equals("")) {
-                Log.d(LOG_TAG, "Got notifiation Id information from bundle: " + tappedNotificationId);
+                Log.d(TAG, "Got notifiation Id information from bundle: " + tappedNotificationId);
                 EventBus.getDefault().post(new NotificationClickedEvent(tappedNotificationId));
             }
         }
@@ -152,7 +153,7 @@ public class BaseActivity extends AppCompatActivity implements
         if (!((this instanceof LoginActivity) || (this instanceof CreateAccountActivity))) {
             mFirebaseRef.removeAuthStateListener(mAuthListener);
         }
-        Log.d(LOG_TAG, "Destroying instance of " + this.getClass().getSimpleName());
+        Log.d(TAG, "Destroying instance of " + this.getClass().getSimpleName());
     }
 
     @Override
@@ -210,7 +211,7 @@ public class BaseActivity extends AppCompatActivity implements
                     gotUserStatsFromDatabase(submissionStatsFuture.get());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    Log.d(LOG_TAG, "Creating mUserSubmissionStats");
+                    Log.d(TAG, "Creating mUserSubmissionStats");
                     gotUserStatsFromDatabase(null);
                 } catch (ExecutionException e) {
                     e.printStackTrace();
@@ -221,10 +222,8 @@ public class BaseActivity extends AppCompatActivity implements
     }
 
     protected void gotUserStatsFromDatabase(UserSubmissionStats userSubmissionStats) {
-        Log.d(LOG_TAG, "setting mUserSubmissionStats");
+        Log.d(TAG, "setting mUserSubmissionStats");
         mUserSubmissionStats = userSubmissionStats;
-        if(mUserSubmissionStats==null)
-            Log.d(LOG_TAG, "???");
     }
 
     @Override
@@ -344,17 +343,18 @@ public class BaseActivity extends AppCompatActivity implements
 
 
     protected boolean areDatesEqual(long currentTime, long previousTime) {
-        Log.d(LOG_TAG, "Checking if the both moods were recorded on the same day");
+        Log.d(TAG, "Checking if the both dates are the same");
 
         Calendar currentDate = Calendar.getInstance();
         Calendar previousDate = Calendar.getInstance();
 
         currentDate.setTimeInMillis(currentTime);
         previousDate.setTimeInMillis(previousTime);
-        Log.d(LOG_TAG, "Current:" + currentDate.toString() + " Previous:" + previousDate.toString());
+        Log.d(TAG, "Current:" + currentDate.toString() + " Previous:" + previousDate.toString());
 
-        boolean sameDay = currentDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
-                previousDate.get(Calendar.DAY_OF_YEAR) == previousDate.get(Calendar.DAY_OF_YEAR);
+        boolean sameDay = currentDate.get(Calendar.YEAR) == previousDate.get(Calendar.YEAR) &&
+                currentDate.get(Calendar.DAY_OF_YEAR) == previousDate.get(Calendar.DAY_OF_YEAR) &&
+                currentDate.get(Calendar.MONTH) == previousDate.get(Calendar.MONTH);
         return sameDay;
     }
 }

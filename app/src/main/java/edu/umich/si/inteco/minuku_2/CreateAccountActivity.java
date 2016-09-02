@@ -1,10 +1,8 @@
 package edu.umich.si.inteco.minuku_2;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -20,13 +18,14 @@ import java.util.Map;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minukucore.user.User;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by neera_000 on 3/26/2016.
  */
 public class CreateAccountActivity extends BaseActivity {
 
-    private static final String LOG_TAG = CreateAccountActivity.class.getSimpleName();
+    private static final String TAG = CreateAccountActivity.class.getSimpleName();
     private ProgressDialog mAuthProgressDialog;
     private EditText mEditTextUserFirstNameCreate, mEditTextUserLastNameCreate,
             mEditTextEmailCreate, mEditTextPasswordCreate;
@@ -124,7 +123,7 @@ public class CreateAccountActivity extends BaseActivity {
 
             @Override
             public void onError(FirebaseError firebaseError) {
-                Log.d(LOG_TAG, Constants.LOG_ERROR + firebaseError);
+                Log.d(TAG, Constants.LOG_ERROR + firebaseError);
                 mAuthProgressDialog.dismiss();
                 /* Display the appropriate error message */
                 if (firebaseError.getCode() == FirebaseError.EMAIL_TAKEN) {
@@ -158,7 +157,7 @@ public class CreateAccountActivity extends BaseActivity {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                Log.d(LOG_TAG, Constants.LOG_ERROR + firebaseError.getMessage());
+                Log.d(TAG, Constants.LOG_ERROR + firebaseError.getMessage());
             }
         });
     }

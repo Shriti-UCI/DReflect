@@ -1,6 +1,5 @@
 package edu.umich.si.inteco.minuku_2.action;
 
-import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -17,6 +16,7 @@ import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEventBuilder;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 8/12/16.
@@ -35,6 +35,8 @@ public class MissedFoodAction {
         Map<String, String> dataSentToQuestinnaireActivity = new HashMap<>();
         dataSentToQuestinnaireActivity.put(Constants.BUNDLE_KEY_FOR_QUESTIONNAIRE_ID,
                 String.valueOf(QuestionConfig.missedReportQuestionnaire_2.getID()));
+        dataSentToQuestinnaireActivity.put(Constants.BUNDLE_KEY_FOR_NOTIFICATION_SOURCE,
+                Constants.FOOD_NOTIFICATION_SOURCE);
 
         EventBus.getDefault().post(
                 new ShowNotificationEventBuilder()

@@ -4,13 +4,11 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,63 +22,17 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.umich.si.inteco.minuku.config.Constants;
-import edu.umich.si.inteco.minuku.dao.AnnotatedImageDataRecordDAO;
-import edu.umich.si.inteco.minuku.dao.FreeResponseQuestionDAO;
-import edu.umich.si.inteco.minuku.dao.LocationDataRecordDAO;
-import edu.umich.si.inteco.minuku.dao.MoodDataRecordDAO;
-import edu.umich.si.inteco.minuku.dao.MultipleChoiceQuestionDAO;
-import edu.umich.si.inteco.minuku.dao.NoteDataRecordDAO;
-import edu.umich.si.inteco.minuku.dao.NotificationDAO;
-import edu.umich.si.inteco.minuku.dao.SemanticLocationDataRecordDAO;
 import edu.umich.si.inteco.minuku.dao.UserSubmissionStatsDAO;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuNotificationManager;
-import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
-import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
-import edu.umich.si.inteco.minuku.model.LocationDataRecord;
-import edu.umich.si.inteco.minuku.model.MoodDataRecord;
-import edu.umich.si.inteco.minuku.model.NoteDataRecord;
-import edu.umich.si.inteco.minuku.model.SemanticLocationDataRecord;
 import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
-import edu.umich.si.inteco.minuku.streamgenerator.AnnotatedImageStreamGenerator;
-import edu.umich.si.inteco.minuku.streamgenerator.FreeResponseQuestionStreamGenerator;
-import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
-import edu.umich.si.inteco.minuku.streamgenerator.MoodStreamGenerator;
-import edu.umich.si.inteco.minuku.streamgenerator.MultipleChoiceQuestionStreamGenerator;
-import edu.umich.si.inteco.minuku.streamgenerator.NoteStreamGenerator;
-import edu.umich.si.inteco.minuku.streamgenerator.SemanticLocationStreamGenerator;
-import edu.umich.si.inteco.minuku_2.action.MissedFoodAction;
-import edu.umich.si.inteco.minuku_2.action.MissedGlucoseReadingAction;
-import edu.umich.si.inteco.minuku_2.action.MissedInsulinAdminAction;
-import edu.umich.si.inteco.minuku_2.action.MoodAnnotationExpectedAction;
-import edu.umich.si.inteco.minuku_2.action.MoodDataExpectedAction;
-import edu.umich.si.inteco.minuku_2.dao.FoodImageDAO;
-import edu.umich.si.inteco.minuku_2.dao.GlucoseReadingImageDAO;
-import edu.umich.si.inteco.minuku_2.dao.InsulinAdminImageDAO;
 import edu.umich.si.inteco.minuku.event.DecrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku.event.IncrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku_2.manager.InstanceManager;
-import edu.umich.si.inteco.minuku_2.model.FoodImage;
-import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
-import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
 import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
-import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
-import edu.umich.si.inteco.minuku_2.situation.MissedFoodImageSituation;
-import edu.umich.si.inteco.minuku_2.situation.MissedGlucoseReadingSituation;
-import edu.umich.si.inteco.minuku_2.situation.MissedInsulinAdminSituation;
-import edu.umich.si.inteco.minuku_2.situation.MoodAnnotationExpectedSituation;
-import edu.umich.si.inteco.minuku_2.situation.MoodDataExpectedSituation;
-import edu.umich.si.inteco.minuku_2.streamgenerator.FoodImageStreamGenerator;
-import edu.umich.si.inteco.minuku_2.streamgenerator.GlucoseReadingImageStreamGenerator;
-import edu.umich.si.inteco.minuku_2.streamgenerator.InsulinAdminImageStreamGenerator;
-import edu.umich.si.inteco.minuku_2.view.helper.ActionObject;
 import edu.umich.si.inteco.minuku_2.view.helper.CustomGridAdapter;
-import edu.umich.si.inteco.minuku_2.view.helper.StableArrayAdapter;
-import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
-import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
-import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
-import edu.umich.si.inteco.minukucore.user.User;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 public class MainActivity extends BaseActivity {
 
@@ -321,13 +273,15 @@ public class MainActivity extends BaseActivity {
                 }
                 //
                 try {
-                    /*Log.d(TAG, "getting mUserSubmissionStats from future " +
-                            submissionStatsFuture.get().getTotalSubmissionCount());*/
+                    Log.d(TAG, "getting mUserSubmissionStats from future ");
                     UserSubmissionStats userSubmissionStats = submissionStatsFuture.get();
                     //date check - ensuring that every day we have a new instance of submission
                     // stats. Needs to be tested
-                    if(!areDatesEqual(userSubmissionStats.creationTime, new Date().getTime())
+
+                    if(!areDatesEqual(userSubmissionStats.creationTime, (new Date().getTime()))
                             || userSubmissionStats==null) {
+                        Log.d(TAG, "userSubmissionStats is either null or we have a new date." +
+                                "Creating new userSubmissionStats object");
                         userSubmissionStats = new UserSubmissionStats();
                     }
                     gotUserStatsFromDatabase(userSubmissionStats);

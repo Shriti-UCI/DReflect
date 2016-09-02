@@ -1,7 +1,5 @@
 package edu.umich.si.inteco.minuku_2.situation;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -16,6 +14,7 @@ import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
 import edu.umich.si.inteco.minukucore.situation.Situation;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 8/12/16.
@@ -29,7 +28,8 @@ public class MissedFoodImageSituation implements Situation {
             MinukuSituationManager.getInstance().register(this);
             Log.d(TAG, "Registered successfully.");
         } catch (DataRecordTypeNotFound dataRecordTypeNotFound) {
-            Log.e(TAG, "Registration failed.", dataRecordTypeNotFound);
+            Log.e(TAG, "Registration failed.");
+            dataRecordTypeNotFound.printStackTrace();
         }
     }
 

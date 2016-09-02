@@ -1,7 +1,5 @@
 package edu.umich.si.inteco.minuku_2.situation;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -21,6 +19,7 @@ import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
 import edu.umich.si.inteco.minukucore.situation.Situation;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 7/31/16.
@@ -34,7 +33,8 @@ public class MissedGlucoseReadingSituation implements Situation {
             MinukuSituationManager.getInstance().register(this);
             Log.d(TAG, "Registered successfully.");
         } catch (DataRecordTypeNotFound dataRecordTypeNotFound) {
-            Log.e(TAG, "Registration failed.", dataRecordTypeNotFound);
+            Log.e(TAG, "Registration failed.");
+            dataRecordTypeNotFound.printStackTrace();
         }
     }
 
@@ -63,7 +63,6 @@ public class MissedGlucoseReadingSituation implements Situation {
 
     private List<Integer> getTimesForCheckingLastReports() {
         Set<String> glucoseReadingTimes = UserPreferences.getInstance().getPreferenceSet("gmTimes");
-        //String endTime = UserPreferences.getInstance().getPreference("endTime");
 
         List<Integer> timesForNotification = new LinkedList<>();
 
@@ -112,6 +111,24 @@ public class MissedGlucoseReadingSituation implements Situation {
         long passed = now - c.getTimeInMillis();
         long secondsPassed = passed / 1000;
         Log.d(TAG, "Time in seconds now is: " + secondsPassed);
+
+        String endTime = UserPreferences.getInstance().getPreference("endTime");
+        Log.d(TAG, "end time " + endTime);
+        String startTime = UserPreferences.getInstance().getPreference("startTime");
+        Log.d(TAG, "start time " + startTime);
+        if(endTime!=null && startTime!=null) {
+            int endTimeInSeconds = convertHHMMtoSeconds(endTime);
+            Log.d(TAG, "end time in seconds " + endTimeInSeconds);
+            int startTimeInSeconds = convertHHMMtoSeconds(startTime);
+            Log.d(TAG, "start time in seconds " + startTimeInSeconds);
+
+            if (secondsPassed > endTimeInSeconds || secondsPassed < startTimeInSeconds) {
+                Log.d(TAG, "Situation returning false because time now is beyond start or end time" +
+                        "for the user");
+                return false;
+            }
+        }
+
         long time = 0;
         //long time = secondsPassed;
         for(int oneOfExpectedReportingTimes:getTimesForCheckingLastReports()) {

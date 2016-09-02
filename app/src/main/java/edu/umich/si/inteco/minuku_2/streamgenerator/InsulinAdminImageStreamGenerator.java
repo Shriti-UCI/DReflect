@@ -1,19 +1,12 @@
 package edu.umich.si.inteco.minuku_2.streamgenerator;
 
 import android.content.Context;
-import android.util.Log;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
-import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
-import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.streamgenerator.AnnotatedImageStreamGenerator;
-import edu.umich.si.inteco.minuku_2.dao.InsulinAdminImageDAO;
-import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
-import edu.umich.si.inteco.minuku_2.stream.InsulinAdminImageStream;
-import edu.umich.si.inteco.minukucore.dao.DAOException;
-import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 7/31/16.

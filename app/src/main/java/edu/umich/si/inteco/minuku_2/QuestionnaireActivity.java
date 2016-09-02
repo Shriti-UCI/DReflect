@@ -1,7 +1,6 @@
 package edu.umich.si.inteco.minuku_2;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -23,6 +22,7 @@ import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
 import edu.umich.si.inteco.minukucore.model.question.Question;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 7/28/16.
@@ -58,7 +58,7 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    acceptResults();
+                    acceptResults(getIntent().getExtras());
                 } catch (StreamNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -86,9 +86,11 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
 
         for(Question q : QuestionManager.getInstance().getQuestionnaireForID(questionnaireId).getQuestionnaire()) {
             try {
+                Log.d(TAG, "a question was added to form: "  + q.getQuestion());
                 section.addElement(QuestionConfig.getControllerFor(q, getApplicationContext()));
             } catch (QuestionNotFoundException e) {
-                Log.d(TAG, "A question passed to question config was not found", e);
+                Log.d(TAG, "A question passed to question config was not found");
+                e.printStackTrace();
 
             }
         }
@@ -101,17 +103,21 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
 
     }
 
-    public void acceptResults() throws StreamNotFoundException {
+    public void acceptResults(Bundle savedInstanceState) throws StreamNotFoundException {
 
         //Object firstName = formController.getModel().getValue();
         //Object lastName = formController.getModel().getValue("lastName");
 
+        int questionnaireId = Integer.valueOf(savedInstanceState.getString(Constants.BUNDLE_KEY_FOR_QUESTIONNAIRE_ID));
+        Log.d(TAG, "accepting result for questionnaire: " + questionnaireId);
 
-
-        for (Map.Entry<T, FormElementController> entry:questionControllerMap.entrySet()) {
-            T question = entry.getKey();
+        //for (Map.Entry<T, FormElementController> entry:questionControllerMap.entrySet()) {
+        for(Question question : QuestionManager.getInstance().getQuestionnaireForID(questionnaireId).getQuestionnaire()) {
+            //T question = entry.getKey();
+            Log.d(TAG, "getting the answer for question: " + question.getQuestion());
             Object answer = formController.getModel().getValue(String.valueOf(question.getID()));
             if(question instanceof FreeResponse) {
+                Log.d(TAG, "question is a FreeResponse");
                 if(answer!=null)
                     ((FreeResponse) question).setAnswer(answer.toString());
                 else
@@ -121,6 +127,7 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
                             .offer((FreeResponse) question);
             }
             if(question instanceof MultipleChoice) {
+                Log.d(TAG, "question is a MCQ");
                 Set<String> answerSet = new HashSet<>();
                 if(answer != null) {
                     answerSet = (HashSet<String>) answer;
@@ -141,7 +148,7 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
                         .offer((MultipleChoice) question);
             }
         }
-        Log.d(TAG, "Increasing question count");
+        Log.d(TAG, "Increasing question count in submission stats");
         mUserSubmissionStats.incrementQuestionCount();
         try {
             Log.d(TAG, "Uploading user submission stats");

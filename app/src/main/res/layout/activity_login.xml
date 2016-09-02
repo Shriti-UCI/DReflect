@@ -162,6 +162,21 @@
                 android:layout_height="wrap_content"
                 android:onClick="onSignUpPressed"
                 android:text="@string/button_create_account" />
+
+            <TextView
+                android:id="@+id/tv_forgot_your_password"
+                style="@style/BoldText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_forgot_your_password" />
+
+            <TextView
+                android:id="@+id/tv_reset_password"
+                style="@style/LoginCreateTextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onSendPasswordResetEmail"
+                android:text="@string/tv_text_reset_password" />
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

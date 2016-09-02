@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +22,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 
 import edu.umich.si.inteco.minuku.config.LocationPreference;
 import edu.umich.si.inteco.minuku.config.SelectedLocation;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 8/16/16.
