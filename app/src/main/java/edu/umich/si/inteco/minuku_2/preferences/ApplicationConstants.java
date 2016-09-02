@@ -27,6 +27,11 @@ public class ApplicationConstants {
     public static final String NOTIFICATION_CATEGORY_MOOD_ANNOTATION = "MOOD_ANNOTATION_NOTIF";
 
     public static final int MIN_REPORTS_TO_GET_REWARD = 2;
+
+    public static final String EMAIL_FROM = "dstudio.umich@gmail.com";
+    public static final String EMAIL_FROM_PASSWORD = "Dstudio123#";
+    public static final String EMAIL_TO = "shritir@uci.edu";
+
 }
 
 
