@@ -1,17 +1,12 @@
 package edu.umich.si.inteco.minuku.manager;
 
-import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import edu.umich.si.inteco.minukucore.datastructures.DefaultValueHashMap;
 import edu.umich.si.inteco.minukucore.event.ActionEvent;
 import edu.umich.si.inteco.minukucore.event.IsDataExpectedEvent;
 import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
@@ -22,7 +17,7 @@ import edu.umich.si.inteco.minukucore.manager.SituationManager;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
 import edu.umich.si.inteco.minukucore.situation.Situation;
-
+import edu.umich.si.inteco.minuku.logger.Log;
 /**
  * Created by neerajkumar on 7/23/16.
  */

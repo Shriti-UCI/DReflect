@@ -3,14 +3,12 @@ package edu.umich.si.inteco.minuku.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
-import com.google.gson.Gson;
 
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import edu.umich.si.inteco.minukucore.model.DataRecord;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minukucore.user.User;
 
 /**

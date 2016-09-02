@@ -1,7 +1,5 @@
 package edu.umich.si.inteco.minuku.manager;
 
-import android.util.Log;
-
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
@@ -10,13 +8,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.model.MinukuStreamSnapshot;
 import edu.umich.si.inteco.minukucore.event.IsDataExpectedEvent;
 import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 import edu.umich.si.inteco.minukucore.event.StateChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
-import edu.umich.si.inteco.minukucore.manager.SituationManager;
 import edu.umich.si.inteco.minukucore.manager.StreamManager;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;

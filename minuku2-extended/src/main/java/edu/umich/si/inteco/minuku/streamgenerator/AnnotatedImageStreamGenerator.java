@@ -2,7 +2,6 @@ package edu.umich.si.inteco.minuku.streamgenerator;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -12,16 +11,13 @@ import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.AnnotatedImageDataRecordDAO;
-import edu.umich.si.inteco.minuku.dao.ImageDataRecordDAO;
 import edu.umich.si.inteco.minuku.event.DecrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku.event.IncrementLoadingProcessCountEvent;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
-import edu.umich.si.inteco.minuku.model.ImageDataRecord;
-import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.stream.AnnotatedImageStream;
-import edu.umich.si.inteco.minuku.stream.ImageStream;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.event.NoDataChangeEvent;
 import edu.umich.si.inteco.minukucore.exception.StreamAlreadyExistsException;

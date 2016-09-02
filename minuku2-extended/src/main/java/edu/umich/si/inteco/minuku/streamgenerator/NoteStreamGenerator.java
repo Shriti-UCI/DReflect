@@ -2,7 +2,6 @@ package edu.umich.si.inteco.minuku.streamgenerator;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -14,6 +13,7 @@ import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.NoteDataRecordDAO;
 import edu.umich.si.inteco.minuku.event.DecrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku.event.IncrementLoadingProcessCountEvent;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.NoteDataRecord;

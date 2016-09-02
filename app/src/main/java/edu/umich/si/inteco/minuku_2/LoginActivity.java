@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -34,7 +33,9 @@ import java.io.IOException;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
+import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 import edu.umich.si.inteco.minukucore.user.User;
+import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 7/22/16.
@@ -164,6 +165,26 @@ public class LoginActivity extends BaseActivity {
         Intent intent = new Intent(LoginActivity.this, CreateAccountActivity.class);
         startActivity(intent);
     }
+
+    /**
+     * Open CreateAccountActivity when user taps on "Sign up" TextView
+     */
+    public void onSendPasswordResetEmail(View view) {
+        String userEmail = mEditTextEmailInput.getText().toString();
+
+        if(isEmailValid(userEmail)) {
+
+            MailHelper mailHelper = new MailHelper(this, ApplicationConstants.EMAIL_TO,
+                    "Dreflect - Password Reset Email",
+                    "Reset password for user with email " + mEditTextEmailInput.getText().toString(),
+                    ApplicationConstants.EMAIL_FROM,
+                    ApplicationConstants.EMAIL_FROM_PASSWORD);
+            mailHelper.execute();
+        } else {
+            showToast("Please specify the correct email address in email field and try again.");
+        }
+    }
+
 
     /**
      * Link layout elements from XML and setup the progress dialog
@@ -511,7 +532,7 @@ public class LoginActivity extends BaseActivity {
                 } catch (GoogleAuthException authEx) {
                     /* The call is not ever expected to succeed assuming you have already verified that
                      * Google Play services is installed. */
-                    Log.e(TAG, " " + authEx.getMessage(), authEx);
+                    Log.e(TAG, " " + authEx.getMessage());
                     mErrorMessage = getString(R.string.google_error_auth_with_google) + authEx.getMessage();
                 }
                 return token;
@@ -532,4 +553,14 @@ public class LoginActivity extends BaseActivity {
         task.execute();
     }
 
+    private boolean isEmailValid(String email) {
+        boolean isGoodEmail =
+                (email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches());
+        if (!isGoodEmail) {
+            mEditTextEmailInput.setError(String.format(getString(R.string.error_invalid_email_not_valid),
+                    email));
+            return false;
+        }
+        return isGoodEmail;
+    }
 }

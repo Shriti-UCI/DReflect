@@ -1,33 +1,28 @@
 package edu.umich.si.inteco.minuku.manager;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
-import android.service.notification.StatusBarNotification;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.umich.si.inteco.minuku.R;
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.NotificationDAO;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.event.NotificationClickedEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
-import edu.umich.si.inteco.minukucore.manager.DAOManager;
 import edu.umich.si.inteco.minukucore.manager.NotificationManager;
 
 /**
@@ -172,7 +167,8 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     @Subscribe
     @Override
     public void handleShowNotificationEvent(ShowNotificationEvent aShowNotificationEvent) {
-        Log.d(TAG, "Handling notification event: " + aShowNotificationEvent.getCategory());
+        Log.d(TAG, "Handling notification event for notification from : " +
+                aShowNotificationEvent.getParams().get(Constants.BUNDLE_KEY_FOR_NOTIFICATION_SOURCE));
         if(aShowNotificationEvent.getCategory() != null) {
             if(ifSameCategoryNotificationExists(aShowNotificationEvent)) {
                 Log.d(TAG, "There is already a notification with the same category in map.");
@@ -211,7 +207,8 @@ public class MinukuNotificationManager extends Service implements NotificationMa
         }
 
         Integer notificationID = CURRENT_NOTIFICATION_ID.incrementAndGet();
-        Log.d(TAG, "Getting new notification ID: " + notificationID);
+        Log.d(TAG, "Getting new notification ID: " + notificationID + " with source: " +
+                aShowNotificationEvent.getParams().get(Constants.BUNDLE_KEY_FOR_NOTIFICATION_SOURCE));
         Notification n = buildNotificationForNotificationEvent(aShowNotificationEvent,
                 notificationID);
         registeredNotifications.put(notificationID, aShowNotificationEvent);
@@ -263,7 +260,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                         .add(registeredNotifications.get(aNotificaitonId));
             } catch (DAOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "Could not notification info to DAO", e);
+                Log.e(TAG, "Could not notification info to DAO");
             }
         }
         // Notification was already unregistered at some earlier time or was never registered.

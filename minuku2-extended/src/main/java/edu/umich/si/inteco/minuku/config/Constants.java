@@ -84,8 +84,15 @@ public class Constants {
     public static final String TAPPED_NOTIFICATION_ID_KEY = "TAPPED_NOTIFICATION_ID" ;
     public static final String SELECTED_LOCATIONS = "USERPREF_SELECTED_LOCATIONS";
     public static final String BUNDLE_KEY_FOR_QUESTIONNAIRE_ID = "QUESTIONNAIRE_ID";
+    public static final String BUNDLE_KEY_FOR_NOTIFICATION_SOURCE = "NOTIFICATION_SOURCE";
     public static final String APP_NAME = "Minuku";
     public static final String RUNNING_APP_DECLARATION = APP_NAME + " is running in the background";
     public static final long INTERNAL_LOCATION_UPDATE_FREQUENCY = 10 * 60 * 1000;
     public static final float LOCATION_MINUMUM_DISPLACEMENT_UPDATE_THRESHOLD = 150 ;
+
+    public static final String FOOD_NOTIFICATION_SOURCE = "FOOD";
+    public static final String GLUCOSE_READING_NOTIFICATION_SOURCE = "GLUCOSE_READING";
+    public static final String INSULIN_SHOT_NOTIFICATION_SOURCE = "INSULIN_SHOT";
+
+
 }

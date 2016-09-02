@@ -1,7 +1,6 @@
 package edu.umich.si.inteco.minuku.manager;
 
 import com.github.dkharrat.nexusdialog.FormElementController;
-import com.github.dkharrat.nexusdialog.controllers.*;
 
 import java.util.HashMap;
 import java.util.Map;

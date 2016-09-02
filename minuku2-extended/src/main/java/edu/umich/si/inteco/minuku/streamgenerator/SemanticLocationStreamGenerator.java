@@ -3,14 +3,10 @@ package edu.umich.si.inteco.minuku.streamgenerator;
 import android.content.Context;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.util.Log;
-
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -19,16 +15,12 @@ import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.LocationPreference;
 import edu.umich.si.inteco.minuku.config.SelectedLocation;
 import edu.umich.si.inteco.minuku.dao.SemanticLocationDataRecordDAO;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
 import edu.umich.si.inteco.minuku.model.SemanticLocationDataRecord;
-import edu.umich.si.inteco.minuku.stream.LocationStream;
 import edu.umich.si.inteco.minuku.stream.SemanticLocationStream;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
-import edu.umich.si.inteco.minukucore.manager.DAOManager;
-import edu.umich.si.inteco.minukucore.model.DataRecord;
-import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
-import edu.umich.si.inteco.minukucore.stream.AbstractStreamFromDevice;
 import edu.umich.si.inteco.minukucore.stream.Stream;
 
 /**
@@ -120,8 +112,7 @@ public class SemanticLocationStreamGenerator
             mDAO.add(convertToSemanticLocation(d));
         } catch (DAOException e) {
             e.printStackTrace();
-            Log.e(TAG, "There was an error adding the semantic location data record." +
-                    Log.getStackTraceString(e));
+            Log.e(TAG, "There was an error adding the semantic location data record.");
 
         }
     }
