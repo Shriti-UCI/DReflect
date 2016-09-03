@@ -22,6 +22,7 @@ import com.desmond.squarecamera.ImageUtility;
 
 import java.io.ByteArrayOutputStream;
 
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
 import edu.umich.si.inteco.minuku_2.model.FoodImage;
@@ -31,7 +32,6 @@ import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
-import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 7/19/16.

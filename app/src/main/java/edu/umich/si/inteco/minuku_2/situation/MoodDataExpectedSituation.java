@@ -6,18 +6,17 @@ import java.util.Calendar;
 import java.util.List;
 
 import edu.umich.si.inteco.minuku.config.UserPreferences;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minuku_2.event.MoodDataExpectedActionEvent;
 import edu.umich.si.inteco.minukucore.event.ActionEvent;
 import edu.umich.si.inteco.minukucore.event.IsDataExpectedEvent;
 import edu.umich.si.inteco.minukucore.event.MinukuEvent;
-
 import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
 import edu.umich.si.inteco.minukucore.situation.Situation;
-import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by neerajkumar on 7/30/16.

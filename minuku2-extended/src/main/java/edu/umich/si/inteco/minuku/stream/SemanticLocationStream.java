@@ -1,9 +1,6 @@
 package edu.umich.si.inteco.minuku.stream;
 
-import android.location.Location;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;

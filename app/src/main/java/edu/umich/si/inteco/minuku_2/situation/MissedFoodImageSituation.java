@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import edu.umich.si.inteco.minuku.config.UserPreferences;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
 import edu.umich.si.inteco.minuku_2.event.MissedFoodEvent;
 import edu.umich.si.inteco.minuku_2.model.FoodImage;
@@ -15,7 +16,6 @@ import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
 import edu.umich.si.inteco.minukucore.situation.Situation;
-import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 8/12/16.

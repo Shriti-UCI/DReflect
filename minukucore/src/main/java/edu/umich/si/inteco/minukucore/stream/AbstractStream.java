@@ -2,13 +2,10 @@ package edu.umich.si.inteco.minukucore.stream;
 
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 import edu.umich.si.inteco.minukucore.model.DataRecord;
-import edu.umich.si.inteco.minukucore.stream.Stream;
 
 /**
  * Created by Neeraj Kumar on 7/17/16.

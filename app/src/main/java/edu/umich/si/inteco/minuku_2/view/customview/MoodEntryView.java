@@ -1,4 +1,5 @@
 package edu.umich.si.inteco.minuku_2.view.customview;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,8 +9,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import edu.umich.si.inteco.minuku_2.R;
 import edu.umich.si.inteco.minuku.logger.Log;
+import edu.umich.si.inteco.minuku_2.R;
 
 public class MoodEntryView extends View
 {

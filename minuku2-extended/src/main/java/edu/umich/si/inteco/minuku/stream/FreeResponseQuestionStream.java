@@ -1,13 +1,11 @@
 package edu.umich.si.inteco.minuku.stream;
 
-import edu.umich.si.inteco.minukucore.exception.QuestionNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.stream.AbstractStreamFromQuestion;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by shriti on 7/28/16.

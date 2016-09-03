@@ -1,7 +1,6 @@
 package edu.umich.si.inteco.minukucore.model.question;
 
 import java.util.Date;
-import java.util.UUID;
 
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 

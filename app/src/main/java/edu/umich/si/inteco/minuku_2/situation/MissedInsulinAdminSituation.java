@@ -9,6 +9,7 @@ import java.util.Set;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
 import edu.umich.si.inteco.minuku_2.event.MissedInsulinAdminEvent;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
@@ -19,7 +20,6 @@ import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
 import edu.umich.si.inteco.minukucore.situation.Situation;
-import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 8/1/16.

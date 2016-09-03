@@ -1,6 +1,5 @@
 package edu.umich.si.inteco.minuku_2.stream;
 
-import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
 import edu.umich.si.inteco.minuku.stream.AnnotatedImageStream;
 
 /**

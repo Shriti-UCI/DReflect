@@ -19,11 +19,11 @@ import java.util.concurrent.Future;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minukucore.dao.DAO;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.user.User;
-import edu.umich.si.inteco.minuku.logger.Log;
 /**
  * Created by shriti on 7/21/16.
  */

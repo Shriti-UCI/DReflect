@@ -4,9 +4,9 @@ import android.content.Context;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.streamgenerator.AnnotatedImageStreamGenerator;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
-import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 7/31/16.

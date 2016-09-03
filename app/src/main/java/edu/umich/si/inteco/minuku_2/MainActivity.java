@@ -12,8 +12,6 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.crash.FirebaseCrash;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -25,16 +23,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.dao.UserSubmissionStatsDAO;
+import edu.umich.si.inteco.minuku.event.DecrementLoadingProcessCountEvent;
+import edu.umich.si.inteco.minuku.event.IncrementLoadingProcessCountEvent;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuNotificationManager;
 import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
-import edu.umich.si.inteco.minuku.event.DecrementLoadingProcessCountEvent;
-import edu.umich.si.inteco.minuku.event.IncrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku_2.manager.InstanceManager;
 import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 import edu.umich.si.inteco.minuku_2.service.BackgroundService;
 import edu.umich.si.inteco.minuku_2.view.helper.CustomGridAdapter;
-import edu.umich.si.inteco.minuku.logger.Log;
 
 public class MainActivity extends BaseActivity {
 

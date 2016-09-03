@@ -2,7 +2,6 @@ package edu.umich.si.inteco.minukucore.event;
 
 import java.util.List;
 
-import edu.umich.si.inteco.minukucore.action.Action;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 
 /**

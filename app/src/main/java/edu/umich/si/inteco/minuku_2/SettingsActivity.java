@@ -4,7 +4,6 @@ package edu.umich.si.inteco.minuku_2;
  * Created by shriti on 3/28/16.
  */
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 

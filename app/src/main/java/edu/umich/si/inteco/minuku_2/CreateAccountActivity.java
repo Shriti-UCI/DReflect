@@ -17,8 +17,8 @@ import com.firebase.client.ValueEventListener;
 import java.util.Map;
 
 import edu.umich.si.inteco.minuku.config.Constants;
-import edu.umich.si.inteco.minukucore.user.User;
 import edu.umich.si.inteco.minuku.logger.Log;
+import edu.umich.si.inteco.minukucore.user.User;
 
 /**
  * Created by neera_000 on 3/26/2016.

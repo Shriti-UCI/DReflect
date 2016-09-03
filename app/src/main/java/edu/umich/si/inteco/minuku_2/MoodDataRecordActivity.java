@@ -6,16 +6,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-
 import java.text.DecimalFormat;
 import java.util.Date;
 
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minuku_2.view.customview.MoodEntryView;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
-import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 7/21/16.

@@ -1,8 +1,6 @@
 package edu.umich.si.inteco.minukucore.stream;
 
 import edu.umich.si.inteco.minukucore.exception.QuestionNotFoundException;
-import edu.umich.si.inteco.minukucore.model.DataRecord;
-import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.model.question.Question;
 
 /**

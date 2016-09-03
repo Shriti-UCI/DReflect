@@ -1,9 +1,5 @@
 package edu.umich.si.inteco.minukucore.streamgenerator;
 
-import android.content.Context;
-
-import java.util.List;
-
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.stream.Stream;
 

@@ -21,7 +21,8 @@ import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.model.LocationDataRecord;
-import edu.umich.si.inteco.minukucore.dao.*;
+import edu.umich.si.inteco.minukucore.dao.DAO;
+import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.user.User;
 
 /**

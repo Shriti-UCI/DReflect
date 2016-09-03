@@ -1,7 +1,5 @@
 package edu.umich.si.inteco.minukucore.model.question;
 
-import java.lang.reflect.AnnotatedElement;
-
 /**
  * A Likert scale question gives user a question and expects an answer on a gradient.
  * @see <a href="https://en.wikipedia.org/wiki/Likert_scale">Wiki on Likert Scale</a> for more info.

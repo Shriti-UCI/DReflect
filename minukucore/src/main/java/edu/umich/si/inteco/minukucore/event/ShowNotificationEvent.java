@@ -1,7 +1,6 @@
 package edu.umich.si.inteco.minukucore.event;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 

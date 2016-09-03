@@ -3,8 +3,8 @@ package edu.umich.si.inteco.minuku_2;
 import android.os.Bundle;
 import android.widget.ListView;
 
-import edu.umich.si.inteco.minuku_2.preferences.LocationArrayListAdapter;
 import edu.umich.si.inteco.minuku.config.LocationPreference;
+import edu.umich.si.inteco.minuku_2.preferences.LocationArrayListAdapter;
 
 /**
  * Created by shriti on 8/15/16.

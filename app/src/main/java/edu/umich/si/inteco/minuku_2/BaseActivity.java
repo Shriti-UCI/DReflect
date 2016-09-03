@@ -31,11 +31,11 @@ import java.util.Calendar;
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.dao.UserSubmissionStatsDAO;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.event.NotificationClickedEvent;
-import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 7/22/16.

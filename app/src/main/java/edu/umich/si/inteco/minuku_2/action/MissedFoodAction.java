@@ -4,11 +4,11 @@ package edu.umich.si.inteco.minuku_2.action;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku_2.QuestionnaireActivity;
 import edu.umich.si.inteco.minuku_2.R;
 import edu.umich.si.inteco.minuku_2.event.MissedFoodEvent;
@@ -16,7 +16,6 @@ import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEventBuilder;
-import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by shriti on 8/12/16.

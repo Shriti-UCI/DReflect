@@ -7,7 +7,6 @@ import edu.umich.si.inteco.minukucore.event.MinukuEvent;
 import edu.umich.si.inteco.minukucore.exception.DataRecordTypeNotFound;
 import edu.umich.si.inteco.minukucore.model.DataRecord;
 import edu.umich.si.inteco.minukucore.model.StreamSnapshot;
-import edu.umich.si.inteco.minukucore.stream.Stream;
 
 /**
  * Created by shriti on 7/9/16.

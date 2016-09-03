@@ -8,8 +8,8 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import edu.umich.si.inteco.minuku.config.Constants;
-import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.logger.Log;
+import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 
 public class BackgroundService extends Service {
 

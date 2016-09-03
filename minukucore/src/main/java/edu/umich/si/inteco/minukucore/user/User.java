@@ -1,9 +1,5 @@
 package edu.umich.si.inteco.minukucore.user;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 /**
  * User is a well defined entity which will have a first name,
  * a last name, email and a set of devices that belong to the user

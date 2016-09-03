@@ -3,7 +3,8 @@ package edu.umich.si.inteco.minuku_2.question;
 import android.content.Context;
 
 import com.github.dkharrat.nexusdialog.FormElementController;
-import com.github.dkharrat.nexusdialog.controllers.*;
+import com.github.dkharrat.nexusdialog.controllers.CheckBoxController;
+import com.github.dkharrat.nexusdialog.controllers.EditTextController;
 
 import java.util.Arrays;
 import java.util.LinkedList;

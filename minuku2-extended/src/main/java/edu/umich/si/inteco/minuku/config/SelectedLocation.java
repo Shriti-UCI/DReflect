@@ -1,15 +1,5 @@
 package edu.umich.si.inteco.minuku.config;
 
-import android.location.Location;
-
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import edu.umich.si.inteco.minuku.model.LocationDataRecord;
-import edu.umich.si.inteco.minuku.model.SemanticLocationDataRecord;
-
 /**
  * Created by shriti on 8/16/16.
  */

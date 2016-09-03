@@ -7,13 +7,13 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.HashMap;
 
 import edu.umich.si.inteco.minuku.config.Constants;
+import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku_2.MoodDataRecordActivity;
 import edu.umich.si.inteco.minuku_2.R;
 import edu.umich.si.inteco.minuku_2.event.MoodDataExpectedActionEvent;
 import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEventBuilder;
-import edu.umich.si.inteco.minuku.logger.Log;
 
 /**
  * Created by neerajkumar on 7/30/16.

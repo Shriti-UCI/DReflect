@@ -1,6 +1,5 @@
 package edu.umich.si.inteco.minuku_2.preferences;
 
-import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku_2.BuildConfig;
 
 /**
