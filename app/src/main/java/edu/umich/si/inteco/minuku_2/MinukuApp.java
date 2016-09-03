@@ -29,7 +29,7 @@ public class MinukuApp extends android.app.Application {
         Firebase.setAndroidContext(this);
         UserPreferences.getInstance().Initialize(getApplicationContext());
 
-        Bugfender.init(this, "Nxfprfl78iMhECM0MmtsRJAERdPrPQvd", BuildConfig.DEBUG);
+        Bugfender.init(this, "N7pdXEGbmKhK9k8YtpFPyXORtsAwgZa5", BuildConfig.DEBUG);
         Bugfender.enableLogcatLogging();
         Bugfender.enableUIEventLogging(this);
 
