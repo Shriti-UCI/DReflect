@@ -33,7 +33,7 @@ public class MoodDataExpectedAction {
                         .setExpirationAction(ShowNotificationEvent.ExpirationAction.DISMISS)
                         .setExpirationTimeSeconds(Constants.MOOD_NOTIFICATION_EXPIRATION_TIME)
                         .setViewToShow(MoodDataRecordActivity.class)
-                        .setIconID(R.drawable.bell_yellow)
+                        .setIconID(R.drawable.self_reflection)
                         .setTitle(Constants.MOOD_REMINDER_TITLE)
                         .setMessage(Constants.MOOD_REMINDER_MESSAGE)
                         .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MOOD_REPORT)

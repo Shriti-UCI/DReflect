@@ -42,7 +42,7 @@ public class MissedFoodAction {
                 .setExpirationAction(ShowNotificationEvent.ExpirationAction.DISMISS)
                 .setExpirationTimeSeconds(Constants.MISSED_REPORT_NOTIFICATION_EXPIRATION_TIME)
                 .setViewToShow(QuestionnaireActivity.class)
-                .setIconID(R.drawable.bell_yellow)
+                .setIconID(R.drawable.self_reflection)
                 .setTitle(Constants.MISSED_ACTIVITY_DATA_PROMPT_TITLE)
                 .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MISSED_ACTIVITY)
                 .setMessage(Constants.MISSED_ACTIVITY_DATA_PROMPT_MESSAGE)

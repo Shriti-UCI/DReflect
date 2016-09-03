@@ -91,7 +91,7 @@ public class MainActivity extends BaseActivity {
                 "Record Notes          ",
                 "Upload Screenshots    ",
                 "Record Other Pictures ",
-                "Check Credit          "
+                "Check Reward          "
         };
 
         int[] imageID = {
@@ -361,5 +361,10 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public boolean isEligibleForReward(UserSubmissionStats userSubmissionStats) {
         return getRewardRelevantSubmissionCount(userSubmissionStats) >= ApplicationConstants.MIN_REPORTS_TO_GET_REWARD;
+    }
+
+    public void onCheckCreditPressed(View view) {
+        Intent displayCreditIntent = new Intent(MainActivity.this, DisplayCreditActivity.class);
+        startActivity(displayCreditIntent);
     }
 }
