@@ -72,6 +72,7 @@ public class MissedGlucoseReadingSituation implements Situation {
         Set<Integer> glucoseReadingTimesInSeconds = new HashSet<Integer>();
 
         for (String time:glucoseReadingTimes) {
+            Log.d(TAG, "gm time: " + time);
             glucoseReadingTimesInSeconds.add(convertHHMMtoSeconds(time));
         }
         //int endTimeInSeconds = convertHHMMtoSeconds(endTime);
@@ -93,7 +94,23 @@ public class MissedGlucoseReadingSituation implements Situation {
      * @return
      */
     private int convertHHMMtoSeconds(String aTime) {
-        return Integer.valueOf(aTime) * 3600;
+        //atime example: "23:55" , length =5 0-1, 3-4
+        int timeInseconds = 0;
+        String hour =null;
+        String minutes = null;
+        if(aTime!=null) {
+            String[] time = aTime.split(":");
+            if(time.length>0) {
+                hour = time[0];
+                timeInseconds = timeInseconds + Integer.valueOf(hour)*3600;
+            }
+            if(time.length>1) {
+                minutes = time[1];
+                timeInseconds = timeInseconds + Integer.valueOf(minutes)*60;
+            }
+            Log.d(TAG, "hour: " + hour + "minutes: " + minutes);
+        }
+        return timeInseconds;
     }
 
     /**
@@ -112,6 +129,7 @@ public class MissedGlucoseReadingSituation implements Situation {
         long secondsPassed = passed / 1000;
         Log.d(TAG, "Time in seconds now is: " + secondsPassed);
 
+        //compare now with start and end time
         String endTime = UserPreferences.getInstance().getPreference("endTime");
         Log.d(TAG, "end time " + endTime);
         String startTime = UserPreferences.getInstance().getPreference("startTime");
@@ -128,6 +146,7 @@ public class MissedGlucoseReadingSituation implements Situation {
                 return false;
             }
         }
+        Log.d(TAG, "Time now is in the range of startTime and endTime for user");
 
         long time = 0;
         //long time = secondsPassed;
@@ -170,7 +189,7 @@ public class MissedGlucoseReadingSituation implements Situation {
                 return true;
             }
             else {
-                Log.d(TAG, "Situation returning false");
+                Log.d(TAG, "Situation returning false because not enough time has passed since last report.");
                 return false;
             }
         } else {

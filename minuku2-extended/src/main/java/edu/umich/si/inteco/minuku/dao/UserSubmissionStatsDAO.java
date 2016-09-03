@@ -68,28 +68,30 @@ public class UserSubmissionStatsDAO implements DAO<UserSubmissionStats> {
         userStatsRef.setValue(newEntity);
     }
 
-    public Future<UserSubmissionStats> get(){
+    public Future<UserSubmissionStats> get() {
         final SettableFuture<UserSubmissionStats> future = SettableFuture.create();
-        Firebase userStatsRef = new Firebase(Constants.FIREBASE_URL_USER_SUBMISSION_STATS)
-                .child(myUserEmail)
-                .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
+        if (myUserEmail != null) {
+            Firebase userStatsRef = new Firebase(Constants.FIREBASE_URL_USER_SUBMISSION_STATS)
+                    .child(myUserEmail)
+                    .child(new SimpleDateFormat("MMddyyyy").format(new Date()).toString());
 
-        userStatsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    UserSubmissionStats stats = dataSnapshot.getValue(UserSubmissionStats.class);
-                    future.set(stats);
-                } else {
-                    future.set(new UserSubmissionStats());
+            userStatsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        UserSubmissionStats stats = dataSnapshot.getValue(UserSubmissionStats.class);
+                        future.set(stats);
+                    } else {
+                        future.set(new UserSubmissionStats());
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-            }
-        });
+                }
+            });
+        }
         return future;
     }
 }

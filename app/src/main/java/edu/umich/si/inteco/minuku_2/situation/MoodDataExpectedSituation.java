@@ -81,6 +81,10 @@ public class MoodDataExpectedSituation implements Situation {
         timesForNotification[1] = startTimeInSeconds += partitionWindow;
         timesForNotification[2] = startTimeInSeconds += partitionWindow;
 
+        Log.d(TAG, "Mood data expected at: " + timesForNotification[0] +
+                ", " + timesForNotification[1] +
+        ", " + timesForNotification[2]);
+
         return timesForNotification;
     }
 
@@ -90,9 +94,23 @@ public class MoodDataExpectedSituation implements Situation {
      * @return
      */
     private int convertHHMMtoSeconds(String aTime) {
-        String[] aTimeParts = aTime.split(":");
-        return Integer.valueOf(aTimeParts[0]) * 3600 +
-                Integer.valueOf(aTimeParts[1]) * 60;
+        //atime example: "23:55" , length =5 0-1, 3-4
+        int timeInseconds = 0;
+        String hour =null;
+        String minutes = null;
+        if(aTime!=null) {
+            String[] time = aTime.split(":");
+            if(time.length>0) {
+                hour = time[0];
+                timeInseconds = timeInseconds + Integer.valueOf(hour)*3600;
+            }
+            if(time.length>1) {
+                minutes = time[1];
+                timeInseconds = timeInseconds + Integer.valueOf(minutes)*60;
+            }
+            Log.d(TAG, "hour: " + hour + "minutes: " + minutes);
+        }
+        return timeInseconds;
     }
 
     /**
@@ -112,12 +130,33 @@ public class MoodDataExpectedSituation implements Situation {
         long passed = now - c.getTimeInMillis();
         long secondsPassed = passed / 1000;
 
+        //compare now with start and end time
+        String endTime = UserPreferences.getInstance().getPreference("endTime");
+        Log.d(TAG, "end time " + endTime);
+        String startTime = UserPreferences.getInstance().getPreference("startTime");
+        Log.d(TAG, "start time " + startTime);
+        if(endTime!=null && startTime!=null) {
+            int endTimeInSeconds = convertHHMMtoSeconds(endTime);
+            Log.d(TAG, "end time in seconds " + endTimeInSeconds);
+            int startTimeInSeconds = convertHHMMtoSeconds(startTime);
+            Log.d(TAG, "start time in seconds " + startTimeInSeconds);
+
+            if (secondsPassed > endTimeInSeconds || secondsPassed < startTimeInSeconds) {
+                Log.d(TAG, "Situation returning false because time now is beyond start or end time" +
+                        "for the user");
+                return false;
+            }
+        }
+        Log.d(TAG, "Time now is in the range of startTime and endTime for user");
+
         for(int i:getTimesForNotification()) {
             Log.d(TAG, "Seconds passed: " + secondsPassed + "; Time: " + i);
             if(secondsPassed - i > 0 && secondsPassed - i < 300) {
+                Log.d(TAG, "Situation returning true");
                 return true;
             }
         }
+        Log.d(TAG, "Situation returning false");
         return false;
     }
 }

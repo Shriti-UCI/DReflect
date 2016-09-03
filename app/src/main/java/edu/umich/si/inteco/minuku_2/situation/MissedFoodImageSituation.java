@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
 import edu.umich.si.inteco.minuku_2.event.MissedFoodEvent;
 import edu.umich.si.inteco.minuku_2.model.FoodImage;
@@ -72,6 +73,26 @@ public class MissedFoodImageSituation implements Situation {
         long passed = now - c.getTimeInMillis();
         long secondsPassed = passed / 1000; /*time now*/
 
+        //compare now with start and end time
+        String endTime = UserPreferences.getInstance().getPreference("endTime");
+        Log.d(TAG, "end time " + endTime);
+        String startTime = UserPreferences.getInstance().getPreference("startTime");
+        Log.d(TAG, "start time " + startTime);
+        if(endTime!=null && startTime!=null) {
+            int endTimeInSeconds = convertHHMMtoSeconds(endTime);
+            Log.d(TAG, "end time in seconds " + endTimeInSeconds);
+            int startTimeInSeconds = convertHHMMtoSeconds(startTime);
+            Log.d(TAG, "start time in seconds " + startTimeInSeconds);
+
+            if (secondsPassed > endTimeInSeconds || secondsPassed < startTimeInSeconds) {
+                Log.d(TAG, "Situation returning false because time now is beyond start or end time" +
+                        "for the user");
+                return false;
+            }
+        }
+
+        Log.d(TAG, "Time now is in the range of startTime and endTime for user");
+
         //if the last reported image was 3 hours before from now, return true
         if (snapshot.getCurrentValue(FoodImage.class) != null) {
             long lastReportedTime = snapshot.getCurrentValue(FoodImage.class).getCreationTime();
@@ -88,6 +109,31 @@ public class MissedFoodImageSituation implements Situation {
             Log.d(TAG, "current value from snapshot is null. Situation returning true");
             return true;
         }
+    }
+
+    /**
+     * Given a String in the format HH:MM, returns the number of seconds from midnight.
+     * @param aTime
+     * @return
+     */
+    private int convertHHMMtoSeconds(String aTime) {
+        //atime example: "23:55" , length =5 0-1, 3-4
+        int timeInseconds = 0;
+        String hour =null;
+        String minutes = null;
+        if(aTime!=null) {
+            String[] time = aTime.split(":");
+            if(time.length>0) {
+                hour = time[0];
+                timeInseconds = timeInseconds + Integer.valueOf(hour)*3600;
+            }
+            if(time.length>1) {
+                minutes = time[1];
+                timeInseconds = timeInseconds + Integer.valueOf(minutes)*60;
+            }
+            Log.d(TAG, "hour: " + hour + "minutes: " + minutes);
+        }
+        return timeInseconds;
     }
 
 }

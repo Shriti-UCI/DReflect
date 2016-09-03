@@ -79,6 +79,7 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
         int questionnaireId = Integer.valueOf(savedInstanceState.getString(Constants.BUNDLE_KEY_FOR_QUESTIONNAIRE_ID));
 
         Log.d(TAG, "creating form for questionnaire ID " + questionnaireId);
+        Log.d(TAG, "prompt source: " + savedInstanceState.getString(Constants.BUNDLE_KEY_FOR_NOTIFICATION_SOURCE));
         //get questionnaire ID from bundle
         //QuestionManager.getInstance().getQuestionnaireForID(ID)
         //
