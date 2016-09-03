@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "578867820113",
+    "firebase_url": "https://dstudio.firebaseio.com",
+    "project_id": "firebase-dstudio",
+    "storage_bucket": "firebase-dstudio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578867820113:android:54cb1fe984020452",
+        "android_client_info": {
+          "package_name": "edu.umich.si.inteco.minuku_2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "578867820113-qdpt47sjh0aqvepujqg39000psl6kuq2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnGBJPQ7UQG7veWBSdhOS_zUrZSt5SU-Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

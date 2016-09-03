@@ -41,11 +41,14 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     /* for custom shaped images in gridview */
     compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+
     compile files('libs/activation.jar')
     compile files('libs/additionnal.jar')
     compile files('libs/mail.jar')
 
 }
+
+apply plugin: 'com.google.gms.google-services'
 
 allprojects {
     repositories {

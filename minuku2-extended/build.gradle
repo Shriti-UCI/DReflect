@@ -31,15 +31,17 @@ dependencies {
     compile 'com.firebase:firebase-client-android:2.4.0'
     /* Firebase UI */
     compile 'com.firebaseui:firebase-ui:0.2.2'
+
+
     /* For Google Play Services */
-    compile 'com.google.android.gms:play-services-safetynet:8.3.0'
-    compile 'com.google.android.gms:play-services-auth:8.3.0'
+    compile 'com.google.android.gms:play-services-safetynet:9.2.1'
+    compile 'com.google.android.gms:play-services-auth:9.2.1'
     /*compile 'com.google.android.gms:play-services:8.3.0'*/
     compile 'com.google.android.gms:play-services:9.2.1'
     /* For Google Maps */
     /*compile 'com.google.android.gms:play-services-maps:8.3.0'*/
     compile 'com.google.android.gms:play-services-maps:9.2.1'
-    compile 'com.google.android.gms:play-services-location:8.3.0'
+    compile 'com.google.android.gms:play-services-location:9.2.1'
     /* Google Guava */
     compile 'com.google.guava:guava:19.0'
     compile 'org.greenrobot:eventbus:3.0.0'

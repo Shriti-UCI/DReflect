@@ -31,7 +31,8 @@ public class MinukuApp extends android.app.Application {
 
         Bugfender.init(this, "N7pdXEGbmKhK9k8YtpFPyXORtsAwgZa5", BuildConfig.DEBUG);
         Bugfender.enableLogcatLogging();
-        Bugfender.enableUIEventLogging(this);
+        
+        //Bugfender.enableUIEventLogging(this);
 
         //register questions registerStudyQuestions();
     }
