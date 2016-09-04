@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -55,6 +56,7 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestPermission();
+
         setContentView(R.layout.add_image_activity);
         imageView = (ImageView) findViewById(R.id.image);
         mText = (EditText) findViewById(R.id.image_annotation);
@@ -93,71 +95,71 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
         UserSubmissionStats userSubmissionStats = InstanceManager
                 .getInstance(getApplicationContext()).getUserSubmissionStats();
 
-            switch (photoTypeValue) {
-                case ApplicationConstants.IMAGE_TYPE_GLUCOSE_READIMG:
-                    GlucoseReadingImage glucoseReadingImage = new GlucoseReadingImage(base64ImageData,
-                            annotation, photoTypeValue);
-                    try {
-                        StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
-                                getStreamGeneratorFor(GlucoseReadingImage.class);
-                        Log.d(TAG, "Saving results to the database");
-                        streamGenerator.offer(glucoseReadingImage);
-                        Log.d(TAG, "increment glucose reading image count");
+        switch (photoTypeValue) {
+            case ApplicationConstants.IMAGE_TYPE_GLUCOSE_READIMG:
+                GlucoseReadingImage glucoseReadingImage = new GlucoseReadingImage(base64ImageData,
+                        annotation, photoTypeValue);
+                try {
+                    StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
+                            getStreamGeneratorFor(GlucoseReadingImage.class);
+                    Log.d(TAG, "Saving results to the database");
+                    streamGenerator.offer(glucoseReadingImage);
+                    Log.d(TAG, "increment glucose reading image count");
 
-                        if(userSubmissionStats != null)
-                            userSubmissionStats.incrementGlucoseReadingCount();
-                        else
-                            Log.d(TAG, "mUSerSubmissionStats is null");
-                    } catch (StreamNotFoundException e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "The photo stream does not exist on this device.");
-                    }
-                    break;
-                case ApplicationConstants.IMAGE_TYPE_INSULIN_SHOT:
-                    InsulinAdminImage insulinAdminImage = new InsulinAdminImage(base64ImageData,
-                            annotation, photoTypeValue);
-                    try {
-                        StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
-                                getStreamGeneratorFor(InsulinAdminImage.class);
-                        Log.d(TAG, "Saving results to the database");
-                        streamGenerator.offer(insulinAdminImage);
-                        Log.d(TAG, "increment insulin shot image count");
-                        userSubmissionStats.incrementInsulinCount();
-                    } catch (StreamNotFoundException e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "The photo stream does not exist on this device.");
-                    }
-                    break;
-                case ApplicationConstants.IMAGE_TYPE_FOOD:
-                    FoodImage foodImage = new FoodImage(base64ImageData, annotation, photoTypeValue);
-                    try {
-                        StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
-                                getStreamGeneratorFor(FoodImage.class);
-                        Log.d(TAG, "Saving results to the database");
-                        streamGenerator.offer(foodImage);
-                        Log.d(TAG, "increment food image count");
-                        userSubmissionStats.incrementFoodCount();
-                    } catch (StreamNotFoundException e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "The photo stream does not exist on this device.");
-                    }
-                    break;
-                default:
-                    AnnotatedImageDataRecord annotatedImageDataRecord = new AnnotatedImageDataRecord(
-                            base64ImageData,
-                            annotation, photoTypeValue);
-                    try {
-                        StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
-                                getStreamGeneratorFor(AnnotatedImageDataRecord.class);
-                        Log.d(TAG, "Saving results to the database");
-                        streamGenerator.offer(annotatedImageDataRecord);
-                        Log.d(TAG, "increment other image count");
-                        userSubmissionStats.incrementOtherImagesCount();
-                    } catch (StreamNotFoundException e) {
-                        e.printStackTrace();
-                        Log.e(TAG, "The photo stream does not exist on this device.");
-                    }
-            }
+                    if(userSubmissionStats != null)
+                        userSubmissionStats.incrementGlucoseReadingCount();
+                    else
+                        Log.d(TAG, "mUSerSubmissionStats is null");
+                } catch (StreamNotFoundException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "The photo stream does not exist on this device.");
+                }
+                break;
+            case ApplicationConstants.IMAGE_TYPE_INSULIN_SHOT:
+                InsulinAdminImage insulinAdminImage = new InsulinAdminImage(base64ImageData,
+                        annotation, photoTypeValue);
+                try {
+                    StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
+                            getStreamGeneratorFor(InsulinAdminImage.class);
+                    Log.d(TAG, "Saving results to the database");
+                    streamGenerator.offer(insulinAdminImage);
+                    Log.d(TAG, "increment insulin shot image count");
+                    userSubmissionStats.incrementInsulinCount();
+                } catch (StreamNotFoundException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "The photo stream does not exist on this device.");
+                }
+                break;
+            case ApplicationConstants.IMAGE_TYPE_FOOD:
+                FoodImage foodImage = new FoodImage(base64ImageData, annotation, photoTypeValue);
+                try {
+                    StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
+                            getStreamGeneratorFor(FoodImage.class);
+                    Log.d(TAG, "Saving results to the database");
+                    streamGenerator.offer(foodImage);
+                    Log.d(TAG, "increment food image count");
+                    userSubmissionStats.incrementFoodCount();
+                } catch (StreamNotFoundException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "The photo stream does not exist on this device.");
+                }
+                break;
+            default:
+                AnnotatedImageDataRecord annotatedImageDataRecord = new AnnotatedImageDataRecord(
+                        base64ImageData,
+                        annotation, photoTypeValue);
+                try {
+                    StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
+                            getStreamGeneratorFor(AnnotatedImageDataRecord.class);
+                    Log.d(TAG, "Saving results to the database");
+                    streamGenerator.offer(annotatedImageDataRecord);
+                    Log.d(TAG, "increment other image count");
+                    userSubmissionStats.incrementOtherImagesCount();
+                } catch (StreamNotFoundException e) {
+                    e.printStackTrace();
+                    Log.e(TAG, "The photo stream does not exist on this device.");
+                }
+        }
         Log.d(TAG, "increment total image count");
         userSubmissionStats.incrementTotalImageCount();
         InstanceManager
@@ -215,7 +217,7 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
 
         Log.d(TAG, "Requesting camera permission");
 
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.CAMERA)) {
@@ -223,7 +225,7 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                 Log.i(TAG,
                         "Displaying camera permission rationale to provide additional context.");
 
-                Snackbar.make(mLayout, R.string.permission_location_rationale,
+                Snackbar.make(mLayout, R.string.squarecamera__request_write_storage_permission_text,
                         Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.ok, new View.OnClickListener() {
                             @Override
@@ -241,9 +243,25 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                         REQUEST_CAMERA);
             }
         }
-
-        Intent startCustomCameraIntent = new Intent(this, CameraActivity.class);
-        startActivityForResult(startCustomCameraIntent, REQUEST_CAMERA);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CAMERA:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent startCustomCameraIntent = new Intent(this, CameraActivity.class);
+                    startActivityForResult(startCustomCameraIntent, REQUEST_CAMERA);
+
+                } else {
+                    showToast("Could not get permission for accessing your camera.");
+                    finish();
+                }
+                return;
+        }
+    }
 }
