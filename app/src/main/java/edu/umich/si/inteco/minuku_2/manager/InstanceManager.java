@@ -214,9 +214,9 @@ public class InstanceManager {
                         Log.d(LOG_TAG, "userSubmissionStats is either null or we have a new date." +
                                 "Creating new userSubmissionStats object");
                         mUserSubmissionStats = new UserSubmissionStats();
+
                     }
-                    //gotUserStatsFromDatabase(userSubmissionStats);
-                    //EventBus.getDefault().post(userSubmissionStats);
+                    EventBus.getDefault().post(mUserSubmissionStats);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     Log.d(LOG_TAG, "Creating mUserSubmissionStats");
@@ -246,6 +246,7 @@ public class InstanceManager {
         }
 
         mUserSubmissionStats = aUserSubmissionStats;
+        EventBus.getDefault().post(mUserSubmissionStats);
     }
 
     protected boolean areDatesEqual(long currentTime, long previousTime) {

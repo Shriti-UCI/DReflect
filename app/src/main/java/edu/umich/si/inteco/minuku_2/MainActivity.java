@@ -274,7 +274,7 @@ public class MainActivity extends BaseActivity {
 
 
     @Subscribe
-    public void populateCompensationMessage(UserSubmissionStats userSubmissionStats) {
+    public void assertEligibilityAndPopulateCompensationMessage(UserSubmissionStats userSubmissionStats) {
         Log.d(TAG, "Attempting to update compesnation message");
         if(userSubmissionStats != null && isEligibleForReward(userSubmissionStats)) {
             Log.d(TAG, "populating the compensation message");
@@ -283,11 +283,18 @@ public class MainActivity extends BaseActivity {
                 public void run() {
                     compensationMessage.setText("You are now eligible for today's reward!");
                     compensationMessage.setVisibility(View.VISIBLE);
+                    compensationMessage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            onCheckCreditPressed(v);
+                        }
+                    });
+
                 }});
         } else {
                 compensationMessage.setText("");
                 compensationMessage.setVisibility(View.INVISIBLE);
-            }
+        }
     }
 
     @Subscribe

@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:gravity="center|bottom"
     tools:context="edu.umich.si.inteco.minuku_2.MainActivity"
     android:id="@+id/main_layout">
 
@@ -39,5 +40,6 @@
         android:layout_below="@+id/list_view_actions_list"
         android:layout_alignParentBottom="true"
         android:onClick="onCheckCreditPressed"
+        android:clickable="true"
         android:layout_marginTop="10dp"/>
 </LinearLayout>
