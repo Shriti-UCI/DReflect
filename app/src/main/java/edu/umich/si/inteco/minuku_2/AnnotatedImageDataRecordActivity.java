@@ -219,29 +219,16 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.CAMERA)) {
+            Log.i(TAG,
+                    "Displaying camera permission rationale to provide additional context.");
 
-                Log.i(TAG,
-                        "Displaying camera permission rationale to provide additional context.");
-
-                Snackbar.make(mLayout, R.string.squarecamera__request_write_storage_permission_text,
-                        Snackbar.LENGTH_INDEFINITE)
-                        .setAction(R.string.ok, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                ActivityCompat.requestPermissions(AnnotatedImageDataRecordActivity.this,
-                                        new String[]{Manifest.permission.CAMERA},
-                                        REQUEST_CAMERA);
-                            }
-                        })
-                        .show();
-            } else {
-                // Camera permission has not been granted yet. Request it directly.
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.CAMERA},
-                        REQUEST_CAMERA);
-            }
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA);
+        } else {
+            Log.d(TAG, "Permission for camera activity already granted. Starting activity.");
+            Intent startCustomCameraIntent = new Intent(this, CameraActivity.class);
+            startActivityForResult(startCustomCameraIntent, REQUEST_CAMERA);
         }
     }
 
@@ -250,15 +237,15 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d(TAG, "On request permission result called.");
         switch (requestCode) {
             case REQUEST_CAMERA:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Intent startCustomCameraIntent = new Intent(this, CameraActivity.class);
                     startActivityForResult(startCustomCameraIntent, REQUEST_CAMERA);
-
+                    Log.d(TAG, "Successfully received permissions and started camera activity.");
                 } else {
-                    showToast("Could not get permission for accessing your camera.");
                     finish();
                 }
                 return;
