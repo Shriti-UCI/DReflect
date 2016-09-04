@@ -56,7 +56,7 @@ public class Constants {
     public static final String MOOD_REMINDER_MESSAGE = "Tap here to report your mood.";
 
     public static final String MOOD_ANNOTATION_TITLE = "Tell us more about your mood";
-    public static final String MOOD_ANNOTATION_MESSAGE = "Tap here answer one quick question.";
+    public static final String MOOD_ANNOTATION_MESSAGE = "Tap here answer a quick question.";
 
     public static final String MISSED_ACTIVITY_DATA_PROMPT_TITLE = "We want to hear from you!";
     public static final String MISSED_ACTIVITY_DATA_PROMPT_MESSAGE = "Tap here to answer some questions.";
@@ -78,14 +78,14 @@ public class Constants {
     public static final int FOOD_IMAGE_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES = 180;
 
     public static final int MOOD_NOTIFICATION_EXPIRATION_TIME = 30 * 60 /* 30 minutes*/;
-    public static final int MISSED_REPORT_NOTIFICATION_EXPIRATION_TIME = 5 * 60 /* 60 minutes*/;
+    public static final int MISSED_REPORT_NOTIFICATION_EXPIRATION_TIME = 60 * 60 /* 60 minutes*/;
 
 
     public static final String TAPPED_NOTIFICATION_ID_KEY = "TAPPED_NOTIFICATION_ID" ;
     public static final String SELECTED_LOCATIONS = "USERPREF_SELECTED_LOCATIONS";
     public static final String BUNDLE_KEY_FOR_QUESTIONNAIRE_ID = "QUESTIONNAIRE_ID";
     public static final String BUNDLE_KEY_FOR_NOTIFICATION_SOURCE = "NOTIFICATION_SOURCE";
-    public static final String APP_NAME = "Minuku";
+    public static final String APP_NAME = "DReflect";
     public static final String RUNNING_APP_DECLARATION = APP_NAME + " is running in the background";
     public static final long INTERNAL_LOCATION_UPDATE_FREQUENCY = 10 * 60 * 1000;
     public static final float LOCATION_MINUMUM_DISPLACEMENT_UPDATE_THRESHOLD = 150 ;

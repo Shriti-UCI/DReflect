@@ -41,7 +41,7 @@ public class MoodAnnotationExpectedAction {
                         .setExpirationAction(ShowNotificationEvent.ExpirationAction.DISMISS)
                         .setExpirationTimeSeconds(Constants.MOOD_NOTIFICATION_EXPIRATION_TIME)
                         .setViewToShow(QuestionnaireActivity.class)
-                        .setIconID(R.drawable.bell_yellow)
+                        .setIconID(R.drawable.self_reflection)
                         .setTitle(Constants.MOOD_ANNOTATION_TITLE)
                         .setMessage(Constants.MOOD_ANNOTATION_MESSAGE)
                         .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MOOD_ANNOTATION)
