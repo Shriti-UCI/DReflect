@@ -6,6 +6,7 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import edu.umich.si.inteco.minuku.logger.Log;
+import edu.umich.si.inteco.minuku_2.manager.InstanceManager;
 import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
 
 /**
@@ -36,17 +37,7 @@ public class DisplayCreditActivity extends BaseActivity {
         totalReportCount = (TextView) findViewById(R.id.total_response_count);
         rewardCount = (TextView) findViewById(R.id.reward_count);
 
-        if(mUserSubmissionStats != null) {
-             compensationMessages = getCompensationMessage();
-        }
-        else {
-            compensationMessages = new HashMap<>();
-            compensationMessages.put(GENERAL_MESSAGE, "You are not yet eligible for today's reward." +
-                    " Log some more data and get going!");
-            compensationMessages.put(REMAINING_TASKS, "at least 2 self reports to become eligible");
-            compensationMessages.put(TOTAL_RESPONSE_COUNT, "0");
-            compensationMessages.put(REWARD_COUNT, "0");
-        }
+        compensationMessages = getCompensationMessage();
 
         generalMessage.setText(compensationMessages.get(GENERAL_MESSAGE));
         remainingTasks.setText("Reports needed to earn today's reward : " + compensationMessages.get(REMAINING_TASKS));
@@ -67,7 +58,8 @@ public class DisplayCreditActivity extends BaseActivity {
                 mUserSubmissionStats.getInsulinCount()+
                 mUserSubmissionStats.getMoodCount();**/
 
-        int relevantDataCount = getRewardRelevantSubmissionCount(mUserSubmissionStats);
+        int relevantDataCount = getRewardRelevantSubmissionCount(
+                InstanceManager.getInstance(getApplicationContext()).getUserSubmissionStats());
 
         double reward;
         double compensationAmount = relevantDataCount*0.10;

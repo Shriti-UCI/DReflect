@@ -21,6 +21,8 @@ import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.manager.QuestionManager;
+import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
+import edu.umich.si.inteco.minuku_2.manager.InstanceManager;
 import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
 import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.exception.QuestionNotFoundException;
@@ -155,14 +157,14 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
             }
         }
         Log.d(TAG, "Increasing question count in submission stats");
-        mUserSubmissionStats.incrementQuestionCount();
-        try {
-            Log.d(TAG, "Uploading user submission stats");
-            uploadUserSubmissionStats(mUserSubmissionStats);
-        } catch (DAOException e) {
-            Log.d(TAG, "Failed to upload user submission stats");
-            e.printStackTrace();
-        }
+        UserSubmissionStats userSubmissionStats = InstanceManager
+                .getInstance(getApplicationContext())
+                .getUserSubmissionStats();
+        userSubmissionStats.incrementQuestionCount();
+        InstanceManager
+                .getInstance(getApplicationContext())
+                .setUserSubmissionStats(userSubmissionStats);
+
         showToast("Your answer has been recorded");
         finish();
     }

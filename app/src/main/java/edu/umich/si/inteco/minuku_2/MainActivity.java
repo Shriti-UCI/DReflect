@@ -256,49 +256,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
-
         super.onResume();
         mSharedPref.writePreference(Constants.CAN_SHOW_NOTIFICATION, Constants.NO);
-
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                Future<UserSubmissionStats> submissionStatsFuture = ((UserSubmissionStatsDAO)
-                        MinukuDAOManager.getInstance().getDaoFor(UserSubmissionStats.class)).get();
-                while (!submissionStatsFuture.isDone()) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                //
-                try {
-                    Log.d(TAG, "getting mUserSubmissionStats from future ");
-                    UserSubmissionStats userSubmissionStats = submissionStatsFuture.get();
-                    //date check - ensuring that every day we have a new instance of submission
-                    // stats. Needs to be tested
-
-                    if(!areDatesEqual(userSubmissionStats.creationTime, (new Date().getTime()))
-                            || userSubmissionStats==null) {
-                        Log.d(TAG, "userSubmissionStats is either null or we have a new date." +
-                                "Creating new userSubmissionStats object");
-                        userSubmissionStats = new UserSubmissionStats();
-                    }
-                    gotUserStatsFromDatabase(userSubmissionStats);
-                    EventBus.getDefault().post(userSubmissionStats);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Log.d(TAG, "Creating mUserSubmissionStats");
-                    gotUserStatsFromDatabase(null);
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                    Log.d(TAG, "Creating mUserSubmissionStats");
-                    gotUserStatsFromDatabase(null);
-                }
-            }
-        });
     }
+
 
     private void showSettingsScreen() {
         //showToast("Clicked settings");
@@ -311,10 +272,6 @@ public class MainActivity extends BaseActivity {
         super.onStart();
     }
 
-    @Override
-    protected void gotUserStatsFromDatabase(UserSubmissionStats userSubmissionStats) {
-        super.gotUserStatsFromDatabase(userSubmissionStats);
-    }
 
     @Subscribe
     public void populateCompensationMessage(UserSubmissionStats userSubmissionStats) {

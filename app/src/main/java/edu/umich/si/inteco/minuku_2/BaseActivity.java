@@ -58,8 +58,6 @@ public class BaseActivity extends AppCompatActivity implements
 
     protected View mLayout;
 
-    protected static UserSubmissionStats mUserSubmissionStats;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -221,10 +219,6 @@ public class BaseActivity extends AppCompatActivity implements
         });*/
     }
 
-    protected void gotUserStatsFromDatabase(UserSubmissionStats userSubmissionStats) {
-        Log.d(TAG, "setting mUserSubmissionStats");
-        mUserSubmissionStats = userSubmissionStats;
-    }
 
     @Override
     protected void onPause() {
@@ -327,12 +321,6 @@ public class BaseActivity extends AppCompatActivity implements
         }
     }
 
-    public void uploadUserSubmissionStats(UserSubmissionStats newUserSubmissionStats)
-            throws DAOException {
-        mUserSubmissionStats = newUserSubmissionStats;
-        MinukuDAOManager.getInstance().getDaoFor(UserSubmissionStats.class).update(null,
-                mUserSubmissionStats);
-    }
 
     public int getRewardRelevantSubmissionCount(UserSubmissionStats userSubmissionStats) {
         return (userSubmissionStats.getGlucoseReadingCount() +

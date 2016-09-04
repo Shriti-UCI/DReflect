@@ -25,6 +25,8 @@ import java.io.ByteArrayOutputStream;
 import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
+import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
+import edu.umich.si.inteco.minuku_2.manager.InstanceManager;
 import edu.umich.si.inteco.minuku_2.model.FoodImage;
 import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
 import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
@@ -88,6 +90,8 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
     private void acceptResults() {
         //create a new image data record once submitted/accepted by user
         String annotation = mText.getText().toString();
+        UserSubmissionStats userSubmissionStats = InstanceManager
+                .getInstance(getApplicationContext()).getUserSubmissionStats();
 
             switch (photoTypeValue) {
                 case ApplicationConstants.IMAGE_TYPE_GLUCOSE_READIMG:
@@ -99,8 +103,9 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                         Log.d(TAG, "Saving results to the database");
                         streamGenerator.offer(glucoseReadingImage);
                         Log.d(TAG, "increment glucose reading image count");
-                        if(mUserSubmissionStats!=null)
-                            mUserSubmissionStats.incrementGlucoseReadingCount();
+
+                        if(userSubmissionStats != null)
+                            userSubmissionStats.incrementGlucoseReadingCount();
                         else
                             Log.d(TAG, "mUSerSubmissionStats is null");
                     } catch (StreamNotFoundException e) {
@@ -117,7 +122,7 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                         Log.d(TAG, "Saving results to the database");
                         streamGenerator.offer(insulinAdminImage);
                         Log.d(TAG, "increment insulin shot image count");
-                        mUserSubmissionStats.incrementInsulinCount();
+                        userSubmissionStats.incrementInsulinCount();
                     } catch (StreamNotFoundException e) {
                         e.printStackTrace();
                         Log.e(TAG, "The photo stream does not exist on this device.");
@@ -131,7 +136,7 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                         Log.d(TAG, "Saving results to the database");
                         streamGenerator.offer(foodImage);
                         Log.d(TAG, "increment food image count");
-                        mUserSubmissionStats.incrementFoodCount();
+                        userSubmissionStats.incrementFoodCount();
                     } catch (StreamNotFoundException e) {
                         e.printStackTrace();
                         Log.e(TAG, "The photo stream does not exist on this device.");
@@ -147,21 +152,18 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                         Log.d(TAG, "Saving results to the database");
                         streamGenerator.offer(annotatedImageDataRecord);
                         Log.d(TAG, "increment other image count");
-                        mUserSubmissionStats.incrementOtherImagesCount();
+                        userSubmissionStats.incrementOtherImagesCount();
                     } catch (StreamNotFoundException e) {
                         e.printStackTrace();
                         Log.e(TAG, "The photo stream does not exist on this device.");
                     }
             }
         Log.d(TAG, "increment total image count");
-        mUserSubmissionStats.incrementTotalImageCount();
-        try {
-            uploadUserSubmissionStats(mUserSubmissionStats);
-            Log.d(TAG, "Upoloaded user submission stats");
-        } catch (DAOException e) {
-            Log.d(TAG, "Failed to upload user submission stats");
-            e.printStackTrace();
-        }
+        userSubmissionStats.incrementTotalImageCount();
+        InstanceManager
+                .getInstance(getApplicationContext())
+                .setUserSubmissionStats(userSubmissionStats);
+
         showToast("Starting the image stream annotated photo.");
 
         finish();
