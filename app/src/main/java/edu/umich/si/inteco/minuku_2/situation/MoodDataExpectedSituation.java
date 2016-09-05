@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
@@ -98,10 +99,15 @@ public class MoodDataExpectedSituation implements Situation {
         int endTimeInSeconds = convertHHMMtoSeconds(endTime);
 
         int partitionWindow = (endTimeInSeconds - startTimeInSeconds) / 3;
-        timesForNotification[0] = startTimeInSeconds += partitionWindow;
-        timesForNotification[1] = startTimeInSeconds += partitionWindow;
-        timesForNotification[2] = startTimeInSeconds += partitionWindow;
-
+        //timesForNotification[0] = startTimeInSeconds += partitionWindow;
+        timesForNotification[0] = startTimeInSeconds + partitionWindow/2;
+        //start time + partition/2 -- the denominator here can be a random no. generate between 2 and 3
+        //timesForNotification[1] = startTimeInSeconds += partitionWindow;
+        timesForNotification[1] = startTimeInSeconds + partitionWindow + partitionWindow/2;
+        //start time +partition + partition/2
+        //timesForNotification[2] = startTimeInSeconds += partitionWindow;
+        timesForNotification[2] = startTimeInSeconds + partitionWindow + partitionWindow + partitionWindow/2;
+        //start time +partition + partition/2
         Log.d(TAG, "Mood data expected at: " + timesForNotification[0] +
                 ", " + timesForNotification[1] +
         ", " + timesForNotification[2]);
@@ -172,7 +178,7 @@ public class MoodDataExpectedSituation implements Situation {
 
         for(int i:getTimesForNotification()) {
             Log.d(TAG, "Seconds passed: " + secondsPassed + "; Time: " + i);
-            if(secondsPassed - i > 0 && secondsPassed - i < 300) {
+            if(secondsPassed - i >= 0 && secondsPassed - i < Constants.MOOD_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES*60) {
                 Log.d(TAG, "Situation returning true");
                 return true;
             }

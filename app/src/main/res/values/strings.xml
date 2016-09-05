@@ -31,6 +31,8 @@
     <string name="progress_dialog_authenticating_with_firebase">Authenticating with Firebase…</string>
     <string name="progress_dialog_creating_user_with_firebase">Attempting to create account…</string>
     <string name="progress_dialog_check_inbox">Please check your inbox for your password</string>
+    <string name="progress_dialog_account_creation_closure">Your account has been created</string>
+
     <!-- Errors -->
     <string name="dialog_title_error">Error</string>
     <string name="error_message_failed_sign_in_no_network">There was a problem with the network connection.\nAre you sure you\'re connected to the internet?</string>
@@ -72,6 +74,7 @@
     <string name="hint_enter_firstname">Enter your First name</string>
     <string name="hint_enter_lastname">Enter your Last name</string>
     <string name="hint_enter_password">Enter password</string>
+    <string name="password_requirement">Password must have a number, a small letter, a capital letter, and a symbol(@#$%^+=)</string>
     <string name="image_view_logo_image">Logo Image</string>
     <string name="tv_forgot_your_password">Forgot your password?</string>
     <string name="tv_text_reset_password">Send Password Reset Email</string>
