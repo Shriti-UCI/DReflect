@@ -37,6 +37,7 @@ import com.google.common.util.concurrent.AtomicDouble;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -117,7 +118,7 @@ public class LocationStreamGenerator extends AndroidStreamGenerator<LocationData
                         Thread.sleep(1000);
                     }
                     Log.d(TAG, "Received data from Future for " + TAG);
-                    mStream.addAll(listFuture.get());
+                    mStream.addAll(new LinkedList<>(listFuture.get()));
                 } catch (DAOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
