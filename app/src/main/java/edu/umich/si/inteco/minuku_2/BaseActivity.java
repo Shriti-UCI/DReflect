@@ -45,6 +45,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
+import com.instabug.library.Instabug;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -128,6 +129,7 @@ public class BaseActivity extends AppCompatActivity implements
         mEmail = mSharedPref.getPreference(Constants.ID_SHAREDPREF_EMAIL);
         mProvider = mSharedPref.getPreference(Constants.ID_SHAREDPREF_PROVIDER);
         Log.setDeviceString(mEmail);
+        Instabug.setUserEmail(mEmail);
 
         // The base activity takes care of getting information about the notification that started
         // the activity (if there is one), and posting the NotificationClickEvent on the bus.

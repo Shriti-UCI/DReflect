@@ -26,6 +26,8 @@ import android.content.Context;
 
 import com.bugfender.sdk.Bugfender;
 import com.firebase.client.Firebase;
+import com.instabug.library.IBGInvocationEvent;
+import com.instabug.library.Instabug;
 
 import edu.umich.si.inteco.minuku.config.UserPreferences;
 
@@ -53,9 +55,9 @@ public class MinukuApp extends android.app.Application {
 
         Bugfender.init(this, "N7pdXEGbmKhK9k8YtpFPyXORtsAwgZa5", BuildConfig.DEBUG);
         Bugfender.enableLogcatLogging();
-        
-        //Bugfender.enableUIEventLogging(this);
 
-        //register questions registerStudyQuestions();
+        new Instabug.Builder(this, "2be6d236d601237a17e9c6314455930a")
+                .setInvocationEvent(IBGInvocationEvent.IBGInvocationEventShake)
+                .build();
     }
 }
