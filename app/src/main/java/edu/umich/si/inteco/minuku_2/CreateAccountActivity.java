@@ -71,7 +71,7 @@ public class CreateAccountActivity extends BaseActivity {
         /* Setup the progress dialog that is displayed later when authenticating with Firebase */
         mAuthProgressDialog = new ProgressDialog(this);
         mAuthProgressDialog.setTitle(getResources().getString(R.string.progress_dialog_loading));
-        mAuthProgressDialog.setMessage(getResources().getString(R.string.progress_dialog_check_inbox));
+        mAuthProgressDialog.setMessage(getResources().getString(R.string.progress_dialog_account_creation_closure));
         mAuthProgressDialog.setCancelable(false);
     }
 

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.config.UserPreferences;
 import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuSituationManager;
@@ -150,7 +151,7 @@ public class MoodDataExpectedSituation implements Situation {
 
         for(int i:getTimesForNotification()) {
             Log.d(TAG, "Seconds passed: " + secondsPassed + "; Time: " + i);
-            if(secondsPassed - i > 0 && secondsPassed - i < 300) {
+            if(secondsPassed - i >= 0 && secondsPassed - i < Constants.MOOD_STREAM_GENERATOR_UPDATE_FREQUENCY_MINUTES) {
                 Log.d(TAG, "Situation returning true");
                 return true;
             }
