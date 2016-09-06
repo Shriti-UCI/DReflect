@@ -74,7 +74,8 @@ public abstract class AbstractStream<T extends DataRecord>
 
     @Override
     public boolean addAll(int location, Collection<? extends T> objects) {
-       return super.addAll(0, objects);
+        Log.d("AbstractStream", "Add all called on location :" + location);
+        return super.addAll(location, objects);
     }
 
     @Override
