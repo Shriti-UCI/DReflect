@@ -74,9 +74,7 @@ public abstract class AbstractStream<T extends DataRecord>
 
     @Override
     public boolean addAll(int location, Collection<? extends T> objects) {
-        Log.e("AbstractStream", "Cannot add to multiple entries at location.");
-        throw new UnsupportedOperationException(
-                "Cannot add to multiple entries at location.");
+       return super.addAll(0, objects);
     }
 
     @Override
