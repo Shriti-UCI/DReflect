@@ -26,9 +26,11 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.TaskStackBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,8 +66,6 @@ public class MinukuNotificationManager extends Service implements NotificationMa
         //categorizedNotificationMap = new HashMap<>();
         mDAO = MinukuDAOManager.getInstance().getDaoFor(ShowNotificationEvent.class);
         EventBus.getDefault().register(this);
-
-
     }
 
     @Override
@@ -102,6 +102,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     private void checkRegisteredNotifications() {
 
         Log.d(TAG, "Checking for registered notificaitons.");
+
         Log.d(TAG, "Number of registered notifications: " + registeredNotifications.size());
         for(Map.Entry<Integer, ShowNotificationEvent> entry: registeredNotifications.entrySet()) {
             ShowNotificationEvent notification = entry.getValue();
@@ -168,8 +169,12 @@ public class MinukuNotificationManager extends Service implements NotificationMa
         }
         launchIntent.putExtra(Constants.TAPPED_NOTIFICATION_ID_KEY, id.toString());
 
-        PendingIntent pIntent = PendingIntent.getActivity(this,
-                0, launchIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pIntent = TaskStackBuilder.create(this)
+                .addParentStack(aShowNotificationEvent.getViewToShow())
+                .addNextIntent(launchIntent)
+                .getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT);
+//                PendingIntent.getActivity(this,
+//                0, launchIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
 
         Notification n  = new Notification.Builder(this)
