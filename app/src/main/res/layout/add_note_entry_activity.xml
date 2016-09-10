@@ -6,7 +6,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:text="Got somthing more to say? Please use this space to record anything you want!"
+        android:text="Got something more to say? Please use this space to record anything you want!"
         android:id="@+id/note_hint"
         android:background="@color/colorPrimaryDark"
         android:textColor="@android:color/white"

@@ -62,6 +62,7 @@ public class LocationArrayListAdapter extends ArrayAdapter<SelectedLocation> {
         View rowView = inflater.inflate(R.layout.listitem_locationpreference, null, true);
 
         TextView txtTitle = (TextView) rowView.findViewById(R.id.firstLine);
+        TextView txtSubTitle = (TextView) rowView.findViewById(R.id.secondLine);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +73,9 @@ public class LocationArrayListAdapter extends ArrayAdapter<SelectedLocation> {
         });
 
         txtTitle.setText(items.get(position).getPlace());
+        if(items.get(position).getLabel()!=null) {
+            txtSubTitle.setText(items.get(position).getLabel());
+        }
         imageView.setImageResource(items.get(position).getImageResourceId());
         return rowView;
     }
