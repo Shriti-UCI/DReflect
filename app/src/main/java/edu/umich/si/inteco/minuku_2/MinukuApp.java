@@ -25,6 +25,7 @@ package edu.umich.si.inteco.minuku_2;
 import android.content.Context;
 
 import com.bugfender.sdk.Bugfender;
+import com.firebase.client.Config;
 import com.firebase.client.Firebase;
 import com.instabug.library.IBGInvocationEvent;
 import com.instabug.library.Instabug;
@@ -50,7 +51,13 @@ public class MinukuApp extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Firebase.setAndroidContext(this);
+        Config mConfig = new Config();
+        mConfig.setPersistenceEnabled(true);
+        long cacheSizeOfHundredMB = 100 * 1024 * 1024;
+        mConfig.setPersistenceCacheSizeBytes(cacheSizeOfHundredMB);
+        mConfig.setPersistenceEnabled(true);
+        mConfig.setAndroidContext(this);
+        Firebase.setDefaultConfig(mConfig);
         UserPreferences.getInstance().Initialize(getApplicationContext());
 
         Bugfender.init(this, "N7pdXEGbmKhK9k8YtpFPyXORtsAwgZa5", BuildConfig.DEBUG);
