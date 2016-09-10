@@ -129,7 +129,7 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
 
         ViewGroup containerView = (ViewGroup)findViewById(R.id.form_elements_container);
         formController.recreateViews(containerView);
-        Log.d(TAG, "creating activity");
+        Log.d(TAG, "creating the form");
 
     }
 
