@@ -38,6 +38,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.umich.si.inteco.minuku.R;
@@ -62,7 +63,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
 
     public MinukuNotificationManager() {
         Log.d(TAG, "Started minuku notification manager");
-        registeredNotifications = new HashMap<>();
+        registeredNotifications = new ConcurrentHashMap<>();
         //categorizedNotificationMap = new HashMap<>();
         mDAO = MinukuDAOManager.getInstance().getDaoFor(ShowNotificationEvent.class);
         EventBus.getDefault().register(this);
