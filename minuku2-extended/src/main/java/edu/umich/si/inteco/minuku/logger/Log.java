@@ -29,18 +29,14 @@ import com.bugfender.sdk.Bugfender;
  */
 public class Log {
 
-    public Log(){
-
-    }
-
     public static void d(String TAG, String message) {
         Bugfender.d(TAG, message);
-        //android.util.Log.d(TAG, message);
+        android.util.Log.d(TAG, message);
     }
 
     public static void e(String TAG, String message) {
         Bugfender.e(TAG, message);
-        //android.util.Log.e(TAG, message);
+        android.util.Log.e(TAG, message);
     }
 
     public static void w(String TAG, String message) {
@@ -50,11 +46,10 @@ public class Log {
 
     public static void i(String TAG, String message) {
         Bugfender.d(TAG, message);
-        //android.util.Log.i(TAG, message);
+        android.util.Log.i(TAG, message);
     }
 
     public static String getDeviceIdentifier() {
-
         return Bugfender.getDeviceIdentifier();
     }
 
