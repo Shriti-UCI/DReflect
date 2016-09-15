@@ -58,13 +58,11 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     private static AtomicInteger CURRENT_NOTIFICATION_ID = new AtomicInteger(Integer.MIN_VALUE + 5);
     private Map<Integer, ShowNotificationEvent> registeredNotifications;
     private android.app.NotificationManager mNotificationManager;
-    //private Map<String, ShowNotificationEvent> categorizedNotificationMap;
     private NotificationDAO mDAO;
 
     public MinukuNotificationManager() {
         Log.d(TAG, "Started minuku notification manager");
         registeredNotifications = new ConcurrentHashMap<>();
-        //categorizedNotificationMap = new HashMap<>();
         mDAO = MinukuDAOManager.getInstance().getDaoFor(ShowNotificationEvent.class);
         EventBus.getDefault().register(this);
     }
@@ -217,13 +215,13 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                     if((id = getIdForNotification(previousNotification)) != null) {
                         unregisterNotification(id);
                     }
-
-                    try {
+                    //we do not need this as every notification is getting added the moment it is registered
+                    /*try {
                         Log.d(TAG, "Adding previous notification information.");
                         mDAO.add(previousNotification);
                     } catch (DAOException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                 } else {
                     Log.d(TAG, "The old notification already in the map has not  " +
                             " expired. New notification ignored..");
@@ -240,7 +238,14 @@ public class MinukuNotificationManager extends Service implements NotificationMa
         Notification n = buildNotificationForNotificationEvent(aShowNotificationEvent,
                 notificationID);
         registeredNotifications.put(notificationID, aShowNotificationEvent);
+        try {
+            Log.d(TAG, "adding the newly registered notification to database");
+            mDAO.add(aShowNotificationEvent);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
         mNotificationManager.notify(notificationID, n);
+        //should add the notification here?
     }
 
     @Subscribe
