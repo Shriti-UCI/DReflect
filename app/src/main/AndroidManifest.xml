@@ -44,16 +44,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- API KEY FOR PLACES -->
+        <!-- API KEY FOR PLACES
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB0t35c44rDCvs_o3ZEVdoUy3r5iRB6Oog"
-            />
+            /> -->
         <!-- API KEY FOR MAPS
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyB0t35c44rDCvs_o3ZEVdoUy3r5iRB6Oog" /> -->
 
+        <!-- API KEY FOR PLACES -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAB-peLVWYyFvxsveP_rR_q7JHvC6MflRY"
+            />
 
         <activity android:name=".MainActivity"
             android:launchMode="singleInstance">
