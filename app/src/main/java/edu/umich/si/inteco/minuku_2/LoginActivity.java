@@ -63,7 +63,7 @@ import edu.umich.si.inteco.minukucore.user.User;
  * Created by shriti on 7/22/16.
  */
 public class LoginActivity extends BaseActivity {
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "WOLoginActivity";
 
     /* A dialog that is presented until the Firebase authentication finished. */
     private ProgressDialog mAuthProgressDialog;
