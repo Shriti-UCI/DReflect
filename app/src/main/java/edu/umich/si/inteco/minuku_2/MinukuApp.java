@@ -60,7 +60,8 @@ public class MinukuApp extends android.app.Application {
         Firebase.setDefaultConfig(mConfig);
         UserPreferences.getInstance().Initialize(getApplicationContext());
 
-        Bugfender.init(this, "N7pdXEGbmKhK9k8YtpFPyXORtsAwgZa5", false);
+        Bugfender.init(this, "N7pdXEGbmKhK9k8YtpFPyXORtsAwgZa5", true);
+        Bugfender.setForceEnabled(true);
         //Bugfender.enableLogcatLogging();
 
         new Instabug.Builder(this, "2be6d236d601237a17e9c6314455930a")
