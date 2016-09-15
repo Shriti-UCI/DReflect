@@ -377,7 +377,7 @@ public class LoginActivity extends BaseActivity {
          * as a Firebase db key
          */
         mEmail = Utils.encodeEmail(unprocessedEmail);
-        mSharedPref.getInstance().writePreference(Constants.ID_SHAREDPREF_EMAIL, mEmail);
+        UserPreferences.getInstance().writePreference(Constants.ID_SHAREDPREF_EMAIL, mEmail);
 
         final String fullNameAsOnGoogleProfile = (String)
                 authData.getProviderData().get("displayName");
@@ -468,7 +468,7 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-        ImageButton fButton = (ImageButton) findViewById(R.id.login_with_facebook);
+        //ImageButton fButton = (ImageButton) findViewById(R.id.login_with_facebook);
         //Utils.invert(fButton.getDrawable());
     }
 

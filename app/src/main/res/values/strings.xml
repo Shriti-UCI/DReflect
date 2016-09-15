@@ -79,6 +79,6 @@
     <string name="tv_forgot_your_password">Forgot your password?</string>
     <string name="tv_text_reset_password">Send Password Reset Email</string>
 
-    <string name="text_login_via">Login using</string>
+    <string name="text_login_via">Sign in with</string>
 
 </resources>

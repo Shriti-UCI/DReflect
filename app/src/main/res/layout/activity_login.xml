@@ -43,17 +43,8 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:padding="5dp"
-                android:src="@drawable/g"
-                android:background="@color/black"
-                android:scaleType="fitCenter"/>
-
-            <ImageButton
-                android:id="@+id/login_with_facebook"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:padding="5dp"
-                android:src="@drawable/f"
-                android:background="@color/black"
+                android:src="@drawable/g_icon"
+                android:background="@color/squarecamera__white"
                 android:scaleType="fitCenter"/>
 
         </android.support.v7.widget.LinearLayoutCompat>
