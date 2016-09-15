@@ -46,7 +46,6 @@ import edu.umich.si.inteco.minuku.manager.QuestionManager;
 import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
 import edu.umich.si.inteco.minuku_2.manager.InstanceManager;
 import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
-import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.exception.QuestionNotFoundException;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
