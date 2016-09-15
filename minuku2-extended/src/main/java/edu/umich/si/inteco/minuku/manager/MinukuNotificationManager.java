@@ -158,7 +158,7 @@ public class MinukuNotificationManager extends Service implements NotificationMa
     private Notification buildNotificationForNotificationEvent(
             ShowNotificationEvent aShowNotificationEvent, Integer id) {
 
-        if(aShowNotificationEvent.getCreationTimeMs() != 0) {
+        if(aShowNotificationEvent.getCreationTimeMs() == 0) {
             aShowNotificationEvent.setCreationTimeMs(new Date().getTime());
         }
 
@@ -199,15 +199,12 @@ public class MinukuNotificationManager extends Service implements NotificationMa
             if(ifSameCategoryNotificationExists(aShowNotificationEvent)) {
                 Log.d(TAG, "There is already a notification with the same category in map.");
                 ShowNotificationEvent previousNotification = getSameCategoryNotification(aShowNotificationEvent);
-                Log.d(TAG, "1. Old notification is: Category" + previousNotification.getCategory() +
+                Log.d(TAG, "Old notification is: Category" + previousNotification.getCategory() +
                         "  Title:  " + previousNotification.getTitle() + " exp count: " +
                         previousNotification.getExpirationCount());
                 if(previousNotification.getExpirationCount() > 0) {
                     Log.d(TAG, "The old notification already in the map seemed to have expired. " +
                             "Will clean it up. You should see a new notification.");
-                    Log.d(TAG, "2. Old notification is: Category" + previousNotification.getCategory() +
-                            "  Title:  " + previousNotification.getTitle() + "exp count: " +
-                            previousNotification.getExpirationCount());
                     // If a previously existing notification has expired, then regardless of the
                     // expiration mechanism of such notification, remove it from the map, push
                     // that information to DAO and add the current notification to the map.
@@ -215,13 +212,12 @@ public class MinukuNotificationManager extends Service implements NotificationMa
                     if((id = getIdForNotification(previousNotification)) != null) {
                         unregisterNotification(id);
                     }
-
-                    try {
+                    /*try {
                         Log.d(TAG, "Adding previous notification information.");
                         mDAO.add(previousNotification);
                     } catch (DAOException e) {
                         e.printStackTrace();
-                    }
+                    }*/
                 } else {
                     Log.d(TAG, "The old notification already in the map has not  " +
                             " expired. New notification ignored..");
@@ -273,21 +269,23 @@ public class MinukuNotificationManager extends Service implements NotificationMa
      */
     private boolean unregisterNotification(Integer aNotificaitonId) {
         if(registeredNotifications.containsKey(aNotificaitonId)) {
-            Log.d(TAG, "Removing notification: " + aNotificaitonId);
-            ShowNotificationEvent notifiation = registeredNotifications.get(aNotificaitonId);
-            notifiation.setClickedTimeMs(new Date().getTime());
-            //categorizedNotificationMap.remove(aNotificaitonId);
-            registeredNotifications.remove(aNotificaitonId);
-            Log.d(TAG, "Number of registered notifications in unreg method: " + registeredNotifications.size());
-            //Log.d(TAG, "Number of categorized notifications in unreg method: " + categorizedNotificationMap.size());
+            //get the NOTIFICATION using ID
+            ShowNotificationEvent notification = registeredNotifications.get(aNotificaitonId);
+            //set NOTIFICATION click time
+            notification.setClickedTimeMs(new Date().getTime());
             try {
-                MinukuDAOManager.getInstance()
-                        .getDaoFor(ShowNotificationEvent.class)
-                        .add(registeredNotifications.get(aNotificaitonId));
+                //add NOTIFICATION to database
+                Log.d(TAG, "adding the unregistered notification to database");
+                mDAO.add(notification);
             } catch (DAOException e) {
                 e.printStackTrace();
-                Log.e(TAG, "Could not notification info to DAO");
+                Log.e(TAG, "Could not add notification info to DB");
             }
+            Log.d(TAG, "Removing notification: " + aNotificaitonId);
+            //Remove ID from registered notification map
+            registeredNotifications.remove(aNotificaitonId);
+            Log.d(TAG, "Number of registered notifications in unreg method: " + registeredNotifications.size());
+
         }
         // Notification was already unregistered at some earlier time or was never registered.
         // This is not a failure case, hence we return true.
