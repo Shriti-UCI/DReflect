@@ -57,7 +57,6 @@ import edu.umich.si.inteco.minuku.dao.UserSubmissionStatsDAO;
 import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
-import edu.umich.si.inteco.minukucore.dao.DAOException;
 import edu.umich.si.inteco.minukucore.event.NotificationClickedEvent;
 
 /**
@@ -69,7 +68,6 @@ public class BaseActivity extends AppCompatActivity implements
     private static final String TAG = "BaseActivity";
 
     protected GoogleApiClient mGoogleApiClient;
-    protected Firebase.AuthStateListener mAuthListener;
     protected Firebase mFirebaseRef;
     protected String mProvider;
     protected String mEmail;
@@ -108,22 +106,7 @@ public class BaseActivity extends AppCompatActivity implements
 
         mFirebaseRef = new Firebase(Constants.FIREBASE_URL);
 
-        if (this instanceof LoginActivity) {
-            // do nothing
-        } else if (this instanceof CreateAccountActivity) {
-            // do nothing
-        } else {
-            mAuthListener = new Firebase.AuthStateListener() {
-                @Override
-                public void onAuthStateChanged(AuthData authData) {
-                    if (authData == null) {
-                        Log.e(TAG, "Kicking user out.");
-                        kickUserOut();
-                    }
-                }
-            };
-            mFirebaseRef.addAuthStateListener(mAuthListener);
-        }
+        kickUserOutIfLoggedOut();
 
         // Get the provider and email if set. A null value means the user is not yet authenticated.
         mEmail = mSharedPref.getPreference(Constants.ID_SHAREDPREF_EMAIL);
@@ -153,8 +136,6 @@ public class BaseActivity extends AppCompatActivity implements
         daoManager.registerDaoFor(UserSubmissionStats.class, userSubmissionStatsDAO);
 
         requestAllPermissions();
-
-        //moving code from on resume here
     }
 
     @Override
@@ -170,11 +151,6 @@ public class BaseActivity extends AppCompatActivity implements
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // The Auth listener is created only when the user is not a part of the login or
-        // create account activity, do the cleanup only in such cases.
-        if (!((this instanceof LoginActivity) || (this instanceof CreateAccountActivity))) {
-            mFirebaseRef.removeAuthStateListener(mAuthListener);
-        }
         Log.d(TAG, "Destroying instance of " + this.getClass().getSimpleName());
     }
 
@@ -198,7 +174,7 @@ public class BaseActivity extends AppCompatActivity implements
             return true;
         }
         if (id == R.id.action_logout) {
-            logout();
+            kickUserOut();
             return true;
         }
         //new thing, create notification
@@ -214,33 +190,7 @@ public class BaseActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        /*mSharedPref.writePreference(Constants.CAN_SHOW_NOTIFICATION, Constants.NO);
-
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                Future<UserSubmissionStats> submissionStatsFuture = ((UserSubmissionStatsDAO)
-                        MinukuDAOManager.getInstance().getDaoFor(UserSubmissionStats.class)).get();
-                while (!submissionStatsFuture.isDone()) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                //
-                try {
-                    gotUserStatsFromDatabase(submissionStatsFuture.get());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Log.d(TAG, "Creating mUserSubmissionStats");
-                    gotUserStatsFromDatabase(null);
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                    gotUserStatsFromDatabase(null);
-                }
-            }
-        });*/
+        kickUserOutIfLoggedOut();
     }
 
 
@@ -250,29 +200,7 @@ public class BaseActivity extends AppCompatActivity implements
         mSharedPref.writePreference(Constants.CAN_SHOW_NOTIFICATION, Constants.YES);
     }
 
-    /**
-     * This is called from the child activities that are not associated
-     * with login or account creation flows.
-     */
-    protected void logout() {
-        Toast.makeText(this, "Attemping to logout.", Toast.LENGTH_LONG);
-        // mProvider is set only after the user logs in successfully.
-        if (mProvider != null) {
-            mFirebaseRef.unauth();
-            if (mProvider.equals(Constants.GOOGLE_AUTH_PROVIDER)) {
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(Status status) {
-                                // We do not intend to do anything after logout.
-                                // Ignore.
-                            }
-                        });
-            }
-        }
-    }
-
-    private void kickUserOut() {
+    protected void kickUserOut() {
         mSharedPref.clear();
         // Shared prefs store data about email, clear that and kick users out by moving them
         // to login screen.
@@ -314,34 +242,6 @@ public class BaseActivity extends AppCompatActivity implements
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         FINE_LOCATION);
             }
-
-            /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                    != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        Manifest.permission.CAMERA)) {
-
-                    Log.i("MainActivity",
-                            "Displaying camera permission rationale to provide additional context.");
-
-                    Snackbar.make(mLayout, R.string.squarecamera__request_write_storage_permission_text,
-                            Snackbar.LENGTH_INDEFINITE)
-                            .setAction(R.string.ok, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    ActivityCompat.requestPermissions(BaseActivity.this,
-                                            new String[]{Manifest.permission.CAMERA},
-                                            CAMERA);
-                                }
-                            })
-                            .show();
-                } else {
-
-                    // Location permission has not been granted yet. Request it directly.
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.CAMERA},
-                            CAMERA);
-                }
-            }*/
         }
     }
 
@@ -368,5 +268,17 @@ public class BaseActivity extends AppCompatActivity implements
                 currentDate.get(Calendar.DAY_OF_YEAR) == previousDate.get(Calendar.DAY_OF_YEAR) &&
                 currentDate.get(Calendar.MONTH) == previousDate.get(Calendar.MONTH);
         return sameDay;
+    }
+
+    protected void kickUserOutIfLoggedOut() {
+        if (this instanceof LoginActivity) {
+            // do nothing
+        } else if (this instanceof CreateAccountActivity) {
+            // do nothing
+        } else {
+            if(mSharedPref.getPreference(Constants.ID_SHAREDPREF_EMAIL) == null) {
+                kickUserOut();
+            }
+        }
     }
 }

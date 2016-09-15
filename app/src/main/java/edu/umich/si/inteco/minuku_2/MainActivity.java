@@ -24,7 +24,6 @@ package edu.umich.si.inteco.minuku_2;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,18 +36,13 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.Date;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import edu.umich.si.inteco.minuku.config.Constants;
-import edu.umich.si.inteco.minuku.dao.UserSubmissionStatsDAO;
 import edu.umich.si.inteco.minuku.event.DecrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku.event.IncrementLoadingProcessCountEvent;
 import edu.umich.si.inteco.minuku.logger.Log;
-import edu.umich.si.inteco.minuku.manager.MinukuDAOManager;
 import edu.umich.si.inteco.minuku.manager.MinukuNotificationManager;
 import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
 import edu.umich.si.inteco.minuku_2.manager.InstanceManager;
@@ -82,7 +76,6 @@ public class MainActivity extends BaseActivity {
 
         if(!InstanceManager.isInitialized()) {
             InstanceManager.getInstance(getApplicationContext());
-
             loadingProgressDialog = ProgressDialog.show(MainActivity.this,
                     "Loading data", "Fetching information",true);
         }
@@ -94,16 +87,6 @@ public class MainActivity extends BaseActivity {
         //final GridView gridView = (GridView) findViewById(R.id.list_view_actions_list);
         final GridView gridView;
         // the action object is the model behind the list that is shown on the main screen.
-        /**final ActionObject[] array = {
-                new ActionObject("Take Glucose Reading Picture", "A", R.drawable.glucose_reading),
-                new ActionObject("Take Insulin Shot Picture", "A", R.drawable.insulin_shot),
-                new ActionObject("Take Food Pitcure", "A", R.drawable.food),
-                new ActionObject("Take Other Pictures", "A", R.drawable.camera),
-                new ActionObject("Record Your Mood", "A", R.drawable.mood),
-                new ActionObject("Upload Screenshot", "A", R.drawable.camera),
-                new ActionObject("Take Notes","A", R.drawable.blue_circle)
-                //new ActionObject("Answer some questions", "A", R.drawable.blue_circle)
-        };**/
 
         String[] web = {
                 "Record Glucose Reading",
@@ -280,6 +263,10 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         mSharedPref.writePreference(Constants.CAN_SHOW_NOTIFICATION, Constants.NO);
+        if(InstanceManager.isInitialized()) {
+            assertEligibilityAndPopulateCompensationMessage(
+                    InstanceManager.getInstance(getApplicationContext()).getUserSubmissionStats());
+        }
     }
 
 
@@ -296,7 +283,8 @@ public class MainActivity extends BaseActivity {
 
 
     @Subscribe
-    public void assertEligibilityAndPopulateCompensationMessage(UserSubmissionStats userSubmissionStats) {
+    public void assertEligibilityAndPopulateCompensationMessage(
+            UserSubmissionStats userSubmissionStats) {
         Log.d(TAG, "Attempting to update compesnation message");
         if(userSubmissionStats != null && isEligibleForReward(userSubmissionStats)) {
             Log.d(TAG, "populating the compensation message");
@@ -340,7 +328,6 @@ public class MainActivity extends BaseActivity {
                     loadingProgressDialog.hide();
                 }
             });
-
         }
     }
 
