@@ -63,7 +63,7 @@ public class MissedGlucoseReadingAction {
                         .setExpirationAction(ShowNotificationEvent.ExpirationAction.DISMISS)
                         .setExpirationTimeSeconds(Constants.MISSED_REPORT_NOTIFICATION_EXPIRATION_TIME)
                         .setViewToShow(QuestionnaireActivity.class)
-                        .setIconID(R.drawable.self_reflection)
+                        .setIconID(R.drawable.icon)
                         .setTitle(Constants.MISSED_ACTIVITY_DATA_PROMPT_TITLE)
                         .setMessage(Constants.MISSED_ACTIVITY_DATA_PROMPT_MESSAGE)
                         .setCategory(ApplicationConstants.NOTIFICATION_CATEGORY_MISSED_ACTIVITY)

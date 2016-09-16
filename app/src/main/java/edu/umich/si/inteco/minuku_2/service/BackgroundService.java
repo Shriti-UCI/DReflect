@@ -32,6 +32,7 @@ import android.os.IBinder;
 import edu.umich.si.inteco.minuku.config.Constants;
 import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
+import edu.umich.si.inteco.minuku_2.R;
 
 public class BackgroundService extends Service {
 
@@ -56,7 +57,7 @@ public class BackgroundService extends Service {
         Notification note  = new Notification.Builder(getBaseContext())
                 .setContentTitle(Constants.APP_NAME)
                 .setContentText(Constants.RUNNING_APP_DECLARATION)
-                .setSmallIcon(edu.umich.si.inteco.minuku.R.drawable.self_reflection)
+                .setSmallIcon(R.drawable.icon)
                 .setAutoCancel(false)
                 .build();
         note.flags |= Notification.FLAG_NO_CLEAR;

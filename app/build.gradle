@@ -40,7 +40,7 @@ dependencies {
     compile 'com.github.dkharrat.nexusdialog:nexusdialog:0.4.0'
     compile 'com.google.code.gson:gson:2.7'
     /* for custom shaped images in gridview */
-    compile 'com.github.siyamed:android-shape-imageview:0.9.+@aar'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 
     // https://mvnrepository.com/artifact/javax.activation/activation
     compile group: 'javax.activation', name: 'activation', version: '1.1'

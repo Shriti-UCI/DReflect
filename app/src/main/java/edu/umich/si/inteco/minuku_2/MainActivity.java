@@ -89,25 +89,25 @@ public class MainActivity extends BaseActivity {
         // the action object is the model behind the list that is shown on the main screen.
 
         String[] web = {
-                "Record Glucose Reading",
-                "Record Insulin Shot   ",
-                "Record Food           ",
-                "Record Mood           ",
-                "Record Notes          ",
-                "Upload Screenshots    ",
-                "Record Other Pictures ",
-                "Check Reward          "
+                "Record\n Glucose Reading",
+                "Record\n Insulin Shot",
+                "Record\n Food",
+                "Record\n Mood",
+                "Record\n Notes",
+                "Upload\n Screenshots",
+                "Record\n Other Pictures",
+                "Check Reward"
         };
 
         int[] imageID = {
-                R.drawable.glucometer_color,
-                R.drawable.vaccine_color,
-                R.drawable.food_plate_color,
-                R.drawable.smiley_color,
-                R.drawable.note_color,
-                R.drawable.picture_color,
-                R.drawable.photo_camera_color,
-                R.drawable.money_bag_color
+                R.drawable.glucometer_circle,
+                R.drawable.insulin_pump_circle,
+                R.drawable.food_plate_circle,
+                R.drawable.smiley_circle,
+                R.drawable.note_circle,
+                R.drawable.picture_circle,
+                R.drawable.photo_camera_circle,
+                R.drawable.money_bag_circle
         };
 
         final CustomGridAdapter customGridAdapter = new CustomGridAdapter(MainActivity.this,
