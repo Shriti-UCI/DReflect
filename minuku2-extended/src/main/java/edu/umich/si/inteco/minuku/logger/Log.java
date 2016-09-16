@@ -24,29 +24,45 @@ package edu.umich.si.inteco.minuku.logger;
 
 import com.bugfender.sdk.Bugfender;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Created by shriti on 9/1/16.
  */
 public class Log {
 
+    public static AtomicInteger counter = new AtomicInteger(0);
+    public static int BACK_LOG_THRESHOLD = 20;
+
     public static void d(String TAG, String message) {
         Bugfender.d(TAG, message);
         android.util.Log.d(TAG, message);
+        forcePushIfBacklogThresholdReached(counter.incrementAndGet(), BACK_LOG_THRESHOLD);
+    }
+
+    private static void forcePushIfBacklogThresholdReached(int i, int backLogThreshold) {
+        if(i  % backLogThreshold == 0) {
+            android.util.Log.d("LOGGER", "Pushing to bugfender...");
+            Bugfender.forceSendOnce();
+        }
     }
 
     public static void e(String TAG, String message) {
         Bugfender.e(TAG, message);
         android.util.Log.e(TAG, message);
+        forcePushIfBacklogThresholdReached(counter.incrementAndGet(), BACK_LOG_THRESHOLD);
     }
 
     public static void w(String TAG, String message) {
         Bugfender.w(TAG, message);
         android.util.Log.w(TAG, message);
+        forcePushIfBacklogThresholdReached(counter.incrementAndGet(), BACK_LOG_THRESHOLD);
     }
 
     public static void i(String TAG, String message) {
         Bugfender.d(TAG, message);
         android.util.Log.i(TAG, message);
+        forcePushIfBacklogThresholdReached(counter.incrementAndGet(), BACK_LOG_THRESHOLD);
     }
 
     public static String getDeviceIdentifier() {
