@@ -100,14 +100,14 @@ public class MainActivity extends BaseActivity {
         };
 
         int[] imageID = {
-                R.drawable.glucometer_circle,
-                R.drawable.insulin_pump_circle,
-                R.drawable.food_plate_circle,
-                R.drawable.smiley_circle,
-                R.drawable.note_circle,
-                R.drawable.picture_circle,
-                R.drawable.photo_camera_circle,
-                R.drawable.money_bag_circle
+                R.drawable.glucometer,
+                R.drawable.insulin_pump,
+                R.drawable.food_plate,
+                R.drawable.smiley,
+                R.drawable.note,
+                R.drawable.picture,
+                R.drawable.photo_camera,
+                R.drawable.money_bag
         };
 
         final CustomGridAdapter customGridAdapter = new CustomGridAdapter(MainActivity.this,

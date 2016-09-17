@@ -122,8 +122,9 @@ public class MoodAnnotationExpectedSituation implements Situation {
         previousDate.setTimeInMillis(previousTime);
         Log.d(TAG, "Current:" + currentDate.toString() + " Previous:" + previousDate.toString());
 
-        boolean sameDay = currentDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
-                previousDate.get(Calendar.DAY_OF_YEAR) == previousDate.get(Calendar.DAY_OF_YEAR);
+        boolean sameDay = currentDate.get(Calendar.YEAR) == previousDate.get(Calendar.YEAR) &&
+                currentDate.get(Calendar.DAY_OF_YEAR) == previousDate.get(Calendar.DAY_OF_YEAR) &&
+                currentDate.get(Calendar.MONTH) == previousDate.get(Calendar.MONTH);
         return sameDay;
     }
 }
