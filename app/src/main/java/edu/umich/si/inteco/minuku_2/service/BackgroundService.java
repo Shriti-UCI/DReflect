@@ -57,7 +57,7 @@ public class BackgroundService extends Service {
         Notification note  = new Notification.Builder(getBaseContext())
                 .setContentTitle(Constants.APP_NAME)
                 .setContentText(Constants.RUNNING_APP_DECLARATION)
-                .setSmallIcon(R.drawable.icon)
+                .setSmallIcon(R.drawable.self_reflection)
                 .setAutoCancel(false)
                 .build();
         note.flags |= Notification.FLAG_NO_CLEAR;
