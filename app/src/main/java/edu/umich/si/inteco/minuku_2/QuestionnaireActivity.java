@@ -74,7 +74,8 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
         Log.d(TAG, "creating activity");
 
         setContentView(R.layout.custom_form);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE |
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
 
         setupForm(getIntent().getExtras());
@@ -104,7 +105,15 @@ public class QuestionnaireActivity<T extends Question> extends BaseActivity {
     protected void setupForm(Bundle savedInstanceState) {
         formController = new FormController(this);
 
-        int questionnaireId = Integer.valueOf(savedInstanceState.getString(Constants.BUNDLE_KEY_FOR_QUESTIONNAIRE_ID));
+        String bundledQuestionnarieId =
+                savedInstanceState.getString(Constants.BUNDLE_KEY_FOR_QUESTIONNAIRE_ID);
+        // If a questionnaire ID was not provided, then default to the first questionnaire.
+        // This does happen when sometimes a notification is dismissed (i.e. cancalled) but
+        // still keeps showing up on the status bar and the user clicks on it.
+        if(bundledQuestionnarieId == null) {
+            bundledQuestionnarieId = "1";
+        }
+        int questionnaireId = Integer.valueOf(bundledQuestionnarieId);
 
         Log.d(TAG, "creating form for questionnaire ID " + questionnaireId);
         Log.d(TAG, "prompt source: " + savedInstanceState.getString(Constants.BUNDLE_KEY_FOR_NOTIFICATION_SOURCE));
