@@ -27,11 +27,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
 import edu.umich.si.inteco.minuku.model.NoteDataRecord;
+import edu.umich.si.inteco.minuku.tags.Model;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
+import me.gujun.android.taggroup.TagGroup;
 
 /**
  * Created by shriti on 8/20/16.
@@ -50,6 +57,15 @@ public class NoteEntryActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_note_entry_activity);
         mNoteData = (EditText) findViewById(R.id.note_data);
+
+        TagGroup mTagGroup = (TagGroup) findViewById(R.id.tag_group);
+        mTagGroup.setTags(Model.getInstance().getRelevantTags());
+        mTagGroup.setOnTagClickListener(new TagGroup.OnTagClickListener() {
+            @Override
+            public void onTagClick(String tag) {
+                mNoteData.append(" #" + tag + " ");
+            }
+        });
 
         // Add click listeners for buttons
         acceptButton = (ImageView) findViewById(R.id.acceptButton);
@@ -85,6 +101,11 @@ public class NoteEntryActivity extends BaseActivity {
 
         // Make sure that there is some data entered by the user in the note field.
         String noteData = mNoteData.getText().toString();
+
+        for(String hashTag: extractAllHashTags(noteData)) {
+            Model.getInstance().incrementTagCount(hashTag);
+        }
+
         if (noteData == null || noteData.equals("") || noteData.trim().isEmpty()) {
             showToast("Cannot add note without any content.");
             return;
@@ -110,5 +131,15 @@ public class NoteEntryActivity extends BaseActivity {
     public void rejectResults() {
         showToast("Going back to home screen");
         finish();
+    }
+
+    private List<String> extractAllHashTags(String str) {
+        Pattern MY_PATTERN = Pattern.compile("#(\\S+)");
+        Matcher mat = MY_PATTERN.matcher(str);
+        List<String> hashTags = new ArrayList<String>();
+        while (mat.find()) {
+            hashTags.add(mat.group(1));
+        }
+        return hashTags;
     }
 }

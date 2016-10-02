@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="Got something more to say? Please use this space to record anything you want!"
-        android:id="@+id/note_hint"
-        android:background="@color/colorPrimaryDark"
-        android:textColor="@android:color/white"
-        style="@style/Base.TextAppearance.AppCompat.Medium"
-        android:padding="10dp"/>
-    <TextView
+        android:id="@+id/note_hint_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="E.g., comment for researchers, feedback for the application."
         android:background="@color/colorPrimaryDark"
         android:textColor="@android:color/white"
         style="@style/Base.TextAppearance.AppCompat.Medium"
-        android:layout_below="@+id/note_hint"
+        android:layout_alignParentTop="true"
         android:paddingLeft="10dp"
-        android:paddingBottom="10dp"
         android:paddingRight="10dp" />
+
+    <me.gujun.android.taggroup.TagGroup
+        android:paddingTop="10dp"
+        app:atg_textSize="15sp"
+        android:layout_below="@id/note_hint_2"
+        android:id="@+id/tag_group"
+        style="@style/TagGroup" />
+
     <EditText
         android:id="@+id/note_data"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/tag_group"
         android:layout_width="match_parent"
-        android:singleLine="false"
-        android:layout_height="400dp"
+        android:layout_height="200dp"
         style="@style/Base.Theme.AppCompat.Dialog.Alert"/>
 
     <RelativeLayout
