@@ -22,11 +22,18 @@
 
 package edu.umich.si.inteco.minuku_2;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.text.DecimalFormat;
 import java.util.Date;
@@ -59,6 +66,7 @@ public class MoodDataRecordActivity extends BaseActivity {
     private Button btnTrends;
 
     private String TAG ="MoodDataRecordActivity";
+    private Context contextForDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -67,9 +75,11 @@ public class MoodDataRecordActivity extends BaseActivity {
         scale = this.getResources().getDisplayMetrics().density;
         setContentView(R.layout.add_mood_activity);
 
+        contextForDialog = this;
         // Add click listeners for buttons
         ImageView acceptButton = (ImageView) findViewById(R.id.acceptButton);
         ImageView rejectButton = (ImageView) findViewById(R.id.rejectButton);
+        Button helpButton = (Button) findViewById(R.id.help_button);
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +93,24 @@ public class MoodDataRecordActivity extends BaseActivity {
                 rejectResults();
             }
         });
-
+        /*helpButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    findViewById(R.id.mood_legend_overlay).setVisibility(View.VISIBLE);
+                }
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    findViewById(R.id.mood_legend_overlay).setVisibility(View.INVISIBLE);
+                }
+                return true;
+            }
+        });*/
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onHelpClicked();
+            }
+        });
         getDeviceWidth();
         initUi();
     }
@@ -355,5 +382,36 @@ public class MoodDataRecordActivity extends BaseActivity {
     public void rejectResults() {
         showToast("Going back to home screen");
         finish();
+    }
+
+    public void onHelpClicked() {
+        showToast("help clikced");
+        final Dialog dialog = new Dialog(contextForDialog);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.mood_legend_overlay);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(true);
+
+        ImageView overlay = (ImageView) dialog.findViewById(R.id.mood_legend_overlay);
+        //overlay.setBackgroundColor(200 * 0x1000000);
+        Button closeButton = (Button) dialog.findViewById(R.id.close_button);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        DisplayMetrics displayMetrics = contextForDialog.getResources().getDisplayMetrics();
+        int dialogWidth = (int)(displayMetrics.widthPixels * 0.95);
+        int dialogHeight = (int)(displayMetrics.heightPixels * 0.90);
+        dialog.getWindow().setLayout(dialogWidth, dialogHeight);
+        dialog.getWindow().setGravity(Gravity.TOP);
+
+        dialog.show();
+    }
+
+    public void onCancelClicked(View view) {
+        showToast("cancel clicked");
     }
 }

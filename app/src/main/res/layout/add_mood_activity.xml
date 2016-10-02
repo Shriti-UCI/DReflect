@@ -21,7 +21,21 @@
         android:background="@color/primary_dark"
         android:textSize="20dp"/>
 
-    <edu.umich.si.inteco.minuku_2.view.customview.MoodEntryView
+     <!--<Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textAlignment="center"
+        android:text="Help"
+        android:id="@+id/help_button"
+        android:textColor="@android:color/white"
+        android:background="@color/primary_dark"
+        android:textSize="12dp"/> -->
+
+        <edu.umich.si.inteco.minuku_2.view.customview.MoodEntryView
         android:id="@+id/graphCustomView"
         android:layout_width="match_parent"
         android:layout_height="187dp"
@@ -41,12 +55,24 @@
             android:layout_marginLeft="10dp"
             android:src="@drawable/close_red" />
 
-        <ImageView
+        <!--<ImageView
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_mood_black_24dp" />
+            android:src="@drawable/ic_mood_black_24dp"
+            android:id="@+id/help_icon"/> -->
+        <Button
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="Help"
+            android:id="@+id/help_button"
+            android:textColor="@android:color/white"
+            android:background="@color/primary_dark"
+            android:textSize="12dp"/>
 
         <ImageView
             android:id="@+id/acceptButton"
