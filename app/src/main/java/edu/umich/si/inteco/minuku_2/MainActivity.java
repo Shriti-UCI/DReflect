@@ -89,25 +89,14 @@ public class MainActivity extends BaseActivity {
         // the action object is the model behind the list that is shown on the main screen.
 
         String[] web = {
-                "Record\n Glucose Reading",
-                "Record\n Insulin Shot",
-                "Record\n Food",
-                "Record\n Mood",
-                "Record\n Notes",
-                "Upload\n Screenshots",
-                "Record\n Other Pictures",
-                "Check Reward"
+                "Add\n Logs",
+                "Add\n Mood"
+
         };
 
         int[] imageID = {
-                R.drawable.glucometer,
-                R.drawable.insulin_pump,
-                R.drawable.food_plate,
-                R.drawable.smiley,
-                R.drawable.note,
-                R.drawable.picture,
-                R.drawable.photo_camera,
-                R.drawable.money_bag
+                R.drawable.add,
+                R.drawable.smiley
         };
 
         final CustomGridAdapter customGridAdapter = new CustomGridAdapter(MainActivity.this,
@@ -116,62 +105,7 @@ public class MainActivity extends BaseActivity {
         gridView.setAdapter(customGridAdapter);
         // The adapter takes the action object array and converts it into a view that can be
         // rendered as a list, one item at a time.
-        /**final StableArrayAdapter adapter = new StableArrayAdapter(
-                this.getApplicationContext(), array);
-        listview.setAdapter(adapter);
 
-         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Bundle extras = new Bundle();
-                // The position here corresponds to position of objects in the array passed above.
-                switch (position) {
-                    case 0:
-                        Intent addGlucoseReadingPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_GLUCOSE_READIMG);
-                        addGlucoseReadingPhotoIntent.putExtras(extras);
-                        startActivity(addGlucoseReadingPhotoIntent);
-                        break;
-                    case 1:
-                        Intent addInsulinShotPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_INSULIN_SHOT);
-                        addInsulinShotPhotoIntent.putExtras(extras);
-                        startActivity(addInsulinShotPhotoIntent);
-                        break;
-                    case 2:
-                        Intent addFoodPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_FOOD);
-                        addFoodPhotoIntent.putExtras(extras);
-                        startActivity(addFoodPhotoIntent);
-                        break;
-                    case 3:
-                        Intent addOtherPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_OTHERS);
-                        addOtherPhotoIntent.putExtras(extras);
-                        startActivity(addOtherPhotoIntent);
-                        break;
-                    case 4:
-                        Intent addMoodIntent = new Intent(MainActivity.this,
-                                MoodDataRecordActivity.class);
-                        startActivity(addMoodIntent);
-                        break;
-                    case 5:
-                        Intent uploadScreenshotIntent = new Intent(MainActivity.this, UploadScreenshotActivity.class);
-                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_GALLERY_UPLOAD);
-                        uploadScreenshotIntent.putExtras(extras);
-                        startActivity(uploadScreenshotIntent);
-                        break;
-                    case 6:
-                        Intent noteEntryIntent = new Intent(MainActivity.this,
-                                NoteEntryActivity.class);
-                        startActivity(noteEntryIntent);
-                        break;
-                    default:
-                        showToast("Clicked unknown");
-                        break;
-                }
-            }
-        });**/
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -180,49 +114,14 @@ public class MainActivity extends BaseActivity {
                 // The position here corresponds to position of objects in the array passed above.
                 switch (position) {
                     case 0:
-                        Intent addGlucoseReadingPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_GLUCOSE_READIMG);
-                        addGlucoseReadingPhotoIntent.putExtras(extras);
-                        startActivity(addGlucoseReadingPhotoIntent);
+                        Intent noteEntryIntent = new Intent(MainActivity.this,
+                                DiabetesLogActivity.class);
+                        startActivity(noteEntryIntent);
                         break;
                     case 1:
-                        Intent addInsulinShotPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_INSULIN_SHOT);
-                        addInsulinShotPhotoIntent.putExtras(extras);
-                        startActivity(addInsulinShotPhotoIntent);
-                        break;
-                    case 2:
-                        Intent addFoodPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_FOOD);
-                        addFoodPhotoIntent.putExtras(extras);
-                        startActivity(addFoodPhotoIntent);
-                        break;
-                    case 6:
-                        Intent addOtherPhotoIntent = new Intent(MainActivity.this, AnnotatedImageDataRecordActivity.class);
-                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_OTHERS);
-                        addOtherPhotoIntent.putExtras(extras);
-                        startActivity(addOtherPhotoIntent);
-                        break;
-                    case 3:
                         Intent addMoodIntent = new Intent(MainActivity.this,
                                 MoodDataRecordActivity.class);
                         startActivity(addMoodIntent);
-                        break;
-                    case 5:
-                        Intent uploadScreenshotIntent = new Intent(MainActivity.this, UploadScreenshotActivity.class);
-                        extras.putString("photoType", ApplicationConstants.IMAGE_TYPE_GALLERY_UPLOAD);
-                        uploadScreenshotIntent.putExtras(extras);
-                        startActivity(uploadScreenshotIntent);
-                        break;
-                    case 4:
-                        Intent noteEntryIntent = new Intent(MainActivity.this,
-                                NoteEntryActivity.class);
-                        startActivity(noteEntryIntent);
-                        break;
-                    case 7:
-                        //money bag
-                        Intent displayCreditIntent = new Intent(MainActivity.this, DisplayCreditActivity.class);
-                        startActivity(displayCreditIntent);
                         break;
                     default:
                         showToast("Clicked unknown");

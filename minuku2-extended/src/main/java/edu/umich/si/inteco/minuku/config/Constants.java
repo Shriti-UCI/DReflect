@@ -44,6 +44,7 @@ public class Constants {
     public static final String FIREBASE_URL_MCQ = FIREBASE_URL_QUESTIONS + "/mcq";
     public static final String FIREBASE_URL_FREE_RESPONSE = FIREBASE_URL_QUESTIONS + "/freeresponse";
     public static final String FIREBASE_URL_USER_SUBMISSION_STATS = FIREBASE_URL + "/submissionstats";
+    public static final String FIREBASE_URL_DIABETESLOG = FIREBASE_URL + "/diabetes_log";
 
 
 

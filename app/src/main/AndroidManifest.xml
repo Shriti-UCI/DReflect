@@ -57,12 +57,9 @@
 
         <activity android:name=".MainActivity"
             android:launchMode="singleInstance">
-            <meta-data
+            <!--<meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".LoginActivity" />
-        </activity>
-
-        <activity android:name=".AnnotatedImageDataRecordActivity">
+                android:value=".LoginActivity" />-->
         </activity>
 
         <activity android:name=".MoodDataRecordActivity"
@@ -82,10 +79,11 @@
         <activity android:name=".LocationListViewRenderActivity">
         </activity>
 
-        <activity android:name=".UploadScreenshotActivity">
-        </activity>
-
-        <activity android:name=".NoteEntryActivity">
+        <activity android:name=".DiabetesLogActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
         </activity>
 
         <activity android:name=".DisplayCreditActivity">

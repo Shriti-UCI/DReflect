@@ -22,7 +22,6 @@
 
 package edu.umich.si.inteco.minuku_2;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -43,51 +42,93 @@ import com.desmond.squarecamera.CameraActivity;
 import com.desmond.squarecamera.ImageUtility;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import edu.umich.si.inteco.minuku.logger.Log;
 import edu.umich.si.inteco.minuku.manager.MinukuStreamManager;
-import edu.umich.si.inteco.minuku.model.AnnotatedImageDataRecord;
-import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
-import edu.umich.si.inteco.minuku_2.manager.InstanceManager;
-import edu.umich.si.inteco.minuku_2.model.FoodImage;
-import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
-import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
-import edu.umich.si.inteco.minuku_2.preferences.ApplicationConstants;
+import edu.umich.si.inteco.minuku.tags.Model;
+import edu.umich.si.inteco.minuku_2.model.DiabetesLogDataRecord;
 import edu.umich.si.inteco.minukucore.exception.StreamNotFoundException;
 import edu.umich.si.inteco.minukucore.streamgenerator.StreamGenerator;
+import me.gujun.android.taggroup.TagGroup;
 
 /**
- * Created by shriti on 7/19/16.
+ * Created by shriti on 8/20/16.
  */
-public class AnnotatedImageDataRecordActivity extends BaseActivity {
+public class DiabetesLogActivity extends BaseActivity {
 
-    private static final String TAG = "AnotatdImgDataRecActvty";
+    private String TAG = "DiabetesLogActivity";
 
-    protected ImageView imageView;
-    protected EditText mText;
-    protected String base64ImageData;
-    private String photoTypeValue;
-    protected String photoTypeKey = "photoType";
+    private ImageView glucoseReadingImage;
+    private ImageView foodImage;
+    protected String glucoseReadingImageBase64ImageData;
+    protected String foodImageBase64ImageData;
+    public ImageView tempImageView;
+    private String tempBase64ImageData;
 
     protected static final int REQUEST_CAMERA = 101;
     protected static final int REQUEST_GALLERY = 102;
 
+    private EditText mCarbsConsumedInput;
+    private EditText mBasalInsulinInput;
+    private EditText mBolusInsulinInput;
+
+    private EditText mNoteData;
+    private ImageView acceptButton;
+    private ImageView rejectButton;
+
+    private DiabetesLogDataRecord diabetesLogDataRecord;
+    private String imageTypeFlag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestPermission();
+        setContentView(R.layout.add_diabetes_log_activity);
 
-        setContentView(R.layout.add_image_activity);
-        imageView = (ImageView) findViewById(R.id.image);
-        mText = (EditText) findViewById(R.id.image_annotation);
+        glucoseReadingImage = (ImageView) findViewById(R.id.blood_glucose);
+        foodImage = (ImageView) findViewById(R.id.food);
 
-        photoTypeValue = getIntent().getExtras().getString(photoTypeKey);
-        showToast("Checking type of photo : " + photoTypeValue);
+        //Add click listeners
+        glucoseReadingImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tempImageView = glucoseReadingImage;
+                glucoseReadingImageBase64ImageData ="";
+                imageTypeFlag = "GLUCOSE_READING";
+                requestPermission();
+            }
+        });
+        foodImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tempImageView = foodImage;
+                foodImageBase64ImageData = "";
+                imageTypeFlag = "FOOD";
+                requestPermission();
+            }
+        });
 
+        mCarbsConsumedInput = (EditText) findViewById(R.id.edit_carb_count);
+        mBasalInsulinInput = (EditText) findViewById(R.id.edit_insulin_basal);
+        mBolusInsulinInput = (EditText) findViewById(R.id.edit_insulin_bolus);
+
+        mNoteData = (EditText) findViewById(R.id.note_data);
+
+        TagGroup mTagGroup = (TagGroup) findViewById(R.id.tag_group);
+        mTagGroup.setTags(Model.getInstance().getRelevantTags());
+        mTagGroup.setOnTagClickListener(new TagGroup.OnTagClickListener() {
+            @Override
+            public void onTagClick(String tag) {
+                mNoteData.append(" #" + tag + " ");
+            }
+        });
 
         // Add click listeners for buttons
-        ImageView acceptButton = (ImageView) findViewById(R.id.acceptButton);
-        ImageView rejectButton = (ImageView) findViewById(R.id.rejectButton);
+        acceptButton = (ImageView) findViewById(R.id.acceptButton);
+        rejectButton = (ImageView) findViewById(R.id.rejectButton);
 
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,93 +143,71 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
             }
         });
 
-    }
-
-    private void rejectResults() {
-        showToast("Back to home screen");
-        finish();
-    }
-
-    private void acceptResults() {
-        //create a new image data record once submitted/accepted by user
-        String annotation = mText.getText().toString();
-        UserSubmissionStats userSubmissionStats = InstanceManager
-                .getInstance(getApplicationContext()).getUserSubmissionStats();
-
-        switch (photoTypeValue) {
-            case ApplicationConstants.IMAGE_TYPE_GLUCOSE_READIMG:
-                GlucoseReadingImage glucoseReadingImage = new GlucoseReadingImage(base64ImageData,
-                        annotation, photoTypeValue);
-                try {
-                    StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
-                            getStreamGeneratorFor(GlucoseReadingImage.class);
-                    Log.d(TAG, "Saving results to the database");
-                    streamGenerator.offer(glucoseReadingImage);
-                    Log.d(TAG, "increment glucose reading image count");
-
-                    if(userSubmissionStats != null)
-                        userSubmissionStats.incrementGlucoseReadingCount();
-                    else
-                        Log.d(TAG, "mUSerSubmissionStats is null");
-                } catch (StreamNotFoundException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "The photo stream does not exist on this device.");
-                }
-                break;
-            case ApplicationConstants.IMAGE_TYPE_INSULIN_SHOT:
-                InsulinAdminImage insulinAdminImage = new InsulinAdminImage(base64ImageData,
-                        annotation, photoTypeValue);
-                try {
-                    StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
-                            getStreamGeneratorFor(InsulinAdminImage.class);
-                    Log.d(TAG, "Saving results to the database");
-                    streamGenerator.offer(insulinAdminImage);
-                    Log.d(TAG, "increment insulin shot image count");
-                    userSubmissionStats.incrementInsulinCount();
-                } catch (StreamNotFoundException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "The photo stream does not exist on this device.");
-                }
-                break;
-            case ApplicationConstants.IMAGE_TYPE_FOOD:
-                FoodImage foodImage = new FoodImage(base64ImageData, annotation, photoTypeValue);
-                try {
-                    StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
-                            getStreamGeneratorFor(FoodImage.class);
-                    Log.d(TAG, "Saving results to the database");
-                    streamGenerator.offer(foodImage);
-                    Log.d(TAG, "increment food image count");
-                    userSubmissionStats.incrementFoodCount();
-                } catch (StreamNotFoundException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "The photo stream does not exist on this device.");
-                }
-                break;
-            default:
-                AnnotatedImageDataRecord annotatedImageDataRecord = new AnnotatedImageDataRecord(
-                        base64ImageData,
-                        annotation, photoTypeValue);
-                try {
-                    StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
-                            getStreamGeneratorFor(AnnotatedImageDataRecord.class);
-                    Log.d(TAG, "Saving results to the database");
-                    streamGenerator.offer(annotatedImageDataRecord);
-                    Log.d(TAG, "increment other image count");
-                    userSubmissionStats.incrementOtherImagesCount();
-                } catch (StreamNotFoundException e) {
-                    e.printStackTrace();
-                    Log.e(TAG, "The photo stream does not exist on this device.");
-                }
+        Bundle extras = getIntent().getExtras();
+        if(extras !=null && extras.getBoolean("FROM_NOTIFICATION")) {
+            for(String key:extras.keySet()) {
+                Log.d("DiabetesLogActivity", key);
+            }
+            showToast("This screen was started from a notification with type:" + getIntent().getExtras().getString("PROMPT_TYPE", ""));
         }
-        Log.d(TAG, "increment total image count");
-        userSubmissionStats.incrementTotalImageCount();
-        InstanceManager
-                .getInstance(getApplicationContext())
-                .setUserSubmissionStats(userSubmissionStats);
+    }
 
-        showToast("Starting the image stream annotated photo.");
 
+    /**
+     * This is called when the user pressed "Tick" button on the screen.
+     */
+    public void acceptResults() {
+
+        //get the insulin and carbs input
+        float carbsConsumed = Float.valueOf(mCarbsConsumedInput.getText().toString());
+        float basalInsulin = Float.valueOf(mBasalInsulinInput.getText().toString());
+        float bolusInsulin = Float.valueOf(mBolusInsulinInput.getText().toString());
+
+        // Make sure that there is some data entered by the user in the note field.
+        String noteData = mNoteData.getText().toString();
+
+        for(String hashTag: extractAllHashTags(noteData)) {
+            Model.getInstance().incrementTagCount(hashTag);
+        }
+
+        if (noteData == null || noteData.trim().isEmpty()) {
+            noteData = "";
+        }
+        diabetesLogDataRecord = new DiabetesLogDataRecord(glucoseReadingImageBase64ImageData,
+                foodImageBase64ImageData,
+                carbsConsumed,
+                basalInsulin,
+                bolusInsulin,
+                noteData);
+        try {
+            StreamGenerator streamGenerator = MinukuStreamManager.getInstance().
+                    getStreamGeneratorFor(DiabetesLogDataRecord.class);
+            Log.d(TAG, "Saving results to the database");
+            streamGenerator.offer(diabetesLogDataRecord);
+        } catch (StreamNotFoundException e) {
+                e.printStackTrace();
+                Log.e(TAG, "The note stream does not exist on this device.");
+            }
+            showToast("Your note has been recorded");
+            finish();
+    }
+
+    /**
+     * This is called when the user presses the "X" button the screen.
+     */
+    public void rejectResults() {
+        showToast("Going back to home screen");
         finish();
+    }
+
+    private List<String> extractAllHashTags(String str) {
+        Pattern MY_PATTERN = Pattern.compile("#(\\S+)");
+        Matcher mat = MY_PATTERN.matcher(str);
+        List<String> hashTags = new ArrayList<String>();
+        while (mat.find()) {
+            hashTags.add(mat.group(1));
+        }
+        return hashTags;
     }
 
     protected String getBase64FromBitmap(Bitmap b) {
@@ -210,8 +229,8 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
                 && null != data) {
             Uri photoUri = data.getData();
             Bitmap bitmap = ImageUtility.decodeSampledBitmapFromPath(photoUri.getPath(), 300, 300);
-            imageView.setImageBitmap(bitmap);
-            base64ImageData = getBase64FromBitmap(bitmap);
+            tempImageView.setImageBitmap(bitmap);
+            tempBase64ImageData = getBase64FromBitmap(bitmap);
         } else if(requestCode == REQUEST_GALLERY
                 && resultCode == RESULT_OK
                 && null != data) {
@@ -226,8 +245,14 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
             String imgDecodableString = cursor.getString(columnIndex);
             cursor.close();
             Bitmap bitmap = BitmapFactory.decodeFile(imgDecodableString);
-            imageView.setImageBitmap(bitmap);
-            base64ImageData = getBase64FromBitmap(bitmap);
+            tempImageView.setImageBitmap(bitmap);
+            tempBase64ImageData = getBase64FromBitmap(bitmap);
+        }
+        if(imageTypeFlag == "GLUCOSE_READING"){
+            glucoseReadingImageBase64ImageData = tempBase64ImageData;
+        }
+        if(imageTypeFlag == "FOOD"){
+            foodImageBase64ImageData = tempBase64ImageData;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -237,13 +262,13 @@ public class AnnotatedImageDataRecordActivity extends BaseActivity {
 
         Log.d(TAG, "Requesting camera permission");
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
             Log.i(TAG,
                     "Displaying camera permission rationale to provide additional context.");
 
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.CAMERA},
+                    new String[]{android.Manifest.permission.CAMERA},
                     REQUEST_CAMERA);
         } else {
             Log.d(TAG, "Permission for camera activity already granted. Starting activity.");

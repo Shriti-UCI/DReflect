@@ -385,7 +385,6 @@ public class MoodDataRecordActivity extends BaseActivity {
     }
 
     public void onHelpClicked() {
-        showToast("help clikced");
         final Dialog dialog = new Dialog(contextForDialog);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.mood_legend_overlay);
@@ -403,8 +402,8 @@ public class MoodDataRecordActivity extends BaseActivity {
         });
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
         DisplayMetrics displayMetrics = contextForDialog.getResources().getDisplayMetrics();
-        int dialogWidth = (int)(displayMetrics.widthPixels * 0.95);
-        int dialogHeight = (int)(displayMetrics.heightPixels * 0.90);
+        int dialogWidth = (int)(displayMetrics.widthPixels * 0.925);
+        int dialogHeight = (int)(displayMetrics.heightPixels * 0.925);//90
         dialog.getWindow().setLayout(dialogWidth, dialogHeight);
         dialog.getWindow().setGravity(Gravity.TOP);
 

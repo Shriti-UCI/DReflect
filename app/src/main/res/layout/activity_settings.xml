@@ -5,23 +5,11 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
     <edu.umich.si.inteco.minuku_2.preferences.TimePreference
-        android:title="Wake up time"
+        android:title="Time you wake up"
         android:summary="This is the time when the notifications will be enabled"
         android:key="startTime"/>
     <edu.umich.si.inteco.minuku_2.preferences.TimePreference
-        android:title="Bedtime"
+        android:title="Time you go to bed"
         android:summary="This is the time when the notifications will be disabled"
         android:key="endTime"/>
-    <com.h6ah4i.android.compat.preference.MultiSelectListPreferenceCompat
-        android:title="BG times"
-        android:summary="Select all the times that you need to take glucose readings"
-        android:key="gmTimes"
-        android:entries="@array/listArray"
-        android:entryValues="@array/listValues"/>
-    <com.h6ah4i.android.compat.preference.MultiSelectListPreferenceCompat
-        android:title="Insulin times"
-        android:summary="Select all the times that you need to take insulin"
-        android:key="insulinTimes"
-        android:entries="@array/listArray"
-        android:entryValues="@array/listValues"/>
 </PreferenceScreen>

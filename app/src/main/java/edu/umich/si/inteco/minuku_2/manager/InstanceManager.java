@@ -52,33 +52,18 @@ import edu.umich.si.inteco.minuku.model.MoodDataRecord;
 import edu.umich.si.inteco.minuku.model.NoteDataRecord;
 import edu.umich.si.inteco.minuku.model.SemanticLocationDataRecord;
 import edu.umich.si.inteco.minuku.model.UserSubmissionStats;
-import edu.umich.si.inteco.minuku.streamgenerator.AnnotatedImageStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.FreeResponseQuestionStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.LocationStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MoodStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.MultipleChoiceQuestionStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.NoteStreamGenerator;
 import edu.umich.si.inteco.minuku.streamgenerator.SemanticLocationStreamGenerator;
-import edu.umich.si.inteco.minuku_2.action.MissedFoodAction;
-import edu.umich.si.inteco.minuku_2.action.MissedGlucoseReadingAction;
-import edu.umich.si.inteco.minuku_2.action.MissedInsulinAdminAction;
-import edu.umich.si.inteco.minuku_2.action.MoodAnnotationExpectedAction;
 import edu.umich.si.inteco.minuku_2.action.MoodDataExpectedAction;
-import edu.umich.si.inteco.minuku_2.dao.FoodImageDAO;
-import edu.umich.si.inteco.minuku_2.dao.GlucoseReadingImageDAO;
-import edu.umich.si.inteco.minuku_2.dao.InsulinAdminImageDAO;
-import edu.umich.si.inteco.minuku_2.model.FoodImage;
-import edu.umich.si.inteco.minuku_2.model.GlucoseReadingImage;
-import edu.umich.si.inteco.minuku_2.model.InsulinAdminImage;
+import edu.umich.si.inteco.minuku_2.dao.DiabetesLogDAO;
+import edu.umich.si.inteco.minuku_2.model.DiabetesLogDataRecord;
 import edu.umich.si.inteco.minuku_2.question.QuestionConfig;
-import edu.umich.si.inteco.minuku_2.situation.MissedFoodImageSituation;
-import edu.umich.si.inteco.minuku_2.situation.MissedGlucoseReadingSituation;
-import edu.umich.si.inteco.minuku_2.situation.MissedInsulinAdminSituation;
-import edu.umich.si.inteco.minuku_2.situation.MoodAnnotationExpectedSituation;
 import edu.umich.si.inteco.minuku_2.situation.MoodDataExpectedSituation;
-import edu.umich.si.inteco.minuku_2.streamgenerator.FoodImageStreamGenerator;
-import edu.umich.si.inteco.minuku_2.streamgenerator.GlucoseReadingImageStreamGenerator;
-import edu.umich.si.inteco.minuku_2.streamgenerator.InsulinAdminImageStreamGenerator;
+import edu.umich.si.inteco.minuku_2.streamgenerator.DiabetesLogStreamGenerator;
 import edu.umich.si.inteco.minukucore.event.ShowNotificationEvent;
 import edu.umich.si.inteco.minukucore.model.question.FreeResponse;
 import edu.umich.si.inteco.minukucore.model.question.MultipleChoice;
@@ -136,24 +121,9 @@ public class InstanceManager {
         MultipleChoiceQuestionDAO multipleChoiceQuestionDAO = new MultipleChoiceQuestionDAO();
         daoManager.registerDaoFor(MultipleChoice.class, multipleChoiceQuestionDAO);
 
-        //note entry DAO
-        NoteDataRecordDAO noteDataRecordDAO = new NoteDataRecordDAO();
-        daoManager.registerDaoFor(NoteDataRecord.class, noteDataRecordDAO);
-
-        //App speicif Image DAOs
-        GlucoseReadingImageDAO glucoseReadingImageDAO = new GlucoseReadingImageDAO();
-        daoManager.registerDaoFor(GlucoseReadingImage.class, glucoseReadingImageDAO);
-
-        InsulinAdminImageDAO insulinAdminImageDAO = new InsulinAdminImageDAO();
-        daoManager.registerDaoFor(InsulinAdminImage.class, insulinAdminImageDAO);
-
-        FoodImageDAO foodImageDAO = new FoodImageDAO();
-        daoManager.registerDaoFor(FoodImage.class, foodImageDAO);
-
-        //For other images
-        AnnotatedImageDataRecordDAO annotatedImageDataRecordDAO = new AnnotatedImageDataRecordDAO(
-                AnnotatedImageDataRecord.class);
-        daoManager.registerDaoFor(AnnotatedImageDataRecord.class, annotatedImageDataRecordDAO);
+        //Diabetes Log Data Record DAO
+        DiabetesLogDAO diabetesLogDAO = new DiabetesLogDAO();
+        daoManager.registerDaoFor(DiabetesLogDataRecord.class, diabetesLogDAO);
 
         //Notification DAO
         NotificationDAO notificationDAO = new NotificationDAO();
@@ -175,37 +145,16 @@ public class InstanceManager {
                 new FreeResponseQuestionStreamGenerator(getApplicationContext());
         MultipleChoiceQuestionStreamGenerator multipleChoiceQuestionStreamGenerator =
                 new MultipleChoiceQuestionStreamGenerator(getApplicationContext());
-
-        GlucoseReadingImageStreamGenerator glucoseReadingImageStreamGenerator =
-                new GlucoseReadingImageStreamGenerator(getApplicationContext());
-        InsulinAdminImageStreamGenerator insulinAdminImageStreamGenerator =
-                new InsulinAdminImageStreamGenerator(getApplicationContext());
-        FoodImageStreamGenerator foodImageStreamGenerator =
-                new FoodImageStreamGenerator(getApplicationContext());
-        AnnotatedImageStreamGenerator annotatedImageStreamGenerator =
-                new AnnotatedImageStreamGenerator(getApplicationContext(), AnnotatedImageDataRecord.class);
+        DiabetesLogStreamGenerator diabetesLogStreamGenerator =
+                new DiabetesLogStreamGenerator(getApplicationContext());
 
 
-        NoteStreamGenerator noteStreamGenerator =
-                new NoteStreamGenerator(getApplicationContext());
 
         // All situations must be registered AFTER the stream generators are registers.
         MinukuSituationManager situationManager = MinukuSituationManager.getInstance();
 
         MoodDataExpectedSituation moodDataExpectedSituation = new MoodDataExpectedSituation();
         MoodDataExpectedAction moodDataExpectedAction = new MoodDataExpectedAction();
-
-        MissedGlucoseReadingSituation missedGlucoseReadingSituation = new MissedGlucoseReadingSituation();
-        MissedGlucoseReadingAction missedGlucoseReadingAction = new MissedGlucoseReadingAction();
-
-        MissedInsulinAdminSituation missedInsulinAdminSituation = new MissedInsulinAdminSituation();
-        MissedInsulinAdminAction missedInsulinAdminAction = new MissedInsulinAdminAction();
-
-        MissedFoodImageSituation missedFoodImageSituation = new MissedFoodImageSituation();
-        MissedFoodAction missedFoodAction = new MissedFoodAction();
-
-        MoodAnnotationExpectedSituation moodAnnotationExpectedSituation = new MoodAnnotationExpectedSituation();
-        MoodAnnotationExpectedAction moodAnnotationExpectedAction = new MoodAnnotationExpectedAction();
 
         //create questionnaires
         QuestionConfig.getInstance().setUpQuestions(getApplicationContext());

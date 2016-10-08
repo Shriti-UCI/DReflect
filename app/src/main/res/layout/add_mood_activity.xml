@@ -18,10 +18,17 @@
         android:textAlignment="center"
         android:text="Tap and drag to select your mood"
         android:textColor="@android:color/white"
-        android:background="@color/primary_dark"
+        android:background="@color/colorPrimaryDark"
         android:textSize="20dp"/>
 
-     <!--<Button
+        <edu.umich.si.inteco.minuku_2.view.customview.MoodEntryView
+        android:id="@+id/graphCustomView"
+        android:layout_width="match_parent"
+        android:layout_height="187dp"
+        android:layout_weight="0.80"
+        android:paddingTop="10dp"/>
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
@@ -32,15 +39,8 @@
         android:text="Help"
         android:id="@+id/help_button"
         android:textColor="@android:color/white"
-        android:background="@color/primary_dark"
-        android:textSize="12dp"/> -->
-
-        <edu.umich.si.inteco.minuku_2.view.customview.MoodEntryView
-        android:id="@+id/graphCustomView"
-        android:layout_width="match_parent"
-        android:layout_height="187dp"
-        android:layout_weight="0.80"
-        android:paddingTop="10dp"/>
+        android:background="@color/colorPrimaryDark"
+        android:textSize="12dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -62,7 +62,7 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ic_mood_black_24dp"
             android:id="@+id/help_icon"/> -->
-        <Button
+        <!--<Button
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:textAlignment="center"
@@ -72,7 +72,7 @@
             android:id="@+id/help_button"
             android:textColor="@android:color/white"
             android:background="@color/primary_dark"
-            android:textSize="12dp"/>
+            android:textSize="12dp"/>-->
 
         <ImageView
             android:id="@+id/acceptButton"
