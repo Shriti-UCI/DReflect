@@ -24,9 +24,9 @@ package edu.umich.si.inteco.minuku_2;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -34,14 +34,18 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.desmond.squarecamera.CameraActivity;
 import com.desmond.squarecamera.ImageUtility;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -58,7 +62,7 @@ import me.gujun.android.taggroup.TagGroup;
 /**
  * Created by shriti on 8/20/16.
  */
-public class DiabetesLogActivity extends BaseActivity {
+public class DiabetesLogActivity extends BaseActivity{
 
     private String TAG = "DiabetesLogActivity";
 
@@ -71,6 +75,7 @@ public class DiabetesLogActivity extends BaseActivity {
 
     protected static final int REQUEST_CAMERA = 101;
     protected static final int REQUEST_GALLERY = 102;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private EditText mCarbsConsumedInput;
     private EditText mBasalInsulinInput;
@@ -95,19 +100,24 @@ public class DiabetesLogActivity extends BaseActivity {
         glucoseReadingImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "camera started");
                 tempImageView = glucoseReadingImage;
                 glucoseReadingImageBase64ImageData ="";
                 imageTypeFlag = "GLUCOSE_READING";
                 requestPermission();
+                Log.d(TAG, "returning glucose reading with a value of : " + glucoseReadingImageBase64ImageData);
             }
         });
         foodImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "camera started");
                 tempImageView = foodImage;
                 foodImageBase64ImageData = "";
                 imageTypeFlag = "FOOD";
                 requestPermission();
+                Log.d(TAG, "returning food with a value of : " + foodImageBase64ImageData);
+
             }
         });
 
@@ -224,35 +234,27 @@ public class DiabetesLogActivity extends BaseActivity {
         }
         // There are two types of media that are requested, either from Camera, or from Gallery.
         //Each of them have their own ways of rendering the selected/taken image.
-        if (requestCode == REQUEST_CAMERA
+        if (requestCode == REQUEST_IMAGE_CAPTURE
                 && resultCode == RESULT_OK
                 && null != data) {
-            Uri photoUri = data.getData();
-            Bitmap bitmap = ImageUtility.decodeSampledBitmapFromPath(photoUri.getPath(), 300, 300);
-            tempImageView.setImageBitmap(bitmap);
-            tempBase64ImageData = getBase64FromBitmap(bitmap);
-        } else if(requestCode == REQUEST_GALLERY
-                && resultCode == RESULT_OK
-                && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String imgDecodableString = cursor.getString(columnIndex);
-            cursor.close();
-            Bitmap bitmap = BitmapFactory.decodeFile(imgDecodableString);
-            tempImageView.setImageBitmap(bitmap);
+            /**Uri photoUri = data.getData();
+            Bitmap bitmap = ImageUtility.decodeSampledBitmapFromPath(photoUri.getPath(), 300, 300);**/
+            Bundle extras = data.getExtras();
+            Bitmap bitmap = (Bitmap) extras.get("data");
+            Bitmap newBitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, false);
+            tempImageView.setImageBitmap(newBitmap);
             tempBase64ImageData = getBase64FromBitmap(bitmap);
         }
         if(imageTypeFlag == "GLUCOSE_READING"){
+            Log.d(TAG, "Setting glucose reading image to " + tempBase64ImageData);
             glucoseReadingImageBase64ImageData = tempBase64ImageData;
+            Log.d(TAG, "Set glucose reading image to " + glucoseReadingImageBase64ImageData);
+
         }
         if(imageTypeFlag == "FOOD"){
+            Log.d(TAG, "Setting food image to " + tempBase64ImageData);
             foodImageBase64ImageData = tempBase64ImageData;
+            Log.d(TAG, "Set food image to " + foodImageBase64ImageData);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -269,11 +271,16 @@ public class DiabetesLogActivity extends BaseActivity {
 
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.CAMERA},
-                    REQUEST_CAMERA);
+                    REQUEST_IMAGE_CAPTURE);
         } else {
             Log.d(TAG, "Permission for camera activity already granted. Starting activity.");
-            Intent startCustomCameraIntent = new Intent(this, CameraActivity.class);
-            startActivityForResult(startCustomCameraIntent, REQUEST_CAMERA);
+            /**Intent startCustomCameraIntent = new Intent(this, CameraActivity.class);
+            startActivityForResult(startCustomCameraIntent, REQUEST_IMAGE_CAPTURE);**/
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra("android.intent.extra.quickCapture",true);
+            if (intent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+            }
         }
     }
 
@@ -284,11 +291,16 @@ public class DiabetesLogActivity extends BaseActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.d(TAG, "On request permission result called.");
         switch (requestCode) {
-            case REQUEST_CAMERA:
+            case REQUEST_IMAGE_CAPTURE:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent startCustomCameraIntent = new Intent(this, CameraActivity.class);
-                    startActivityForResult(startCustomCameraIntent, REQUEST_CAMERA);
+                    /**Intent startCustomCameraIntent = new Intent(this, CameraActivity.class);
+                    startActivityForResult(startCustomCameraIntent, REQUEST_CAMERA);**/
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra("android.intent.extra.quickCapture",true);
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+                    }
                     Log.d(TAG, "Successfully received permissions and started camera activity.");
                 } else {
                     finish();
@@ -296,4 +308,5 @@ public class DiabetesLogActivity extends BaseActivity {
                 return;
         }
     }
+
 }
