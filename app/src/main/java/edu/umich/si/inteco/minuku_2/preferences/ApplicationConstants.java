@@ -54,6 +54,17 @@ public class ApplicationConstants {
     public static final String EMAIL_FROM_PASSWORD = BuildConfig.DSTUDIO_MAIL_PASSWORD;
     public static final String EMAIL_TO = "shritir@uci.edu";
 
+    public static final String EOD_QUESTION_ONE_MISSED_DATA = "Was there anything else you wanted to share? (in case there was" +
+            " missing data from the day)";
+    public static final String EOD_QUESTION_TWO_LIFE_EVENTS = "Did anything good or bad happen today? If yes, please describe";
+    public static final String EOD_QUESTION_THREE_DIABETES_EVENTS = "Did anything good or bad happen today? If yes, please describe";
+    public static final String EOD_QUESTION_FOUR_DIABETES_EVENTS = "Was there anything hard about managing diabetes today? Please describe";
+
+
+    public static final String EOD_QUESTIONS_TITLE_2 = "Life Events";
+    public static final String EOD_QUESTIONS_TITLE_3 = "Diabetes Events";
+
+
 }
 
 

@@ -90,13 +90,15 @@ public class MainActivity extends BaseActivity {
 
         String[] web = {
                 "Add\n Logs",
-                "Add\n Mood"
+                "Add\n Mood",
+                "EOD"
 
         };
 
         int[] imageID = {
                 R.drawable.add,
-                R.drawable.smiley
+                R.drawable.smiley,
+                R.drawable.accept
         };
 
         final CustomGridAdapter customGridAdapter = new CustomGridAdapter(MainActivity.this,
@@ -122,6 +124,11 @@ public class MainActivity extends BaseActivity {
                         Intent addMoodIntent = new Intent(MainActivity.this,
                                 MoodDataRecordActivity.class);
                         startActivity(addMoodIntent);
+                        break;
+                    case 2:
+                        Intent eodQuestionIntent = new Intent(MainActivity.this,
+                                EODQuestionsActivity.class);
+                        startActivity(eodQuestionIntent);
                         break;
                     default:
                         showToast("Clicked unknown");

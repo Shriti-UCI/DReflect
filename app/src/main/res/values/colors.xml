@@ -22,15 +22,22 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#009587</color>
-    <color name="colorPrimaryDark">#007065</color>
-    <color name="colorAccent">#676565</color>
+    <color name="colorPrimary">#418ECC</color>
+    <color name="colorPrimaryDark">#2974BA</color>
+    <color name="colorAccent">#747576</color>
+    <color name="colorPrimaryLight">#BDDEF5</color>
+    <color name="colorAccentLight">#BCBCBC</color>
+    <color name="colorAccentDark">#1F1F1F</color>
+
     <color name="primary_text">#212121</color>
     <color name="black">#000000</color>
     <color name="dark_grey">#727272</color>
-    <color name="primary">#00BCD4</color>
-    <color name="primary_dark">#00a495</color>
+    <color name="primary">#418ECC</color>
+    <color name="primary_dark">#2974BA</color>
     <color name="divider">#B6B6B6</color>
-    <color name="accent">#0097A7</color>
+    <color name="accent">#747576</color>
+    <color name="accent_light">#BCBCBC</color>
+    <color name="accent_dark">#1F1F1F</color>
+
 
 </resources>
